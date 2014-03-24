@@ -1,0 +1,82 @@
+#include "HUDRenderer.h"
+#include "RenderContext.h"
+#include "Config.h"
+#include "DLLResourceLoader.h"
+#include <DirectXTK/SpriteBatch.h>
+#include <DirectXTK/SpriteFont.h>
+
+using namespace DDEngine;
+using namespace std;
+using namespace DirectX;
+
+HUDRenderer::HUDRenderer(Config& config, RenderContext& renderContext) : config(config), renderContext(renderContext) {
+	resourcesHmodule = LoadLibrary(L"dderes.dll");
+	isRendered = true;
+	
+	DLLDataContainer fontData = DLLResourceLoader::loadHUD_spritefont(resourcesHmodule);
+
+	spriteBatch.reset(new SpriteBatch(renderContext.context));
+	spriteFont.reset(new SpriteFont(renderContext.device, (uint8_t*) fontData.dataBlob, (size_t) fontData.dataSize));
+}
+
+HUDRenderer::~HUDRenderer() {
+	FreeLibrary(resourcesHmodule);
+}
+
+void HUDRenderer::setRender(string hudKey, bool isRender) {
+	HUDBuffer::iterator it = buffer.find(hudKey);
+	if(it != buffer.end()) {
+		HUD* hud = &(it->second);
+		hud->render = isRender;
+	}
+}
+
+void HUDRenderer::render() {
+	if(isRendered) {
+		spriteBatch->Begin();
+
+		for (HUDBuffer::const_iterator it = buffer.begin(); it != buffer.end(); ++it) {
+			HUD hud = it->second;
+			if(hud.render) {
+				string s = hud.text;
+				wstring ws;
+				ws.assign(s.begin(), s.end());
+				spriteFont->DrawString(spriteBatch.get(), ws.c_str(), XMFLOAT2((FLOAT) hud.coords.x, (FLOAT) hud.coords.y), DirectX::XMLoadFloat3(&hud.textColor));
+			}
+		}
+		spriteBatch->End();
+	}
+}
+
+void HUDRenderer::setHUDRendered( bool isRendered ) {
+	this->isRendered = isRendered;
+}
+
+void HUDRenderer::update(string hudKey, string text) {
+	HUDBuffer::iterator it = buffer.find(hudKey);
+	if(it != buffer.end()) {
+		HUD* hud = &(it->second);
+		hud->text = text;
+	}
+}
+
+void HUDRenderer::addText(string name, string text, float x, float y, XMVECTOR color /*= DirectX::Colors::White*/, bool renderedByDefault /*= false*/) {
+	HUD hud;
+	POINT coords;
+
+	coords.x = (LONG) x;
+	coords.y = (LONG) y;
+
+	hud.coords = coords;
+	hud.hudObject = NULL;
+	hud.name = name;
+	hud.render = renderedByDefault;
+	hud.text = text;
+	XMStoreFloat3(&hud.textColor, color);
+
+	buffer.insert(HUDBuffer::value_type(hud.name, hud));
+}
+
+void HUDRenderer::removeText( string name ) {
+	buffer.erase(name);
+}

@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{919FE693-B60E-49AE-93B5-0F2FCB949487}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DDEngine</RootNamespace>
+    <ProjectName>DDEngine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath);$(ProjectDir)sdk\directx\include;$(ProjectDir)include;$(ProjectDir)include\include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(ProjectDir)sdk\directx\lib\x86;$(ProjectDir)lib\DirectXTK\lib\$(Configuration);$(ProjectDir)lib\CEGUI\lib;$(ProjectDir)lib\Effects11\lib\$(Configuration);$(ProjectDir)lib\AntTweakBar\lib\$(Configuration)</LibraryPath>
+    <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib</ReferencePath>
+    <SourcePath>$(ProjectDir)lib\DirectXTK\src;$(ProjectDir)lib\CEGUI\src;$(ProjectDir)lib\Effects11\src;$(ProjectDir)lib\AntTweakBar\src;$(ProjectDir)src;$(SourcePath)</SourcePath>
+    <OutDir>$(ProjectDir)bin\$(Configuration)\bin\</OutDir>
+    <IntDir>$(ProjectDir)build\$(Configuration)\</IntDir>
+    <TargetName>ddengine_d</TargetName>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)include\include;$(ProjectDir)sdk\directx\include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(ProjectDir)sdk\directx\lib\x86;$(ProjectDir)lib\DirectXTK\lib\$(Configuration);$(ProjectDir)lib\CEGUI\lib;$(ProjectDir)lib\Effects11\lib\$(Configuration);$(ProjectDir)lib\AntTweakBar\lib\$(Configuration)</LibraryPath>
+    <TargetName>ddengine</TargetName>
+    <OutDir>$(ProjectDir)bin\$(Configuration)\bin\</OutDir>
+    <IntDir>$(ProjectDir)build\$(Configuration)\</IntDir>
+    <SourcePath>$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;$(MSBuildProjectDirectory)\src</SourcePath>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;PROFILE;DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0_d.lib;CEGUIDirect3D11Renderer-0_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+      <ObjectFileOutput>$(OutDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <PreBuildEvent>
+      <Command>call $(ProjectDir)script\composeDLLs.bat $(ProjectDir) $(Configuration)
+call $(ProjectDir)script\composeIncludes.bat $(ProjectDir)</Command>
+      <Message>
+      </Message>
+    </PreBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0_d.lib;CEGUIDirect3D11Renderer-0_d.lib;CEGUICommonDialogs-0_d.lib;CEGUICoreWindowRendererSet_d.lib;CEGUIExpatParser_d.lib;CEGUISILLYImageCodec_d.lib;CEGUISTBImageCodec_d.lib;CEGUITGAImageCodec_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0.lib;CEGUIDirect3D11Renderer-0.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AssemblyIdentity>
+      </AssemblyIdentity>
+    </Manifest>
+    <FxCompile>
+      <ObjectFileOutput />
+    </FxCompile>
+    <PreBuildEvent>
+      <Command>call $(ProjectDir)script\composeDLLs.bat $(ProjectDir) $(Configuration)</Command>
+    </PreBuildEvent>
+    <Lib>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0.lib;CEGUIDirect3D11Renderer-0.lib;CEGUICommonDialogs-0.lib;CEGUICoreWindowRendererSet.lib;CEGUIExpatParser.lib;CEGUISILLYImageCodec.lib;CEGUISTBImageCodec.lib;CEGUITGAImageCodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <PostBuildEvent>
+      <Command>call $(ProjectDir)script\composeIncludes.bat $(ProjectDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AbstractCommandExecutor.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\CommandExecutor.h" />
+    <ClInclude Include="include\CommandParser.h" />
+    <ClInclude Include="include\CommonObject.h" />
+    <ClInclude Include="include\Config.h" />
+    <ClInclude Include="include\ConfigLoader.h" />
+    <ClInclude Include="include\Console.h" />
+    <ClInclude Include="include\Controlls.h" />
+    <ClInclude Include="include\D3DRenderer.h" />
+    <ClInclude Include="include\D3DUtils.h" />
+    <ClInclude Include="include\DDEComponent.h" />
+    <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\DDEngine.h" />
+    <ClInclude Include="include\DDERenderPackage.h" />
+    <ClInclude Include="include\DDEUtils.h" />
+    <ClInclude Include="include\DDE_CEGUIResourceProvider.h" />
+    <ClInclude Include="include\Dimension.h" />
+    <ClInclude Include="include\DLLResourceLoader.h" />
+    <ClInclude Include="include\Grid.h" />
+    <ClInclude Include="include\GUIRenderer.h" />
+    <ClInclude Include="include\HUDRenderer.h" />
+    <ClInclude Include="include\InputHandler.h" />
+    <ClInclude Include="include\IRenderable.h" />
+    <ClInclude Include="include\Object3D.h" />
+    <ClInclude Include="include\ObjectManager.h" />
+    <ClInclude Include="include\PixelShaderEnvelope.h" />
+    <ClInclude Include="include\QuadObject.h" />
+    <ClInclude Include="include\RenderContext.h" />
+    <ClInclude Include="include\RenderToTexture.h" />
+    <ClInclude Include="include\ResourceProvider.h" />
+    <ClInclude Include="include\ShaderCompiler.h" />
+    <ClInclude Include="include\ShaderHolder.h" />
+    <ClInclude Include="include\Skybox.h" />
+    <ClInclude Include="include\Timer.h" />
+    <ClInclude Include="include\Vertex.h" />
+    <ClInclude Include="include\VertexShaderEnvelope.h" />
+    <ClInclude Include="include\Window.h" />
+    <ClInclude Include="include\WndHandler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AbstractCommandExecutor.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\CommandExecutor.cpp" />
+    <ClCompile Include="src\CommandParser.cpp" />
+    <ClCompile Include="src\CommonObject.cpp" />
+    <ClCompile Include="src\Config.cpp" />
+    <ClCompile Include="src\ConfigLoader.cpp" />
+    <ClCompile Include="src\Console.cpp" />
+    <ClCompile Include="src\Controlls.cpp" />
+    <ClCompile Include="src\D3DRenderer.cpp" />
+    <ClCompile Include="src\D3DUtils.cpp" />
+    <ClCompile Include="src\DDEComponent.cpp" />
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\DDEUtils.cpp" />
+    <ClCompile Include="src\DDE_CEGUIResourceProvider.cpp" />
+    <ClCompile Include="src\DLLResourceLoader.cpp" />
+    <ClCompile Include="src\Grid.cpp" />
+    <ClCompile Include="src\GUIRenderer.cpp" />
+    <ClCompile Include="src\HUDRenderer.cpp" />
+    <ClCompile Include="src\InputHandler.cpp" />
+    <ClCompile Include="src\Object3D.cpp" />
+    <ClCompile Include="src\ObjectManager.cpp" />
+    <ClCompile Include="src\QuadObject.cpp" />
+    <ClCompile Include="src\RenderContext.cpp" />
+    <ClCompile Include="src\RenderToTexture.cpp" />
+    <ClCompile Include="src\ResourceProvider.cpp" />
+    <ClCompile Include="src\ShaderCompiler.cpp" />
+    <ClCompile Include="src\ShaderHolder.cpp" />
+    <ClCompile Include="src\Skybox.cpp" />
+    <ClCompile Include="src\Timer.cpp" />
+    <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\WndHandler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DDEngineRes\DDEngineRes.vcxproj">
+      <Project>{9e4f7ed6-1003-4b4a-9c31-1a04bce7e920}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

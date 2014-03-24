@@ -1,0 +1,23 @@
+
+---------------------
+DEPENDENCIES:
+---------------------
+
+- AntTweakBar	(DLL)
+- CEGUI			(DLL)	version 0.8.2
+- DirectXTK		(LIB)
+- Effects11		(LIB)
+
+
+Remarks:
+--------
+
+* All libraries are compiled
+  with VisualStudio 12 (v120)
+
+* AntTweakBar and CEGUI require also
+  .lib files for implicit dll linking
+
+* PDB files are not needed, debug libraries
+  are compiled with C7 Compatible debug
+  information format

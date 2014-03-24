@@ -1,0 +1,9 @@
+Prikazy:
+
+quit								- Ukonci aplikaci
+camera_reset						- Nastavi kameru do vychoziho stavu
+show_fps = true/false				- Zobrazi/skryje vypis FPS
+render_wireframe = true/false		- Prepinani mezi SOLID/WIREFRAME modem
+mouse_sensitivity = 0.1 - X			- Nastavi citlivost mysi
+move_speed = 0.1 - X				- Nastavi rychlost kamery (chuze)
+mouse_reversed = true/false			- Obrati svisly pohyb mysi
