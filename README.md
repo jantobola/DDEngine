@@ -17,7 +17,7 @@ DDEngineRes
 - DDEngine module depends on this module.
 
 WaterRendering
-- It is a demo project. It shows how DDEngine can be used.
+- It is a demo project. It demonstrates how DDEngine can be used.
 - Simple water simulation based od spring field.
 
 ![Skybox, texturing](http://fii.cz/vbhhaepq)
