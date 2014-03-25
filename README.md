@@ -21,8 +21,8 @@ WaterRendering
 - Simple water simulation based od spring field.
 
 ![Skybox, texturing](http://fii.cz/vbhhaepq)
-![Water simulation](http://puu.sh/7J1XQ/53a0da53e6.jpg)
 ![Heightmap terrain](http://puu.sh/7J26M/01804c5434.jpg)
+![Water simulation](http://puu.sh/7J1XQ/53a0da53e6.jpg)
 
 ---------------------
 Jan Tobola, 2013-2014
