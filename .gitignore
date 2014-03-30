@@ -1,0 +1,8 @@
+DDEngine/bin/
+DDEngine/build/
+DDEngineRes/bin/
+DDEngineRes/build/
+*.opensdf
+*.sdf
+WaterRendering/bin/
+WaterRendering/build/
