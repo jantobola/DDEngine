@@ -7,3 +7,4 @@ DDEngineRes/build/
 WaterRendering/bin/
 WaterRendering/build/
 *.suo
+*.sublime-workspace
