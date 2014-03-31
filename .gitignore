@@ -6,3 +6,4 @@ DDEngineRes/build/
 *.sdf
 WaterRendering/bin/
 WaterRendering/build/
+*.suo
