@@ -5,6 +5,13 @@ DDEngine is a lightweight graphics engine written in C++ and Direct3D 11. It use
 
 This engine is not a game engine. The main purpose of this engine is to test CG algorithms quickly and easily.
 
+FEATURES
+--------
+- Shader management
+- Real-time shader compiling
+- Console
+- Easy to use
+
 MODULES
 -------
 
