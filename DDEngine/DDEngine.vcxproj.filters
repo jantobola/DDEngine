@@ -185,6 +185,9 @@
     <ClInclude Include="include\D3DUtils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\QuadObject.h">
+      <Filter>Header Files\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AbstractCommandExecutor.cpp">
@@ -279,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="src\WndHandler.cpp">
       <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QuadObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -24,6 +24,12 @@ namespace DDEngine
 		}
 	}
 
+	namespace Win32Utils
+	{
+		void showFailMessage(HRESULT result, std::string title, std::string message);
+		void showMessage(std::string title, std::string message);
+	}
+
 	namespace FileUtils
 	{
 		bool isFileLocked(std::wstring path);
@@ -39,4 +45,3 @@ namespace DDEngine
 
 #define HRESULT_RETURN_CHECK(result) if(FAILED(result)) return result;
 #define RELEASE(component) if(component != NULL) component->Release();
-#define DDE_MSG_DIALOG(R,T,M) if(FAILED(R)) MessageBox(NULL, L#M, L#T, MB_OK);

@@ -108,7 +108,7 @@ HRESULT DDEngine::DXUtils::createAndCompileVertexShader(_In_ ID3D11Device* devic
 	std::wstring error;
 
 	if (FAILED(result)) {
-		MessageBox(NULL, (error.assign(r.errorMessage.begin(), r.errorMessage.end())).c_str(), L"Vertex Shader Error", MB_OK);
+		Win32Utils::showFailMessage(result, "Vertex Shader Error", "Some errors occured during the shader compilation.");
 		return result;
 	}
 
@@ -128,7 +128,7 @@ HRESULT DDEngine::DXUtils::createAndCompilePixelShader(_In_ ID3D11Device* device
 	std::wstring error;
 
 	if (FAILED(result)) {
-		MessageBox(NULL, (error.assign(r.errorMessage.begin(), r.errorMessage.end())).c_str(), L"Pixel Shader Error", MB_OK);
+		Win32Utils::showFailMessage(result, "Pixel Shader Error", "Some errors occured during the shader compilation.");
 		return result;
 	}
 
@@ -138,8 +138,6 @@ HRESULT DDEngine::DXUtils::createAndCompilePixelShader(_In_ ID3D11Device* device
 	return result;
 }
 
-#include <comdef.h>
-
 HRESULT DDEngine::DXUtils::createVertexShaderFromBinary(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _Out_ ID3D11VertexShader** vertexShader)
 {
 	HRESULT result = S_OK;
@@ -148,12 +146,7 @@ HRESULT DDEngine::DXUtils::createVertexShaderFromBinary(_In_ ID3D11Device* devic
 	result = D3DReadFileToBlob(shaderName, &vertexShaderBlob);
 
 	if (FAILED(result)) {
-		_com_error err(result);
-
-		std::wstring errMsg(err.ErrorMessage());
-		std::wstring msg = L"Error occured during the loading vertex shader from binary file. INFO: \"" + errMsg + L"\"";
-
-		MessageBox(NULL, msg.c_str() , L"D3DReadFileToBlob error", MB_OK);
+		Win32Utils::showFailMessage(result, "Vertex Shader Error", "Some errors occured during the loading shader from binary file.");
 		return result;
 	}
 
@@ -171,7 +164,7 @@ HRESULT DDEngine::DXUtils::createPixelShaderFromBinary(_In_ ID3D11Device* device
 	result = D3DReadFileToBlob(shaderName, &pixelShaderBlob);
 
 	if (FAILED(result)) {
-		MessageBox(NULL, L"Error occured during the loading pixel shader from binary file.", L"D3DReadFileToBlob error", MB_OK);
+		Win32Utils::showFailMessage(result, "Pixel Shader Error", "Some errors occured during the loading shader from binary file.");
 		return result;
 	}
 

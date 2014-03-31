@@ -25,9 +25,9 @@ void RenderableWater::create() {
 	vsCB_2.sizeX = (float) size.WIDTH;
 	vsCB_2.sizeY = (float) size.HEIGHT;
 
-	computeTexture_0.setShaders("RenderToTextureVS", "RenderToTexturePS", "POS3_TEX");
-	computeTexture_1.setShaders("RenderToTextureVS", "RenderToTexturePS", "POS3_TEX");
-	waterSurface.setShaders("WaterVS", "WaterPS", "POS4_TEX");
+	computeTexture_0.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX");
+	computeTexture_1.setShaders("VS_QuadObject", "VS_QuadObject", "POS3_TEX");
+	waterSurface.setShaders("VS_WaterVDisplacement", "PS_WaterOptical", "POS2");
 
 	setTweakBars();
 }
@@ -56,8 +56,8 @@ void RenderableWater::render() {
  	Ctx.setViewport(0, 0, size.WIDTH, size.HEIGHT);
 
 	resources.assignResources(computeTexture_0.getQuad()); // set current shaders
-	shaders.updateConstantBufferPS("waterProps", &vsCB_2, 0); // update CB values
-	shaders.updateConstantBufferPS("timer", &vsCB_1, 1);
+	shaders.updateConstantBufferPS("CB_WaterProps", &vsCB_2, 0); // update CB values
+	shaders.updateConstantBufferPS("CB_Timer", &vsCB_1, 1);
 
 	Ctx.setPSResource(computeTexture_1.getShaderResourceView(), 0); // set previous state texture to shader
 	Ctx.setPSSampler(waterSampler, 0); // set point sampler
@@ -73,8 +73,8 @@ void RenderableWater::render() {
 	Ctx.setBackbufferRenderTarget(); // set original render target
 	resources.assignResources(waterSurface); // set current shaders
 	
-	shaders.updateConstantBufferVS("perObject", &vsCB_0, 0); // update matrices
-	shaders.updateConstantBufferVS("timer", &vsCB_1, 1); // update time
+	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0); // update matrices
+	shaders.updateConstantBufferVS("CB_Timer", &vsCB_1, 1); // update time
 
 	ID3D11ShaderResourceView* computedTexture_0 = computeTexture_0.getShaderResourceView(); // set computed texture as resource
 	Ctx.setVSResource(computedTexture_0, 0);
@@ -92,7 +92,7 @@ void RenderableWater::render() {
 	Ctx.setViewport(0, 0, size.WIDTH, size.HEIGHT);
 
 	resources.assignResources(computeTexture_1.getQuad()); // set current shaders
-	shaders.updateConstantBufferPS("waterProps", &vsCB_2, 0); // update CB values
+	shaders.updateConstantBufferPS("CB_WaterProps", &vsCB_2, 0); // update CB values
 
 	Ctx.setPSResource(computeTexture_0.getShaderResourceView(), 0); // set previous state texture to shader
 	Ctx.setPSSampler(waterSampler, 0); // set point sampler

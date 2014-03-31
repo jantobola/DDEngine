@@ -61,37 +61,37 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\shaders\MeshPS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\MeshVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\RenderToTextureVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\SkyboxPS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\SkyboxVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\TerrainVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\WaterPS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\WaterVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\shaders\RenderToTexturePS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="data\config.cfg">
       <Filter>Config</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\shaders\PS_BasicLightMesh.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\PS_EnvMapping.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\PS_WaterComputation_T.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\PS_WaterOptical.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_BasicMesh.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_EnvMapping.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_QuadObject.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_TerrainVDisplacement.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_WaterVDisplacement.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

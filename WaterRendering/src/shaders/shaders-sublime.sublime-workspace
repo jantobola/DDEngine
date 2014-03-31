@@ -1,0 +1,369 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"D",
+				"DDEngine"
+			],
+			[
+				"dll",
+				"dllFolder"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"De",
+				"Debug_Shaders"
+			],
+			[
+				"d",
+				"dllFolder"
+			],
+			[
+				"res",
+				"resources"
+			],
+			[
+				"flo",
+				"float4"
+			],
+			[
+				"di",
+				"diffuse"
+			],
+			[
+				"float",
+				"float3"
+			]
+		]
+	},
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 81.0,
+		"selected_items":
+		[
+			[
+				"upp",
+				"Convert Case: Upper Case"
+			],
+			[
+				"fold",
+				"Code Folding: Fold Tag Attributes"
+			],
+			[
+				"foldi",
+				"Code Folding: Fold Tag Attributes"
+			],
+			[
+				"fol",
+				"Code Folding: Fold Tag Attributes"
+			],
+			[
+				"",
+				"Code Folding: Fold Tag Attributes"
+			],
+			[
+				"low",
+				"Convert Case: Lower Case"
+			],
+			[
+				"#",
+				"Snippet: #include <…>"
+			]
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 151.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/VS_TerrainVDisplacement.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/PS_WaterComputation_T.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/PS_WaterOptical.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/PS_EnvMapping.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/VS_BasicMesh.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/VS_WaterVDsiplacement.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/shaders-sublime.sublime-project",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/PS_BasicLightMesh.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/VS_EnvMapping.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/VS_QuadObject.hlsl",
+		"/C/Users/Jan/Desktop/WaterSimulation shaders (ddengine).sublime-project",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/TerrainVS.hlsl",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/MeshVS.hlsl",
+		"/E/C++/PROJECTS/DDE/WaterRendering/bin/Release/bin/config.cfg",
+		"/C/Users/Jan/Desktop/domains.txt",
+		"/C/Users/Jan/Desktop/Bloons TD 5 Deluxe/Čtěte před spuštěním!.txt",
+		"/E/C++/PROJECTS/DDE/deprecated.txt",
+		"/E/GITHUB/DDEngine/WaterRendering/src/shaders/MeshPS.hlsl",
+		"/Y/Patch/ReadMe.txt",
+		"/D/Program Files (x86)/EA Sports/NHL 09/Support/ctimne.txt",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/AntTweakBar/License.txt",
+		"/E/C++/PROJECTS/DDE/WaterRendering/bin/Release_precompiled_shaders/bin/config.cfg",
+		"/C/Users/Jan/Desktop/cv",
+		"/C/Users/Jan/Desktop/Water_Spring_Field/config.cfg",
+		"/C/Users/Jan/AppData/Local/Temp/Temp1_Water_Spring_Field.zip/Water_Spring_Field/config.cfg",
+		"/C/Users/Jan/Desktop/shallow_water_demo/kp07.hlsl",
+		"/C/Users/Jan/Desktop/TEST PROJECT/PGRF3/Debug/config.cfg",
+		"/C/Users/Jan/AppData/Roaming/VisualAssist/MRU2/mru_0dd1d534_FIS.txt",
+		"/C/Users/Jan/AppData/Roaming/VisualAssist/MRU2/mru_beb3d47a_FIS.txt",
+		"/C/Users/Jan/AppData/Local/Temp/7zO9689.tmp/Readme_ENG.txt",
+		"/D/Games/Max Payne3_[R.G.Games]/DVD.txt",
+		"/C/Users/Jan/Desktop/shallow_water_demo/left_mouse.hlsl",
+		"/C/Users/Jan/AppData/Local/Temp/7zO897D.tmp/Readme First!.txt",
+		"/C/Users/Jan/AppData/Local/Temp/Temp1_Grand.Theft.Auto.Episodes.from.Liberty.City.v1.1.2.0.Plus.12.Trainer.zip/trainer.txt",
+		"/C/Users/Jan/Desktop/trainer/changes.txt",
+		"/C/Users/Jan/Desktop/trainer/_gta.cz_readme.txt",
+		"/C/Users/Jan/AppData/Local/Temp/Temp1_inGameTrainer190.zip/Readme.txt",
+		"/C/Users/Jan/Desktop/xlive/_readme.txt",
+		"/C/Users/Jan/Desktop/shallow_water_demo/shallow_water.fx",
+		"/E/C++/PROJECTS/DDE/WaterRendering/src/Main.cpp",
+		"/E/C++/PROJECTS/DDE/WaterRendering/src/CustomRenderer.cpp",
+		"/E/C++/PROJECTS/DDE/WaterRendering/include/CustomRenderer.h",
+		"/E/C++/PROJECTS/DDE/WaterRendering/script/build.bat",
+		"/E/C++/PROJECTS/DDE/WaterRendering/bin/Release/bin/shaders/SkyboxPS.hlsl",
+		"/C/Users/Jan/Desktop/CEGUI/cegui-0.8.2/cegui/include/CEGUI/String.h",
+		"/E/C++/PROJECTS/DDE/DDEngine/include/include/CEGUI/Config.h.in",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/dependencies.txt",
+		"/E/JAVA/WORKSPACE/JNITest/src/app/MainApp.java",
+		"/E/JAVA/WORKSPACE/JNITest/src/jni/NativeutilsLibrary.java",
+		"/E/C++/PROJECTS/DDE/DDEngine/script/composeIncludes.bat",
+		"/E/C++/PROJECTS/DDE/DDEngine/script/composeDLLs.bat",
+		"/E/C++/PROJECTS/DDE/WaterRendering/script/referenceDLLs.bat",
+		"/E/C++/PROJECTS/DDE/WaterRendering/script/refenceDLLs.bat",
+		"/E/C++/PROJECTS/DDE/DDEngine/script/postbuild.bat",
+		"/C/Program Files (portable)/Sublime Text 3/changelog.txt",
+		"/C/Users/Jan/AppData/Local/Temp/Temp1_AntTweakBar_116.zip/AntTweakBar/lib/Readme.txt",
+		"/C/Users/Jan/Desktop/New Text Document.txt",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/src/RendererModules/Direct3D11/ViewportTarget.cpp",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/src/Scheme_xmlHandler.cpp",
+		"/E/C++/PROJECTS/DDE/DDEngine/doc/commands.txt",
+		"/E/C++/PROJECTS/DDE/DDEngine/script/prebuild.bat",
+		"/C/Users/Jan/Desktop/cegui-0.8.2/cegui/src/DefaultResourceProvider.cpp",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/include/CEGUI/FontManager.h",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/src/NamedXMLResourceManager.cpp",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/include/CEGUI/NamedXMLResourceManager.h",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/src/SchemeManager.cpp",
+		"/C/Users/Jan/Desktop/cegui-0.8.2/cegui/include/CEGUI/DefaultResourceProvider.h",
+		"/C/Users/Jan/Desktop/cegui-0.8.2/cegui/include/CEGUI/ResourceProvider.h",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/src/ScriptModules/Python/bindings/output/CEGUI/NamedXMLResourceManagerFont.pypp.cpp",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/src/ScriptModules/Lua/package/FontManager.pkg",
+		"/E/C++/PROJECTS/DDE/DDEngine/lib/CEGUI/src/FontManager.cpp",
+		"/C/Users/Jan/Desktop/whole code.cpp",
+		"/D/SteamLibrary/SteamApps/common/Counter-Strike Global Offensive/csgo/cfg/config.cfg",
+		"/C/Users/Jan/Desktop/gdx-ui-app-master/gdx-ui-app/src/ui.gwt.xml",
+		"/G/SKIDROW/Register Code.txt",
+		"/C/Users/Jan/Desktop/cudaminer-2013-12-18/README.txt",
+		"/C/Users/Jan/Desktop/cudaminer-2013-12-18/x64/start.bat",
+		"/C/Users/Jan/Desktop/RPCMiner2013 Alpha [all-in-one][Win32]/usage.txt",
+		"/C/Users/Jan/Desktop/minning.bat",
+		"/C/Users/Jan/Desktop/GeT RiGhT.cfg",
+		"/C/Users/Jan/AppData/Local/Temp/Temp1_mafia-2-v1.04-trainer-plus11.zip/rzr-m2u4.nfo",
+		"/C/Users/Jan/AppData/Local/Temp/Temp1_mafia-2-v1.04-trainer-plus11.zip/!abcgames.sk.txt",
+		"/E/PHP/SERVER/wamp/vhosts/readme.txt",
+		"/E/PHP/PROJECTS/zlatnictvi_tobolovi/www/resources/gallery/0000_Univerzita_HK/description.txt",
+		"/E/PHP/PROJECTS/zlatnictvi_tobolovi/www/resources/gallery/0000_Univerzita_HK/name.txt",
+		"/E/SPA/PROJECTS/spad3d_sample_terrain_picture/terrain.spsc",
+		"/E/SPA/PROJECTS/spad3d_sample_terrain_picture/shaders/terrain.psh",
+		"/E/SPA/PROJECTS/spad3d_sample_terrain_picture/shaders/terrain.vsh",
+		"/C/Users/Jan/Desktop/Backup and mess/DDE tutorial - skybox.txt",
+		"/E/SPA/PROJECTS/spad3d_sample_terrain_picture/test.sps",
+		"/C/Users/Jan/Desktop/Stardock ObjectDock Plus v2.0/Instructions.txt",
+		"/C/Users/Jan/Desktop/A.txt",
+		"/C/Users/Jan/Desktop/Debug_ShareMouse/sm_debug_25-11-2013_11.33.txt",
+		"/C/Users/Jan/Desktop/synergy-1.4.15-Source/hm.cmd",
+		"/C/Users/Jan/Desktop/synergy-1.4.15-Source/CMakeLists.txt",
+		"/C/Users/Jan/Desktop/synergy-1.4.15-Source/hm.py",
+		"/C/Users/Jan/Desktop/DDE tutorial - skybox.txt",
+		"/C/Users/Jan/AppData/Local/Temp/MeshPS.hlsl-rev63.svn000.tmp.hlsl",
+		"/C/Users/Jan/Desktop/MS D3D Tutorials/Tutorial07/Tutorial07.fx",
+		"/C/Users/Jan/Desktop/MS D3D Tutorials/Tutorial07/Tutorial07_PS.hlsl",
+		"/C/Users/Jan/Desktop/MS D3D Tutorials/Tutorial07/Tutorial07_VS.hlsl",
+		"/E/SPA/PROJECTS/spad3d_sample_terrain_raw/shaders/terrain.vsh",
+		"/E/SPA/PROJECTS/spad3d_sample_terrain_raw/test.sps",
+		"/E/SPA/PROJECTS/spad3d_sample_terrain_raw/terrain.spsc",
+		"/E/C++/PROJECTS/DDE/DDEngine/src/shaders/TerrainVS.hlsl",
+		"/E/C++/PROJECTS/DDE/DDEngine/src/shaders/MeshPS.hlsl",
+		"/E/C++/PROJECTS/DDE/DDEngine/src/shaders/MeshVS.hlsl",
+		"/E/C++/PROJECTS/DDE/DDEngine/src/shaders/SkyboxVS.hlsl",
+		"/E/C++/PROJECTS/DDE/DDEngine/src/shaders/SkyboxPS.hlsl",
+		"/E/C++/PROJECTS/DDE/DDEngine/bin/Debug/data/shaders/MeshPS.hlsl",
+		"/C/Windows/System32/drivers/etc/hosts",
+		"/E/C++/PROJECTS/DDE/DDEngine/bin/Debug/data/shaders/SkyboxPS.hlsl",
+		"/E/C++/PROJECTS/DDE/DDEngine/bin/Debug/data/shaders/MeshVS.hlsl",
+		"/E/C++/PROJECTS/DDE/DDEngine/bin/Debug/data/shaders/SkyboxVS.hlsl",
+		"/C/Program Files (x86)/Microsoft Visual Studio 11.0/Common7/IDE/usertype.dat",
+		"/D/DATA BACKUP/private.xml",
+		"/D/Software/Adobe Illustrator CS6 16.0.0 (32-64 bit) [ChingLiu]/ChingLiu.Install.Notes.nfo"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"atten",
+			"preeeeeev",
+			"prevState",
+			"main",
+			"height",
+			"PixelInput",
+			"equation",
+			"::destro",
+			"destroy",
+			"doExisting",
+			"handle",
+			"createFromConta",
+			"getSingleton",
+			"#define CEGUI_NEW_AO",
+			"CEGUI_NEW_AO",
+			"create",
+			"createFromContainer",
+			"System",
+			"fov"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"Momentum",
+			"height",
+			"cuuuup"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"PS_WaterComputation_T.hlsl"
+			],
+			[
+				"wcomp",
+				"PS_WaterComputation_T.hlsl"
+			],
+			[
+				"watercomp",
+				"PS_WaterComputation_T.hlsl"
+			],
+			[
+				"vbm",
+				"VS_BasicMesh.hlsl"
+			],
+			[
+				"vs_ba",
+				"VS_BasicMesh.hlsl"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 35.0,
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 205.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

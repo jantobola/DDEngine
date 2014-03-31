@@ -16,7 +16,7 @@ RenderableTerrain::~RenderableTerrain() {
 
 void RenderableTerrain::create() {
 
-	wstring heightmapPath = wstring(L"res/textures/hills2.png");
+	wstring heightmapPath = wstring(L"res/textures/hills.png");
 
 	CreateDDSTextureFromFile(Ctx.device, L"res/textures/grass.dds", nullptr, &grassTexture);
 	D3DX11CreateShaderResourceViewFromFile( Ctx.device, heightmapPath.c_str(), NULL, NULL, &terrainTexture, NULL );
@@ -29,8 +29,8 @@ void RenderableTerrain::create() {
 	HRESULT result;
 	D3DX11GetImageInfoFromFile(heightmapPath.c_str(), NULL, &hmapInfo, &result);
 
-	psCB_1.customSize = XMFLOAT3(TERRAIN_SIZE);
-	psCB_1.textureSize = XMFLOAT2((float) hmapInfo.Width, (float) hmapInfo.Height);
+	vsCB_1.customSize = XMFLOAT3(TERRAIN_SIZE);
+	vsCB_1.textureSize = XMFLOAT2((float) hmapInfo.Width, (float) hmapInfo.Height);
 
 	terrain.setShaders(TERRAIN_SHADERS);
 	terrain.registerObject(Ctx.device, Ctx.context);
@@ -54,8 +54,8 @@ void RenderableTerrain::render() {
  	Ctx.setPSResource(grassTexture, 0);
  	Ctx.setPSSampler(terrainSampler, 0);
 
-	shaders.updateConstantBufferVS("perObject", &vsCB_0, 0);
-	shaders.updateConstantBufferVS("heightMap", &psCB_1, 1);
+	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0);
+	shaders.updateConstantBufferVS("CB_TerrainProps", &vsCB_1, 1);
 
 	terrain.draw();
 }

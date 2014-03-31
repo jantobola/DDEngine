@@ -28,7 +28,10 @@ DDEComponent::~DDEComponent() {
 void DDEComponent::compose(HWND hWnd) {
 	
 	// Initialization of D3DRenderer
-	this->initialize(hWnd);
+	if (FAILED(this->initialize(hWnd))) {
+		// initialization error code
+		PostQuitMessage(-1);
+	}
 
 	controlls	= new Controlls(camera, timer);
 	objects		= new ObjectManager(config, Ctx);

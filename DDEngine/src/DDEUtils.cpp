@@ -65,3 +65,24 @@ FILETIME FileUtils::getLastWriteTime( std::wstring path ) {
 
 	return writeTime;
 }
+
+#include <comdef.h>
+
+void DDEngine::Win32Utils::showFailMessage(HRESULT result, std::string title, std::string message)
+{
+	if(FAILED(result)) {
+		_com_error err(result);
+		std::wstring errMsg(err.ErrorMessage());
+
+		std::wstring tit = StringUtils::toWstring(title);
+		std::wstring msg = StringUtils::toWstring(message) + L"\n\nDescription:\n" + errMsg;
+		MessageBox(NULL, msg.c_str(), tit.c_str(), MB_OK);
+	}
+}
+
+void DDEngine::Win32Utils::showMessage(std::string title, std::string message)
+{
+	std::wstring tit = StringUtils::toWstring(title);
+	std::wstring msg = StringUtils::toWstring(message);
+	MessageBox(NULL, msg.c_str(), tit.c_str(), MB_OK);
+}

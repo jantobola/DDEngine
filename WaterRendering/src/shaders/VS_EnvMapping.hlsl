@@ -3,24 +3,28 @@
 // Vertex Shader
 //--------------------------------------------------------------------------------------
 
+cbuffer Matrices : register ( b0 )
+{
+	matrix WVP;
+};
+
 struct VertexInput 
 {
 	float3 pos : POSITION;
 	float2 tex : TEXCOORD;
 };
 
-struct VertexOutput 
+struct VertexOutpus 
 {
-	float4 pos : SV_POSITION;
-	float2 tex : TEXCOORD;
+    float4 pos : SV_POSITION;
+	float3 tex : TEXCOORD;
 };
 
-VertexOutput main( VertexInput input )
+VertexOutpus main( VertexInput input )
 {
-	VertexOutput output;
-	
-	output.pos = float4(input.pos, 1);
-	output.tex = float2(input.pos.xz);
+	VertexOutpus output;
+	output.pos = mul(float4(input.pos, 1.0f), WVP).xyww;
+	output.tex = input.pos;
 
 	return output;
 }

@@ -55,7 +55,7 @@ void CustomRenderer::create() {
 }
 
 void CustomRenderer::render() {
- 	shaders->updateConstantBufferPS("perFrame", &light, 5);
+ 	shaders->updateConstantBufferPS("CB_LightProps", &light, 5);
 }
 
 void CustomRenderer::initShaders() {
@@ -71,67 +71,66 @@ void CustomRenderer::initShaders() {
 	#define _shader(X) path + L#X
 
 	#ifdef PRECOMPILED_SHADERS
-		shaders->addVertexShaderBinary("MeshVS", _shader(MeshVS.cso));
-		shaders->addPixelShaderBinary("MeshPS", _shader(MeshPS.cso));
+		shaders->addVertexShaderBinary("VS_BasicMesh", _shader(VS_BasicMesh.cso));
+		shaders->addPixelShaderBinary("PS_BasicLightMesh", _shader(PS_BasicLightMesh.cso));
 
-		shaders->addVertexShaderBinary("TerrainVS", _shader(TerrainVS.cso));
+		shaders->addVertexShaderBinary("VS_TerrainVDisplacement", _shader(VS_TerrainVDisplacement.cso));
 
-		shaders->addVertexShaderBinary("WaterVS", _shader(WaterVS.cso));
-		shaders->addPixelShaderBinary("WaterPS", _shader(WaterPS.cso));
+		shaders->addVertexShaderBinary("VS_WaterVDisplacement", _shader(VS_WaterVDisplacement.cso));
+		shaders->addPixelShaderBinary("PS_WaterOptical", _shader(PS_WaterOptical.cso));
 
-		shaders->addVertexShaderBinary("RenderToTextureVS", _shader(RenderToTextureVS.cso));
-		shaders->addPixelShaderBinary("RenderToTexturePS", _shader(RenderToTexturePS.cso));
+		shaders->addVertexShaderBinary("VS_QuadObject", _shader(VS_QuadObject.cso));
+		shaders->addPixelShaderBinary("PS_WaterComputation_T", _shader(PS_WaterComputation_T.cso));
 
-		shaders->addVertexShaderBinary("SkyboxVS", _shader(SkyboxVS.cso));
-		shaders->addPixelShaderBinary("SkyboxPS", _shader(SkyboxPS.cso));
+		shaders->addVertexShaderBinary("VS_EnvMapping", _shader(VS_EnvMapping.cso));
+		shaders->addPixelShaderBinary("PS_EnvMapping", _shader(PS_EnvMapping.cso));
 	#else
-		shaders->addVertexShader("MeshVS", _shader(MeshVS.hlsl));
-		shaders->addPixelShader("MeshPS", _shader(MeshPS.hlsl));
+		shaders->addVertexShader("VS_BasicMesh", _shader(VS_BasicMesh.hlsl));
+		shaders->addPixelShader("PS_BasicLightMesh", _shader(PS_BasicLightMesh.hlsl));
 
-		shaders->addVertexShader("TerrainVS", _shader(TerrainVS.hlsl));
+		shaders->addVertexShader("VS_TerrainVDisplacement", _shader(VS_TerrainVDisplacement.hlsl));
 
-		shaders->addVertexShader("WaterVS", _shader(WaterVS.hlsl));
-		shaders->addPixelShader("WaterPS", _shader(WaterPS.hlsl));
+		shaders->addVertexShader("VS_WaterVDisplacement", _shader(VS_WaterVDisplacement.hlsl));
+		shaders->addPixelShader("PS_WaterOptical", _shader(PS_WaterOptical.hlsl));
 
-		shaders->addVertexShader("RenderToTextureVS", _shader(RenderToTextureVS.hlsl));
-		shaders->addPixelShader("RenderToTexturePS", _shader(RenderToTexturePS.hlsl));
+		shaders->addVertexShader("VS_QuadObject", _shader(VS_QuadObject.hlsl));
+		shaders->addPixelShader("PS_WaterComputation_T", _shader(PS_WaterComputation_T.hlsl));
 
-		shaders->addVertexShader("SkyboxVS", _shader(SkyboxVS.hlsl));
-		shaders->addPixelShader("SkyboxPS", _shader(SkyboxPS.hlsl));
+		shaders->addVertexShader("VS_EnvMapping", _shader(VS_EnvMapping.hlsl));
+		shaders->addPixelShader("PS_EnvMapping", _shader(PS_EnvMapping.hlsl));
 	#endif
 
-	D3D11_INPUT_ELEMENT_DESC layout[] = {
+	D3D11_INPUT_ELEMENT_DESC layout1[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL",	 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
 	D3D11_INPUT_ELEMENT_DESC layout2[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	D3D11_INPUT_ELEMENT_DESC layout3[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
+	D3D11_INPUT_ELEMENT_DESC layout3[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
 	#ifdef PRECOMPILED_SHADERS
-		shaders->addInputLayoutBinary("POS3_TEX_NOR", "MeshVS", layout, ARRAYSIZE(layout));
-		shaders->addInputLayoutBinary("POS4_TEX", "WaterVS", layout2, ARRAYSIZE(layout2));
-		shaders->addInputLayoutBinary("POS3_TEX", "SkyboxVS", layout, ARRAYSIZE(layout));
+		shaders->addInputLayoutBinary("POS3_TEX_NOR", "VS_BasicMesh", layout1, ARRAYSIZE(layout1));
+		shaders->addInputLayoutBinary("POS3_TEX", "VS_EnvMapping", layout2, ARRAYSIZE(layout2));
+		shaders->addInputLayoutBinary("POS2", "VS_TerrainVDisplacement", layout3, ARRAYSIZE(layout3));
 	#else
-		shaders->addInputLayout("POS3_TEX_NOR", "MeshVS", layout, ARRAYSIZE(layout));
-		shaders->addInputLayout("POS4_TEX", "WaterVS", layout2, ARRAYSIZE(layout2));
-		shaders->addInputLayout("POS3_TEX", "SkyboxVS", layout, ARRAYSIZE(layout));
+		shaders->addInputLayout("POS3_TEX_NOR", "VS_BasicMesh", layout1, ARRAYSIZE(layout1));
+		shaders->addInputLayout("POS3_TEX", "VS_EnvMapping", layout2, ARRAYSIZE(layout2));
+		shaders->addInputLayout("POS2", "VS_TerrainVDisplacement", layout3, ARRAYSIZE(layout3));
 	#endif
 
-	shaders->addConstantBuffer("perFrame", sizeof(Light_CB));
-	shaders->addConstantBuffer("WVP", sizeof(WVP_CB));
-	shaders->addConstantBuffer("heightMap", sizeof(Terrain_CB));
-	shaders->addConstantBuffer("timer", sizeof(Timer_CB));
-	shaders->addConstantBuffer("perObject", sizeof(Matrices_CB));
-	shaders->addConstantBuffer("waterProps", sizeof(WaterProps_CB));
+	shaders->addConstantBuffer("CB_LightProps", sizeof(Light_CB));
+	shaders->addConstantBuffer("CB_WVP", sizeof(WVP_CB));
+	shaders->addConstantBuffer("CB_TerrainProps", sizeof(Terrain_CB));
+	shaders->addConstantBuffer("CB_Timer", sizeof(Timer_CB));
+	shaders->addConstantBuffer("CB_Matrices", sizeof(Matrices_CB));
+	shaders->addConstantBuffer("CB_WaterProps", sizeof(WaterProps_CB));
 }
 
 void CustomRenderer::cleanUp() {

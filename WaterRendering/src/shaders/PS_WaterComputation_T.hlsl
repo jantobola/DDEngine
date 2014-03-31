@@ -4,7 +4,7 @@
 //--------------------------------------------------------------------------------------
 
 Texture2D<float4> prevState : register(t0);
-SamplerState samp : register(s0);
+SamplerState samplerState : register(s0);
 
 cbuffer WaterProps : register ( b0 )
 {
@@ -38,10 +38,11 @@ float getDistance(float2 coords)
 	float powC = pow(distX, 2) + pow(distY, 2);
 	return sqrt(powC);
 }
-// R - setrvacnost
+
+// R - momentum
 // G - height
 float4 compute(PixelInput input)
-{	
+{
 	// position without offset
 	float posX = input.pos.x - 0.5f;
 	float posY = input.pos.y - 0.5f;
@@ -49,8 +50,8 @@ float4 compute(PixelInput input)
 	// previous state for current pixel
 	float4 prevValues = prevState.Load(int3(posX, posY, 0));
 	
-	// previous attenuation
-	float prevAtten = prevValues.r;
+	// previous momentum
+	float prevMomentum = prevValues.r;
 	// previous height
 	float prevHeight = prevValues.g;
 
@@ -73,12 +74,12 @@ float4 compute(PixelInput input)
 
 	float diff = dhTop + dhRight + dhBottom + dhLeft;
 	
-	float currAtten = (viscosity - abs(diff / 8)) * prevAtten + diff / 4;
-	float currHeight = currAtten + prevHeight;
+	float currMomentum = (viscosity - abs(diff / 8)) * prevMomentum + diff / 4;
+	float currHeight = currMomentum + prevHeight;
 
 	if (currHeight <= 0) currHeight = prevHeight;
 
-	return float4(currAtten, currHeight, prevValues.b, prevValues.a);
+	return float4(currMomentum, currHeight, prevValues.b, prevValues.a);
 }
 
 float4 copyTexture(PixelInput input)
@@ -91,6 +92,7 @@ float4 copyTexture(PixelInput input)
 	return prevState.Load(int3(posX, posY, 0)).rgba;
 }
 
+// SHADER ENTRY POINT
 float4 main(PixelInput input) : SV_TARGET
 {
 	// two actions in one frame
@@ -100,7 +102,7 @@ float4 main(PixelInput input) : SV_TARGET
 
 		// reset to calm surface (first frame and on backspace key press)
 		if (reset == 1) {
-			return float4(0, 0, 1, 1); // r - setrvacnost, g - height
+			return float4(0, 0, 1, 1); // r - momentum, g - height
 		}
 
 		// generate water drop (on enter key press)
@@ -118,7 +120,6 @@ float4 main(PixelInput input) : SV_TARGET
 				return float4(prev.r, prev.g + sqrt(finalHeight), prev.b, prev.a);
 			}
 			
-
 			//float4 prev = prevState.Load(int3(input.pos.x - 0.5f, input.pos.y - 0.5f, 0));
 			//if (input.pos.x - 0.5f == sizeX / 4 && input.pos.y - 0.5f == sizeY / 2) 
 			//return float4(prev.r, prev.g + height, prev.b, prev.a);

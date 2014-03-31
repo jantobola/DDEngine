@@ -110,6 +110,12 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <FxCompile>
+      <ShaderType>Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">
     <ClCompile>
@@ -133,6 +139,7 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
     <FxCompile>
       <ObjectFileOutput>$(OutDir)shaders\%(Filename).cso</ObjectFileOutput>
       <ShaderModel>5.0</ShaderModel>
+      <ShaderType>Vertex</ShaderType>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -178,6 +185,7 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
     <FxCompile>
       <ObjectFileOutput>$(OutDir)shaders\%(Filename).cso</ObjectFileOutput>
       <ShaderModel>5.0</ShaderModel>
+      <ShaderType>Vertex</ShaderType>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -197,98 +205,6 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
     <ClCompile Include="src\RenderableWater.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\shaders\MeshPS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\MeshVS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\RenderToTexturePS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\RenderToTextureVS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\SkyboxPS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\SkyboxVS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\TerrainVS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\WaterPS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\shaders\WaterVS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">false</ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DDEngine\DDEngine.vcxproj">
       <Project>{919fe693-b60e-49ae-93b5-0f2fcb949487}</Project>
       <Private>false</Private>
@@ -300,6 +216,62 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\config.cfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\shaders\PS_BasicLightMesh.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\PS_EnvMapping.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\PS_WaterComputation_T.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\PS_WaterOptical.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_BasicMesh.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_EnvMapping.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_QuadObject.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_TerrainVDisplacement.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VS_WaterVDisplacement.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

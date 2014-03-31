@@ -3,8 +3,8 @@
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 
-TextureCube objTexture;
-SamplerState objSamplerState;
+TextureCube cubeTexture;
+SamplerState samplerState;
 
 struct PixelInput
 {
@@ -14,5 +14,5 @@ struct PixelInput
 
 float4 main(PixelInput input) : SV_TARGET
 {
-    return objTexture.Sample( objSamplerState, input.tex );
+    return cubeTexture.Sample( samplerState, input.tex );
 }

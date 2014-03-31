@@ -3,7 +3,7 @@
 // Vertex Shader
 //--------------------------------------------------------------------------------------
 
-cbuffer PerObject : register ( b0 )
+cbuffer Matrices : register ( b0 )
 {
 	matrix world;
 	matrix view;
@@ -17,18 +17,18 @@ struct VertexInput
 	float3 nor : NORMAL;
 };
 
-struct VertexOutpus 
+struct VertexOutput 
 {
     float4 pos : SV_POSITION;
 	float2 tex : TEXCOORD;
 	float3 nor : NORMAL;
 };
 
-VertexOutpus main( VertexInput input )
+VertexOutput main( VertexInput input )
 {
-	VertexOutpus output;
+	VertexOutput output;
 
-	float4 pos = float4(input.pos.x, input.pos.y, input.pos.z, 1);
+	float4 pos = float4(input.pos, 1);
 
     output.pos = mul(pos, world);
 	output.pos = mul(output.pos, view);

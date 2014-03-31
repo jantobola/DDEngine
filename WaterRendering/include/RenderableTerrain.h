@@ -4,9 +4,10 @@
 #include <Grid.h>
 #include "ConstantBuffers.h"
 
+// to tweak bar
 #define TERRAIN_GRID_SIZE 1000, 1000
 #define TERRAIN_SIZE 3000, 3000, 50
-#define TERRAIN_SHADERS "TerrainVS", "MeshPS", "POS4_TEX"
+#define TERRAIN_SHADERS "VS_TerrainVDisplacement", "PS_BasicLightMesh", "POS2"
 
 struct Terrain_CB {
 
@@ -26,7 +27,7 @@ class RenderableTerrain : public DDEngine::IRenderable {
 		
 		DDEngine::Grid terrain;
 		Matrices_CB vsCB_0;
-		Terrain_CB psCB_1;
+		Terrain_CB vsCB_1;
 
 		ID3D11ShaderResourceView* grassTexture{ NULL };
 		ID3D11ShaderResourceView* terrainTexture{ NULL };

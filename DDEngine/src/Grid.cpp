@@ -45,7 +45,7 @@ void Grid::loadGeometry(vector<Vertex>* vertices, vector<DWORD>* indices) {
 
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < columns; c++) {
-			VB(float(c) / (columns - 1), 0, float(r) / (rows - 1), 0, 0, 0, 0, 0)
+			VB(float(c) / (columns - 1), float(r) / (rows - 1), 0, 0, 0, 0, 0, 0)
 		}
 	}
 
