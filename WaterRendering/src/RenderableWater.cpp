@@ -26,7 +26,7 @@ void RenderableWater::create() {
 	vsCB_2.sizeY = (float) size.HEIGHT;
 
 	computeTexture_0.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX");
-	computeTexture_1.setShaders("VS_QuadObject", "VS_QuadObject", "POS3_TEX");
+	computeTexture_1.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX");
 	waterSurface.setShaders("VS_WaterVDisplacement", "PS_WaterOptical", "POS2");
 
 	setTweakBars();
