@@ -15,7 +15,7 @@ cbuffer Matrices : register ( b0 )
 
 cbuffer Timer : register ( b1 )
 {
-	float velocity;
+	float time;
 };
 
 struct VertexInput 
@@ -30,8 +30,9 @@ struct VertexOutput
 	float3 nor : NORMAL;
 };
 
-// to CB
-#define SIZE 400
+// GetDimensions
+#define SIZE 100
+#define HEIGHT_OFFSET -0.0001f
 
 // input: pos.xy - 2D pixel coord
 // output: pos.rgba - color components for a given pixel from computed texture
@@ -55,7 +56,7 @@ VertexOutput main( VertexInput input )
 	float4 rgba = getRGBA(input.pos);
 
 	float2 position2 = input.pos;
-	float4 position4 = float4(position2.x, rgba.g, position2.y, 1);
+	float4 position4 = float4(position2.x, rgba.g + HEIGHT_OFFSET, position2.y, 1);
 
 	float3 xVec = getHeight(position2 + float2(1.0f / SIZE, 0)) - getHeight(position2 - float2(1.0f / SIZE, 0));
 	float3 zVec = getHeight(position2 + float2(0, 1.0f / SIZE)) - getHeight(position2 - float2(0, 1.0f / SIZE));

@@ -1,4 +1,5 @@
 #include "RenderableWater.h"
+#include <d3dx11.h>
 
 using namespace DDEngine;
 using namespace std;
@@ -6,15 +7,22 @@ using namespace DirectX;
 
 RenderableWater::~RenderableWater() {
 	waterSurface.releaseBuffers();
+	bottomSurface.releaseBuffers();
 	RELEASE(waterSampler)
+	RELEASE(linearSampler)
+	RELEASE(texture_bottom)
 }
 
 void RenderableWater::create() {
 
 	DXUtils::createSamplerState(Ctx.device, &waterSampler, DXUtils::SamplerType::MIN_MAG_MIP_POINT);
+	DXUtils::createSamplerState(Ctx.device, &linearSampler, DXUtils::SamplerType::MIN_MAG_MIP_LINEAR);
 
 	waterSurface = Grid(size.WIDTH, size.HEIGHT);
 	waterSurface.registerObject(Ctx.device, Ctx.context);
+
+	bottomSurface = Grid(2, 2);
+	bottomSurface.registerObject(Ctx.device, Ctx.context);
 
 	computeTexture_0 = RenderToTexture(Ctx.device, Ctx.context);
 	computeTexture_0.create(size.WIDTH, size.HEIGHT);
@@ -22,12 +30,15 @@ void RenderableWater::create() {
 	computeTexture_1 = RenderToTexture(Ctx.device, Ctx.context);
 	computeTexture_1.create(size.WIDTH, size.HEIGHT);
 
+	D3DX11CreateShaderResourceViewFromFile(Ctx.device, L"res/textures/bottom_tile.jpg", NULL, NULL, &texture_bottom, NULL);
+
 	vsCB_2.sizeX = (float) size.WIDTH;
 	vsCB_2.sizeY = (float) size.HEIGHT;
 
 	computeTexture_0.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX");
 	computeTexture_1.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX");
 	waterSurface.setShaders("VS_WaterVDisplacement", "PS_WaterOptical", "POS2");
+	bottomSurface.setShaders("VS_WaterBottom", "PS_BasicLightMesh", "POS2");
 
 	setTweakBars();
 }
@@ -36,15 +47,27 @@ void RenderableWater::render() {
 	XMMATRIX v = XMMatrixTranspose(camera.getViewMatrix());
 	XMMATRIX p = XMMatrixTranspose(camera.getProjectionMatrix());
 
-	XMStoreFloat4x4(&vsCB_0.world, waterSurface.getWorldMatrix());
 	XMStoreFloat4x4(&vsCB_0.view, v);
 	XMStoreFloat4x4(&vsCB_0.projection, p);
-	
-	vsCB_1.velocity = (float)timer.delta; // some time step
+
+	// RENDER BOTTOM SURFACE
+	// #################################################################################################################
+
+	XMStoreFloat4x4(&vsCB_0.world, bottomSurface.getWorldMatrix());
+
+	resources.assignResources(bottomSurface);
+	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0);
+
+	Ctx.setPSResource(texture_bottom, 0);
+	Ctx.setPSSampler(linearSampler, 0);
+
+	bottomSurface.draw();
 
 	// COMPUTE SIMULATION (computeTexture_0, RenderToTextureVS, RenderToTexturePS)
 	// #################################################################################################################
 	
+	vsCB_1.time = timer.velocity();
+
 	if (!renderStep || oneStep) {
 		vsCB_2.action = 0; // set computation action
 		step();
@@ -63,8 +86,9 @@ void RenderableWater::render() {
 	Ctx.setPSSampler(waterSampler, 0); // set point sampler
 
 	Ctx.context->RSSetState(Ctx.RSSolidCullNone); // solid no culling
-
+	
 	computeTexture_0.draw(); // compute, store new values
+
 	Ctx.setRasterizerState(Ctx.currentRasterizerState); // set original rasterizer state
  	// #################################################################################################################
 
@@ -72,7 +96,9 @@ void RenderableWater::render() {
 	// #################################################################################################################
 	Ctx.setBackbufferRenderTarget(); // set original render target
 	resources.assignResources(waterSurface); // set current shaders
-	
+
+	XMStoreFloat4x4(&vsCB_0.world, waterSurface.getWorldMatrix());
+
 	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0); // update matrices
 	shaders.updateConstantBufferVS("CB_Timer", &vsCB_1, 1); // update time
 

@@ -30,7 +30,7 @@ void CustomRenderer::create() {
 	water->setName("water");
 
 	skybox->setSkyboxPath("res/textures/Skybox.dds");	
-	water->setSize(400, 400);
+	water->setSize(100, 100);
 
 	objects->addObject(skybox);
 	objects->addObject(terrain);
@@ -91,6 +91,7 @@ void CustomRenderer::initShaders() {
 		shaders->addVertexShader("VS_TerrainVDisplacement", _shader(VS_TerrainVDisplacement.hlsl));
 
 		shaders->addVertexShader("VS_WaterVDisplacement", _shader(VS_WaterVDisplacement.hlsl));
+		shaders->addVertexShader("VS_WaterBottom", _shader(VS_WaterBottom.hlsl));
 		shaders->addPixelShader("PS_WaterOptical", _shader(PS_WaterOptical.hlsl));
 
 		shaders->addVertexShader("VS_QuadObject", _shader(VS_QuadObject.hlsl));
@@ -98,6 +99,7 @@ void CustomRenderer::initShaders() {
 
 		shaders->addVertexShader("VS_EnvMapping", _shader(VS_EnvMapping.hlsl));
 		shaders->addPixelShader("PS_EnvMapping", _shader(PS_EnvMapping.hlsl));
+
 	#endif
 
 	D3D11_INPUT_ELEMENT_DESC layout1[] = {

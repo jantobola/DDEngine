@@ -8,6 +8,9 @@
 namespace DDEngine
 {
 
+	typedef ID3D11ShaderResourceView ShaderResourceView;
+	typedef ID3D11SamplerState SamplerState;
+
 	namespace DXUtils
 	{
 		

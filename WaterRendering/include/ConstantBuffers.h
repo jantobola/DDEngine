@@ -44,6 +44,6 @@ struct Timer_CB
 		ZeroMemory(this, sizeof(Timer_CB));
 	}
 
-	float velocity;
+	float time = 1.0f;
 	DirectX::XMFLOAT3 pad;
 };

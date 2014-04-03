@@ -16,7 +16,7 @@ Timer::~Timer() {
 }
 
 void DDEngine::Timer::init() {
-	previous = GetTickCount();
+	previous = timeGetTime();
 	tickTime = previous;
 }
 
@@ -26,14 +26,14 @@ void DDEngine::Timer::pause()
 }
 
 void Timer::start() {
-	current = GetTickCount();
+	current = timeGetTime();
 	delta = current - previous;
 	previous = current;
 
-	if (GetTickCount() - tickTime >= FPS_REFRESH_INTERVAL) {
+	if (timeGetTime() - tickTime >= FPS_REFRESH_INTERVAL) {
 		FPS = counter * (1000 / FPS_REFRESH_INTERVAL);
 		counter = 0;
-		tickTime = GetTickCount();
+		tickTime = timeGetTime();
 	}
 
 	counter++;

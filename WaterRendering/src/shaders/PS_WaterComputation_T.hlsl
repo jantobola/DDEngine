@@ -24,20 +24,9 @@ cbuffer Timer : register (b1)
 
 struct PixelInput
 {
-    float4 pos : SV_POSITION;
+	float4 pos : SV_POSITION;
 	float2 tex : TEXCOORD;
 };
-
-// computes a distance from origin
-// arg coords - texel coords (0-1)
-float getDistance(float2 coords)
-{
-	float distX = coords.x - 0.5f / 2; // 0.5 is an origin (middle)
-	float distY = coords.y - 0.5f / 2;
-
-	float powC = pow(distX, 2) + pow(distY, 2);
-	return sqrt(powC);
-}
 
 // R - momentum
 // G - height
@@ -66,16 +55,21 @@ float4 compute(PixelInput input)
 	float dhBottom = 0.0f;
 	float dhLeft = 0.0f;
 
-	// boundaries
-	if (posX - 1 >= 0.0f)		dhLeft = hLeft - prevHeight;			//else return float4(1, 0, 0, 1);
-	if (posX + 1 <= sizeX - 1)	dhRight = hRight - prevHeight;			//else return float4(1, 0, 0, 1);
-	if (posY - 1 >= 0.0f)		dhTop = hTop - prevHeight;				//else return float4(1, 0, 0, 1);
-	if (posY + 1 <= sizeY - 1)	dhBottom = hBottom - prevHeight;		//else return float4(1, 0, 0, 1);
+	// time = delta (ms) / 1000
 
-	float diff = dhTop + dhRight + dhBottom + dhLeft;
-	
-	float currMomentum = (viscosity - abs(diff / 8)) * prevMomentum + diff / 4;
-	float currHeight = currMomentum + prevHeight;
+	float dt = min(time, 1);
+	//dt = 1;
+
+	// boundaries
+	if (posX - 1 >= 0.0f)		dhLeft = (hLeft - prevHeight);
+	if (posX + 1 <= sizeX - 1)	dhRight = (hRight - prevHeight);
+	if (posY - 1 >= 0.0f)		dhTop = (hTop - prevHeight);
+	if (posY + 1 <= sizeY - 1)	dhBottom = (hBottom - prevHeight);
+
+	float diff = (dhTop + dhRight + dhBottom + dhLeft) / 4;
+
+	float currMomentum = viscosity * (prevMomentum + diff);
+	float currHeight = currMomentum * dt + prevHeight;
 
 	if (currHeight <= 0) currHeight = prevHeight;
 
@@ -92,6 +86,17 @@ float4 copyTexture(PixelInput input)
 	return prevState.Load(int3(posX, posY, 0)).rgba;
 }
 
+// compute a distance from an origin
+// arg coords - texel coords (0-1)
+float getDistance(float2 coords)
+{
+	float distX = coords.x; // 0.5 is an origin (middle)
+	float distY = coords.y;
+
+	float powC = pow(distX, 2) + pow(distY, 2);
+	return sqrt(powC);
+}
+
 // SHADER ENTRY POINT
 float4 main(PixelInput input) : SV_TARGET
 {
@@ -102,14 +107,21 @@ float4 main(PixelInput input) : SV_TARGET
 
 		// reset to calm surface (first frame and on backspace key press)
 		if (reset == 1) {
-			return float4(0, 0, 1, 1); // r - momentum, g - height
+			return float4(0, 0.02, 1, 1); // r - momentum, g - height
 		}
 
 		// generate water drop (on enter key press)
 		if (waterDrop == 1){
 			
+			// current pixel coords in texel coord. system (0-1)
+			float2 normXY = float2((input.pos.x - 0.5f) / sizeX, (input.pos.y - 0.5f) / sizeY);
+
+			// point where to start water drop
+			float originX = normXY.x - 0.25;
+			float originY = normXY.y - 0.75;
+
 			// water drop in the middle of the grid
-			float distance = getDistance(float2((input.pos.x - 0.5f) / sizeX, (input.pos.y - 0.5f) / sizeY));
+			float distance = getDistance(float2(originX, originY));
 			// just a small water drop
 			float dropStrength = height;
 
@@ -119,11 +131,8 @@ float4 main(PixelInput input) : SV_TARGET
 				float finalHeight = pow(dropStrength, 1) - pow(distance, 1);
 				return float4(prev.r, prev.g + sqrt(finalHeight), prev.b, prev.a);
 			}
-			
-			//float4 prev = prevState.Load(int3(input.pos.x - 0.5f, input.pos.y - 0.5f, 0));
-			//if (input.pos.x - 0.5f == sizeX / 4 && input.pos.y - 0.5f == sizeY / 2) 
-			//return float4(prev.r, prev.g + height, prev.b, prev.a);
 
+			// water drop is not affecting this pixel
 			return prev;
 	}
 

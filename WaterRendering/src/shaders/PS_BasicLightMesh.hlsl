@@ -24,7 +24,7 @@ float4 main(PixelInput input) : SV_TARGET
 {
 	input.nor = normalize(input.nor);
 
-	float4 ambient = float4(0.2, 0.2, 0.2, 1);
+	float4 ambient = float4(0.5, 0.5, 0.5, 1);
 	float4 diffuse = float4(0.5, 0.5, 0.5, 1);
 
 	float4 diff = textureObject.Sample(samplerState, input.tex);

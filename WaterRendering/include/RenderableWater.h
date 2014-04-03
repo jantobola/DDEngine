@@ -16,13 +16,13 @@ struct WaterProps_CB
 	// int - 4 bytes
 
 	// align
-	float height{ 0.32f };
+	float height{ 0.024f };
 	float sizeX{ 0 };
 	float sizeY{ 0 };
 	int action{ 0 }; // 0 - computation; 1 - copy state 
 	
 	// align
-	float viscosity{ 0.9980f }; // some constat for a slower or faster attenuation (representing something like viscosity)
+	float viscosity{ 0.9998f }; // some constat for a slower or faster attenuation (representing something like viscosity)
 	int waterDrop{ 0 }; // 0 - off; 1 - on
 	int reset{ 1 }; // 0 - ignore; 1 - reset
 	float pad;
@@ -34,12 +34,18 @@ class RenderableWater : public DDEngine::IRenderable {
 
 		bool renderStep = false;
 		bool oneStep = false;
+		float time = 0.0f;
 
 		TwBar* waterBar;
 
+		DDEngine::ShaderResourceView* texture_bottom = nullptr;
+
 		DDEngine::Dimension size;
 		DDEngine::Grid waterSurface;
-		ID3D11SamplerState* waterSampler { NULL };
+		DDEngine::Grid bottomSurface;
+
+		DDEngine::SamplerState* waterSampler = nullptr; // point sampler
+		DDEngine::SamplerState* linearSampler = nullptr;
 
 		DDEngine::RenderToTexture computeTexture_0; // new values
 		DDEngine::RenderToTexture computeTexture_1; // storage (previous state)

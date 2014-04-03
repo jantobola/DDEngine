@@ -29,9 +29,9 @@ class RenderableTerrain : public DDEngine::IRenderable {
 		Matrices_CB vsCB_0;
 		Terrain_CB vsCB_1;
 
-		ID3D11ShaderResourceView* grassTexture{ NULL };
-		ID3D11ShaderResourceView* terrainTexture{ NULL };
-		ID3D11SamplerState* terrainSampler{ NULL };
+		DDEngine::ShaderResourceView* grassTexture = nullptr;
+		DDEngine::ShaderResourceView* terrainTexture = nullptr;
+		DDEngine::SamplerState* terrainSampler = nullptr;
 
 	public:
 

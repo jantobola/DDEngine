@@ -374,7 +374,7 @@ HRESULT DDEngine::DXUtils::createBlendState(_In_ ID3D11Device* device, _Out_ ID3
 	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	desc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	return device->CreateBlendState(&desc, blendState);
 }
