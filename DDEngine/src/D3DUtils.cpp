@@ -105,10 +105,10 @@ HRESULT DDEngine::DXUtils::createAndCompileVertexShader(_In_ ID3D11Device* devic
 	ID3DBlob* vertexShaderBlob = NULL;
 	ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &vertexShaderBlob);
 	result = r.result;
-	std::wstring error;
 
 	if (FAILED(result)) {
-		Win32Utils::showFailMessage(result, "Vertex Shader Error", "Some errors occured during the shader compilation.");
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Vertex Shader Error", msg);
 		return result;
 	}
 
@@ -125,10 +125,10 @@ HRESULT DDEngine::DXUtils::createAndCompilePixelShader(_In_ ID3D11Device* device
 	ID3DBlob* pixelShaderBlob = NULL;
 	ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &pixelShaderBlob);
 	result = r.result;
-	std::wstring error;
 
 	if (FAILED(result)) {
-		Win32Utils::showFailMessage(result, "Pixel Shader Error", "Some errors occured during the shader compilation.");
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Pixel Shader Error", msg);
 		return result;
 	}
 
