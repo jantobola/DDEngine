@@ -12,10 +12,10 @@ struct WaterProps_CB
 	// int - 4 bytes
 
 	// c0
-	float height = 0.024f;
-	float sizeX = 0;
-	float sizeY = 0;
-	int action = 0; // 0 - computation; 1 - copy state 
+	float height = 0.024f;				// height of water drop
+	float sizeX = 0;					// grid size x
+	float sizeY = 0;					// grid size y
+	int action = 0;						// 0 - computation; 1 - copy state 
 
 	// c1
 	float viscosity = 0.9975f;			// some constat for a momentum (representing something like viscosity)
@@ -40,11 +40,11 @@ class RenderableWater : public DDEngine::IRenderable {
 		DDEngine::Grid waterSurface;
 		DDEngine::Grid bottomSurface;
 
-		DDEngine::SamplerState* waterSampler = nullptr; // point sampler
+		DDEngine::SamplerState* waterSampler = nullptr;			// point sampler
 		DDEngine::SamplerState* linearSampler = nullptr;
 
-		DDEngine::RenderToTexture computeTexture_0; // new values
-		DDEngine::RenderToTexture computeTexture_1; // storage (previous state)
+		DDEngine::RenderToTexture computeTexture_0;				// new values
+		DDEngine::RenderToTexture computeTexture_1;				// storage (previous state)
 
 		Matrices_CB vsCB_0;
 		Timer_CB vsCB_1;
