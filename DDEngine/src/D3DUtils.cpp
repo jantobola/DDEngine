@@ -103,7 +103,7 @@ HRESULT DDEngine::DXUtils::createAndCompileVertexShader(_In_ ID3D11Device* devic
 	HRESULT result = S_OK;
 
 	ID3DBlob* vertexShaderBlob = NULL;
-	ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &vertexShaderBlob);
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &vertexShaderBlob);
 	result = r.result;
 
 	if (FAILED(result)) {
@@ -123,7 +123,7 @@ HRESULT DDEngine::DXUtils::createAndCompilePixelShader(_In_ ID3D11Device* device
 	HRESULT result = S_OK;
 
 	ID3DBlob* pixelShaderBlob = NULL;
-	ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &pixelShaderBlob);
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &pixelShaderBlob);
 	result = r.result;
 
 	if (FAILED(result)) {
@@ -273,15 +273,26 @@ HRESULT DDEngine::DXUtils::createConstatnBuffer(_In_ ID3D11Device* device, _In_ 
 HRESULT DDEngine::DXUtils::createInputLayout(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11InputLayout** inputLayout, _In_ D3D11_INPUT_ELEMENT_DESC layoutDesc[], _In_ UINT numElements)
 {
 	HRESULT result = S_OK;
-	ID3DBlob* blob = NULL;
-	ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &blob);
+	ID3DBlob* blob = nullptr;
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &blob);
 	result = r.result;
 
-	HRESULT_RETURN_CHECK(result)
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Input Layout Error", msg);
+
+		if (blob) blob->Release();
+		return result;
+	}
 
 	result = device->CreateInputLayout(layoutDesc, numElements, blob->GetBufferPointer(), blob->GetBufferSize(), inputLayout);
-	blob->Release();
 
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the creating an input layout.";
+		Win32Utils::showFailMessage(result, "Input Layout Error", msg);
+	}
+
+	if (blob) blob->Release();
 	return result;
 }
 

@@ -8,24 +8,20 @@
 
 struct WaterProps_CB
 {
-	WaterProps_CB() {
-
-	}
-
 	// float - 4 bytes
 	// int - 4 bytes
 
-	// align
-	float height{ 0.024f };
-	float sizeX{ 0 };
-	float sizeY{ 0 };
-	int action{ 0 }; // 0 - computation; 1 - copy state 
-	
-	// align
-	float viscosity{ 0.9998f }; // some constat for a slower or faster attenuation (representing something like viscosity)
-	int waterDrop{ 0 }; // 0 - off; 1 - on
-	int reset{ 1 }; // 0 - ignore; 1 - reset
-	float pad;
+	// c0
+	float height = 0.024f;
+	float sizeX = 0;
+	float sizeY = 0;
+	int action = 0; // 0 - computation; 1 - copy state 
+
+	// c1
+	float viscosity = 0.9975f;			// some constat for a momentum (representing something like viscosity)
+	int waterDrop = 0;					// 0 - off; 1 - on
+	int reset = 1;						// 0 - ignore; 1 - reset
+	float heightOffset = -0.0001f;		// water surface Y position + heightOffset = final Y position
 };
 
 class RenderableWater : public DDEngine::IRenderable {

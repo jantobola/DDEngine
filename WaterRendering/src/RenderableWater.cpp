@@ -8,12 +8,15 @@ using namespace DirectX;
 RenderableWater::~RenderableWater() {
 	waterSurface.releaseBuffers();
 	bottomSurface.releaseBuffers();
+
 	RELEASE(waterSampler)
 	RELEASE(linearSampler)
 	RELEASE(texture_bottom)
 }
 
 void RenderableWater::create() {
+
+	setSize(500, 500);
 
 	DXUtils::createSamplerState(Ctx.device, &waterSampler, DXUtils::SamplerType::MIN_MAG_MIP_POINT);
 	DXUtils::createSamplerState(Ctx.device, &linearSampler, DXUtils::SamplerType::MIN_MAG_MIP_LINEAR);
@@ -66,7 +69,8 @@ void RenderableWater::render() {
 	// COMPUTE SIMULATION (computeTexture_0, RenderToTextureVS, RenderToTexturePS)
 	// #################################################################################################################
 	
-	vsCB_1.time = timer.velocity();
+	vsCB_1.time = (double) timer.delta;
+	vsCB_1.timeCycle += (double) timer.delta;
 
 	if (!renderStep || oneStep) {
 		vsCB_2.action = 0; // set computation action
@@ -101,6 +105,7 @@ void RenderableWater::render() {
 
 	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0); // update matrices
 	shaders.updateConstantBufferVS("CB_Timer", &vsCB_1, 1); // update time
+	shaders.updateConstantBufferVS("CB_WaterProps", &vsCB_2, 2); // update surface props
 
 	ID3D11ShaderResourceView* computedTexture_0 = computeTexture_0.getShaderResourceView(); // set computed texture as resource
 	Ctx.setVSResource(computedTexture_0, 0);
@@ -136,6 +141,8 @@ void RenderableWater::render() {
 	Ctx.setBackbufferRenderTarget();
 	setWaterDrop(false); // turn off water drop
 	resetSurface(false); // switch reset state to ignore in next frames
+
+	if(vsCB_1.timeCycle > vsCB_1.timeStep) vsCB_1.timeCycle = 0.0;
 }
 
 void RenderableWater::setSize( int width, int height ) {
@@ -156,8 +163,9 @@ void RenderableWater::setTweakBars()
 	TwDefine(" waterBar size='200 50' ");
 	TwSetParam(waterBar, NULL, "position", TW_PARAM_INT32, 2, &barPos);
 	TwDefine(" waterBar visible=false ");
-	TwAddVarRW(waterBar, "pointHeight", TW_TYPE_FLOAT, &vsCB_2.height, "min=0 max=10 step=0.001");
-	TwAddVarRW(waterBar, "viscosity", TW_TYPE_FLOAT, &vsCB_2.viscosity, "min=0 max=1 step=0.0001");
+	TwAddVarRW(waterBar, "Drop Strength", TW_TYPE_FLOAT, &vsCB_2.height, "min=0 max=10 step=0.001");
+	TwAddVarRW(waterBar, "Viscosity", TW_TYPE_FLOAT, &vsCB_2.viscosity, "min=0 max=1 step=0.0001");
+	TwAddVarRW(waterBar, "Time Step", TW_TYPE_FLOAT, &vsCB_1.timeStep, "min=1 max=10000 step=1");
 }
 
 void RenderableWater::setWaterDrop(bool isOn) {

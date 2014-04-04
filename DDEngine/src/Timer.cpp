@@ -44,5 +44,5 @@ int Timer::getFPS() {
 }
 
 float Timer::velocity() {
-	return ((float) delta) / 1000.0f;
+	return (float) ((double) delta) / 1000.0f;
 }

@@ -12,14 +12,18 @@ cbuffer WaterProps : register ( b0 )
 	float sizeX;
 	float sizeY;
 	int action;
+
 	float viscosity;
 	int waterDrop;
 	int reset;
+	float heightOffset;
 };
 
 cbuffer Timer : register (b1)
 {
-	float time;
+	double time;			// in miliseconds
+	double timeCycle;	// sum of delta times, reset when timeStep overlaped
+	float timeStep;
 }
 
 struct PixelInput
@@ -55,10 +59,7 @@ float4 compute(PixelInput input)
 	float dhBottom = 0.0f;
 	float dhLeft = 0.0f;
 
-	// time = delta (ms) / 1000
-
-	float dt = min(time, 1);
-	//dt = 1;
+	double dt = min(time / (double) timeStep, 1);
 
 	// boundaries
 	if (posX - 1 >= 0.0f)		dhLeft = (hLeft - prevHeight);
@@ -68,7 +69,11 @@ float4 compute(PixelInput input)
 
 	float diff = (dhTop + dhRight + dhBottom + dhLeft) / 4;
 
-	float currMomentum = viscosity * (prevMomentum + diff);
+	float currMomentum = 0.0f;
+
+	if(timeCycle > timeStep) currMomentum = viscosity * (prevMomentum + diff);
+	else currMomentum = prevMomentum + diff;
+
 	float currHeight = currMomentum * dt + prevHeight;
 
 	if (currHeight <= 0) currHeight = prevHeight;

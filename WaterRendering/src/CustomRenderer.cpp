@@ -29,8 +29,7 @@ void CustomRenderer::create() {
 	terrain->setName("terrain");
 	water->setName("water");
 
-	skybox->setSkyboxPath("res/textures/Skybox.dds");	
-	water->setSize(100, 100);
+	skybox->setSkyboxPath("res/textures/Skybox.dds");
 
 	objects->addObject(skybox);
 	objects->addObject(terrain);

@@ -3,14 +3,7 @@
 #include <d3d11.h>
 
 using namespace DDEngine;
-
-ShaderCompiler::ShaderCompiler() {
-
-}
-
-ShaderCompiler::~ShaderCompiler() {
-
-}
+using namespace ShaderCompiler;
 
 ShaderCompilationResult ShaderCompiler::compile( WCHAR* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** ppBlobOut ) {
 	HRESULT hr = S_OK;

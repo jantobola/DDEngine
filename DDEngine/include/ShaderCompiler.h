@@ -7,18 +7,15 @@
 namespace DDEngine
 {
 
-struct ShaderCompilationResult {
-	HRESULT result;
-	std::string errorMessage;
-};
+namespace ShaderCompiler
+{
 
-class ShaderCompiler {
+	struct ShaderCompilationResult {
+		HRESULT result;
+		std::string errorMessage;
+	};
 
-	public:
-		ShaderCompiler();
-		~ShaderCompiler();
-
-		static ShaderCompilationResult compile( WCHAR* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** ppBlobOut );
+	ShaderCompilationResult compile( WCHAR* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** ppBlobOut );
 
 };
 }

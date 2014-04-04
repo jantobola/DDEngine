@@ -18,6 +18,13 @@ cbuffer Timer : register ( b1 )
 	float time;
 };
 
+cbuffer SurfaceProps : register ( b2 )
+{
+	float sizeX 		: packoffset(c0.y);
+	float sizeY			: packoffset(c0.z);
+	float heightOffset 	: packoffset(c1.w);
+};
+
 struct VertexInput 
 {
 	float2 pos : POSITION;
@@ -30,15 +37,11 @@ struct VertexOutput
 	float3 nor : NORMAL;
 };
 
-// GetDimensions
-#define SIZE 100
-#define HEIGHT_OFFSET -0.0001f
-
 // input: pos.xy - 2D pixel coord
 // output: pos.rgba - color components for a given pixel from computed texture
 float4 getRGBA(float2 pos)
 {
-	return computedTexture.Load(int3(pos.x * SIZE, (1 - pos.y) * SIZE, 0));
+	return computedTexture.Load(int3(pos.x * sizeX, (1 - pos.y) * sizeY, 0));
 }
 
 // input: pos.xy - 2D grid coord
@@ -56,18 +59,15 @@ VertexOutput main( VertexInput input )
 	float4 rgba = getRGBA(input.pos);
 
 	float2 position2 = input.pos;
-	float4 position4 = float4(position2.x, rgba.g + HEIGHT_OFFSET, position2.y, 1);
+	float4 position4 = float4(position2.x, rgba.g + heightOffset, position2.y, 1);
 
-	float3 xVec = getHeight(position2 + float2(1.0f / SIZE, 0)) - getHeight(position2 - float2(1.0f / SIZE, 0));
-	float3 zVec = getHeight(position2 + float2(0, 1.0f / SIZE)) - getHeight(position2 - float2(0, 1.0f / SIZE));
+	float3 xVec = getHeight(position2 + float2(1.0f / sizeX, 0)) - getHeight(position2 - float2(1.0f / sizeY, 0));
+	float3 zVec = getHeight(position2 + float2(0, 1.0f / sizeX)) - getHeight(position2 - float2(0, 1.0f / sizeY));
 
 	// get cross product
 	output.nor = cross(xVec, zVec);
 	output.tex = float2(position2.x, 1 - position2.y);
 	
-	//input.pos.y = sin(input.pos.y + velocity) / 2 * sin(input.pos.x + velocity);
-	//input.pos = float4(input.pos.x, input.pos.y, input.pos.z, 1);
-
     output.pos = mul(position4, world);
 	output.pos = mul(output.pos, view);
 	output.pos = mul(output.pos, projection);
