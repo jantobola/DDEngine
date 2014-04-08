@@ -37,7 +37,6 @@ void RenderableTerrain::create() {
 }
 
 void RenderableTerrain::render() {
-	camera.update();
 	resources.assignResources(terrain);
 
 	XMMATRIX w = XMMatrixTranspose(terrain.getWorldMatrix());

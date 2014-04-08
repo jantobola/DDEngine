@@ -72,6 +72,11 @@ void RenderContext::clearRenderTarget( ID3D11RenderTargetView* renderTarget, ID3
 	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
+void DDEngine::RenderContext::clearRenderTarget(float bgColor[], ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView) {
+	context->ClearRenderTargetView(renderTarget, bgColor);
+	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
 void RenderContext::setViewport( int x, int y, int width, int height ) {
 	D3D11_VIEWPORT viewPortDesc;
 
@@ -102,17 +107,17 @@ void RenderContext::setRenderWireframe( bool renderedWireframe ) {
 }
 
 void RenderContext::setPSResource( ID3D11ShaderResourceView* resource, int index ) {
-	context->PSSetShaderResources(index, index + 1, &resource);
+	context->PSSetShaderResources(index, 1, &resource);
 }
 
 void RenderContext::setVSResource( ID3D11ShaderResourceView* resource, int index ) {
-	context->VSSetShaderResources(index, index + 1, &resource);
+	context->VSSetShaderResources(index, 1, &resource);
 }
 
 void RenderContext::setPSSampler( ID3D11SamplerState* sampler, int index ) {
-	context->PSSetSamplers(index, index + 1, &sampler);
+	context->PSSetSamplers(index, 1, &sampler);
 }
 
 void RenderContext::setVSSampler( ID3D11SamplerState* sampler, int index ) {
-	context->VSSetSamplers(index, index + 1, &sampler);
+	context->VSSetSamplers(index, 1, &sampler);
 }

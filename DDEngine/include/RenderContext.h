@@ -46,6 +46,7 @@ class RenderContext {
 		void setDefaultDepthStencilState();
 		void setRenderTarget(ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView);
 		void clearRenderTarget(ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView);
+		void clearRenderTarget(float bgColor[], ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView);
 		void setViewport(int x, int y, int width, int height);
 		void setPSResource(ID3D11ShaderResourceView* resource, int index);
 		void setVSResource(ID3D11ShaderResourceView* resource, int index);

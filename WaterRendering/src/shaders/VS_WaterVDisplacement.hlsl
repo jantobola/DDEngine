@@ -8,9 +8,10 @@ SamplerState samplerState : register( s0 );
 
 cbuffer Matrices : register ( b0 )
 {
-	matrix world;
-	matrix view;
-	matrix projection;
+	matrix world 			: packoffset(c0);
+	matrix view 			: packoffset(c4);
+	matrix projection 		: packoffset(c8);
+	matrix worldInvTrans 	: packoffset(c16);
 };
 
 cbuffer Timer : register ( b1 )
@@ -20,10 +21,16 @@ cbuffer Timer : register ( b1 )
 
 cbuffer SurfaceProps : register ( b2 )
 {
-	float sizeX 		: packoffset(c0.y);
-	float sizeY			: packoffset(c0.z);
-	float heightOffset 	: packoffset(c1.w);
+	float sizeX 					: packoffset(c0.y);
+	float sizeY						: packoffset(c0.z);
+	float heightOffset 				: packoffset(c1.w);
+	float2 refractiveTextureScale 	: packoffset(c2.x);
 };
+
+cbuffer CameraBuffer : register ( b3 )
+{
+	float3 cameraPosition;
+}
 
 struct VertexInput 
 {
@@ -33,8 +40,9 @@ struct VertexInput
 struct VertexOutput 
 {
     float4 pos : SV_POSITION;
-	float2 tex : TEXCOORD;
-	float3 nor : NORMAL;
+	float3 reflection : TEXCOORD0;
+	float2 refraction : TEXCOORD1;
+	float3 viewDirection : POSITION;
 };
 
 // input: pos.xy - 2D pixel coord
@@ -65,12 +73,26 @@ VertexOutput main( VertexInput input )
 	float3 zVec = getHeight(position2 + float2(0, 1.0f / sizeX)) - getHeight(position2 - float2(0, 1.0f / sizeY));
 
 	// get cross product
-	output.nor = cross(xVec, zVec);
-	output.tex = float2(position2.x, 1 - position2.y);
+	float3 normal = cross(xVec, zVec);
 	
     output.pos = mul(position4, world);
 	output.pos = mul(output.pos, view);
 	output.pos = mul(output.pos, projection);
+
+
+	// REFLECTION COORDS
+	float4 vertPos = mul(position4, world);
+	output.viewDirection = cameraPosition - vertPos;
+
+	float3 norm = normalize(mul(normal, world));
+	output.reflection = reflect(-normalize(output.viewDirection), norm);
+
+	// REFRACTION COORDS
+	float3 refract_dir = refract( -cameraPosition, norm, 1 / 1.333f);
+    
+    float dist = -position4.y / refract_dir.y;
+    float2 base_pos = vertPos.xz + dist * refract_dir.xz;
+    output.refraction = base_pos * refractiveTextureScale;
 
 	return output;
 }

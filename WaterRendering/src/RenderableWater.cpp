@@ -1,5 +1,8 @@
 #include "RenderableWater.h"
 #include <d3dx11.h>
+#include <DirectXMath.h>
+#include "RenderableSkybox.h"
+#include "RenderableTerrain.h"
 
 using namespace DDEngine;
 using namespace std;
@@ -33,6 +36,8 @@ void RenderableWater::create() {
 	computeTexture_1 = RenderToTexture(Ctx.device, Ctx.context);
 	computeTexture_1.create(size.WIDTH, size.HEIGHT);
 
+	// ################# REFLECTION & REFRACTION TEXTURES #################
+
 	D3DX11CreateShaderResourceViewFromFile(Ctx.device, L"res/textures/bottom_tile.jpg", NULL, NULL, &texture_bottom, NULL);
 
 	vsCB_2.sizeX = (float) size.WIDTH;
@@ -42,6 +47,9 @@ void RenderableWater::create() {
 	computeTexture_1.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX");
 	waterSurface.setShaders("VS_WaterVDisplacement", "PS_WaterOptical", "POS2");
 	bottomSurface.setShaders("VS_WaterBottom", "PS_BasicLightMesh", "POS2");
+
+	vsCB_2.refractiveTextureScale.x = 6;
+	vsCB_2.refractiveTextureScale.y = 6;
 
 	setTweakBars();
 }
@@ -60,6 +68,7 @@ void RenderableWater::render() {
 
 	resources.assignResources(bottomSurface);
 	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0);
+	shaders.updateConstantBufferVS("CB_WaterProps", &vsCB_2, 1);
 
 	Ctx.setPSResource(texture_bottom, 0);
 	Ctx.setPSSampler(linearSampler, 0);
@@ -95,22 +104,27 @@ void RenderableWater::render() {
 
 	Ctx.setRasterizerState(Ctx.currentRasterizerState); // set original rasterizer state
  	// #################################################################################################################
-
+	
  	// RENDER WATER (grid, WaterVS, WaterPS)
 	// #################################################################################################################
 	Ctx.setBackbufferRenderTarget(); // set original render target
 	resources.assignResources(waterSurface); // set current shaders
 
 	XMStoreFloat4x4(&vsCB_0.world, waterSurface.getWorldMatrix());
+	//XMStoreFloat4x4(&vsCB_0.worldInvTrans, XMMatrixTranspose(XMMatrixInverse(NULL, waterSurface.getWorldMatrix())));
+
+	vsCB_3.cameraPosition = camera.eye;
 
 	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0); // update matrices
 	shaders.updateConstantBufferVS("CB_Timer", &vsCB_1, 1); // update time
 	shaders.updateConstantBufferVS("CB_WaterProps", &vsCB_2, 2); // update surface props
+	shaders.updateConstantBufferVS("CB_Camera", &vsCB_3, 3); // update camera vectors
 
 	ID3D11ShaderResourceView* computedTexture_0 = computeTexture_0.getShaderResourceView(); // set computed texture as resource
 	Ctx.setVSResource(computedTexture_0, 0);
 	Ctx.setVSSampler(waterSampler, 0);
-	Ctx.setPSResource(computedTexture_0, 0);
+	Ctx.setPSResource(skybox->getSkyboxTexture(), 0);
+	Ctx.setPSResource(texture_bottom, 1);
 	Ctx.setPSSampler(waterSampler, 0);
 
 	waterSurface.draw(); // draw grid (vertex displacement)
@@ -166,6 +180,8 @@ void RenderableWater::setTweakBars()
 	TwAddVarRW(waterBar, "Drop Strength", TW_TYPE_FLOAT, &vsCB_2.height, "min=0 max=10 step=0.001");
 	TwAddVarRW(waterBar, "Viscosity", TW_TYPE_FLOAT, &vsCB_2.viscosity, "min=0 max=1 step=0.0001");
 	TwAddVarRW(waterBar, "Time Step", TW_TYPE_FLOAT, &vsCB_1.timeStep, "min=1 max=10000 step=1");
+	TwAddVarRW(waterBar, "Bottom Scale X", TW_TYPE_FLOAT, &vsCB_2.refractiveTextureScale.x, "min=1 max=100 step=1");
+	TwAddVarRW(waterBar, "Bottom Scale Y", TW_TYPE_FLOAT, &vsCB_2.refractiveTextureScale.y, "min=1 max=100 step=1");
 }
 
 void RenderableWater::setWaterDrop(bool isOn) {

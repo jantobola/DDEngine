@@ -125,3 +125,8 @@ void Skybox::cleanUp() {
 	RELEASE(skyboxDepth)
 	RELEASE(skyboxRasterizer)
 }
+
+ID3D11ShaderResourceView* DDEngine::Skybox::getSkyboxTexture()
+{
+	return skyboxTexture;
+}

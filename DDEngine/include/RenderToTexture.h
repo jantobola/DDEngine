@@ -17,6 +17,9 @@ class RenderToTexture {
 		ID3D11RenderTargetView* renderTargetView;
 		ID3D11ShaderResourceView* shaderResourceView;
 
+		int width = 1;
+		int height = 1;
+
 		QuadObject quad;
 
 		void cleanUp();
@@ -34,5 +37,8 @@ class RenderToTexture {
 		void setShaders(std::string vs, std::string ps, std::string il);
 		void draw();
 		
+		int getWidth();
+		int getHeight();
+
 };
 }

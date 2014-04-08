@@ -37,6 +37,7 @@ class Skybox : public Object3D {
 		void setDDSTexturePath(std::string texturePath);
 		void draw();
 		DirectX::XMMATRIX getSkyboxWVP(Camera& camera);
+		ID3D11ShaderResourceView* getSkyboxTexture();
 
 };
 }

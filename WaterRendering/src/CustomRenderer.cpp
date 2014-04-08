@@ -24,6 +24,9 @@ void CustomRenderer::create() {
 	skybox = new RenderableSkybox(pkg);
 	terrain = new RenderableTerrain(pkg);
 	water = new RenderableWater(pkg);
+	
+	water->setSkybox(skybox);
+	water->setTerrain(terrain);
 
 	skybox->setName("skybox");
 	terrain->setName("terrain");
@@ -132,6 +135,7 @@ void CustomRenderer::initShaders() {
 	shaders->addConstantBuffer("CB_Timer", sizeof(Timer_CB));
 	shaders->addConstantBuffer("CB_Matrices", sizeof(Matrices_CB));
 	shaders->addConstantBuffer("CB_WaterProps", sizeof(WaterProps_CB));
+	shaders->addConstantBuffer("CB_Camera", sizeof(Camera_CB));
 }
 
 void CustomRenderer::cleanUp() {

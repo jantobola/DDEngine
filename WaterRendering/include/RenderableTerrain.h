@@ -23,8 +23,8 @@ struct Terrain_CB {
 
 class RenderableTerrain : public DDEngine::IRenderable {
 
-	private:
-		
+	public:
+	
 		DDEngine::Grid terrain;
 		Matrices_CB vsCB_0;
 		Terrain_CB vsCB_1;
@@ -32,8 +32,6 @@ class RenderableTerrain : public DDEngine::IRenderable {
 		DDEngine::ShaderResourceView* grassTexture = nullptr;
 		DDEngine::ShaderResourceView* terrainTexture = nullptr;
 		DDEngine::SamplerState* terrainSampler = nullptr;
-
-	public:
 
 		RenderableTerrain(DDEngine::DDERenderPackage pkg) : DDEngine::IRenderable(pkg) { }
 		~RenderableTerrain();

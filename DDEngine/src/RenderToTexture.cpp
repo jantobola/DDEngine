@@ -24,6 +24,9 @@ RenderToTexture::~RenderToTexture() {
 }
 
 HRESULT RenderToTexture::create( int width, int height ) {
+	this->width = width;
+	this->height = height;
+
 	HRESULT result  = S_OK;
 	D3D11_TEXTURE2D_DESC textureDesc;
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -81,6 +84,14 @@ void DDEngine::RenderToTexture::setShaders(std::string vs, std::string ps, std::
 
 void DDEngine::RenderToTexture::draw() {
 	quad.draw();
+}
+
+int DDEngine::RenderToTexture::getWidth() {
+	return width;
+}
+
+int DDEngine::RenderToTexture::getHeight() {
+	return height;
 }
 
 void RenderToTexture::cleanUp() {

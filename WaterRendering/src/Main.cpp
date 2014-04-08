@@ -23,6 +23,8 @@ int WINAPI wWinMain(HINSTANCE	hInstance,
 	UNREFERENCED_PARAMETER( nCmdShow );
 
 	CustomRenderer renderer(CONFIG_PATH);
+	renderer.setMultiSamplingValue(2);
+
 	KeyListener listener(&renderer);
 
 	Application app(hInstance, renderer);

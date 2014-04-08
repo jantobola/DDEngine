@@ -17,6 +17,8 @@ class Camera {
 		XMFLOAT4X4 view;
 		XMFLOAT4X4 projection;
 
+		XMFLOAT4X4 reflectionView;
+
 		XMFLOAT4X4 perspectiveProjection;
 		XMFLOAT4X4 orthographicProjection;
 
@@ -59,8 +61,11 @@ class Camera {
 		void toPerspectiveProjection();
 		void toOrthographicProjection();
 		void changeNearFar(float zNear, float zFar);
+		void makeReflection(float height);
 
 		XMMATRIX getViewMatrix();
+		void setViewMatrix(XMFLOAT4X4 viewMatrix);
+		XMMATRIX getReflectionViewMatrix();
 		XMMATRIX getProjectionMatrix();
 		XMMATRIX getPerspectiveMatrix();
 		XMMATRIX getOrthographicMatrix();

@@ -19,5 +19,6 @@ class RenderableSkybox : public DDEngine::IRenderable {
 		virtual void render() override;
 
 		void setSkyboxPath(std::string path);
+		DDEngine::ShaderResourceView* getSkyboxTexture() { return skybox.getSkyboxTexture(); }
 		
 };

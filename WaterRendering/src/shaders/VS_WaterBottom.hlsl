@@ -10,6 +10,11 @@ cbuffer Matrices : register ( b0 )
 	matrix projection;
 };
 
+cbuffer WaterProps : register ( b1 )
+{
+	float2 refractiveTextureScale : packoffset(c2.x);
+}
+
 struct VertexInput 
 {
 	float2 pos : POSITION;
@@ -34,7 +39,7 @@ VertexOutput main( VertexInput input )
 	output.pos = mul(output.pos, view);
 	output.pos = mul(output.pos, projection);
 
-	output.tex = input.pos * TEXTURE_SCALE_FACTOR;
+	output.tex = input.pos * refractiveTextureScale;
 	
 	// wrong light vectors, fix it later
 	output.nor = float3(0, -1, 0);

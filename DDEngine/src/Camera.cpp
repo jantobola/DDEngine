@@ -78,6 +78,40 @@ void Camera::update() {
 	XMStoreFloat4x4(&view, v);
 }
 
+void DDEngine::Camera::makeReflection(float height) {
+	XMFLOAT3 position, target, side;
+	XMVECTOR forwardVector, sideVector, positionVector, targetVector, upVector;
+	XMMATRIX reflectionViewMatrix;
+
+	position.x = eye.x;
+	position.y = -eye.y + (2.0f * height);
+	position.z = eye.z;
+
+	target.x = at.x;
+	target.y = -at.y + (2.0f * height);
+	target.z = at.z;
+
+	positionVector = XMLoadFloat3(&position);
+	targetVector = XMLoadFloat3(&target);
+
+	side.x = 1;
+	side.y = 0;
+	side.z = 0;
+
+	XMVECTOR sideVec = XMLoadFloat3(&side);
+
+	forwardVector = XMVectorSubtract(targetVector, positionVector);
+	sideVector = XMVector3TransformCoord(sideVec, XMLoadFloat4x4(&camRotationMatrix));
+	upVector = XMVector3Cross(sideVector, forwardVector);
+
+	reflectionViewMatrix = XMMatrixLookAtLH(positionVector, targetVector, upVector);
+	XMStoreFloat4x4(&reflectionView, reflectionViewMatrix);
+}
+
+void DDEngine::Camera::setViewMatrix(XMFLOAT4X4 viewMatrix) {
+	view = viewMatrix;
+}
+
 void Camera::setDefaultState() {
 
 	XMStoreFloat3(&defaultForward, XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f));
@@ -124,6 +158,10 @@ void Camera::changeNearFar( float zNear, float zFar ) {
 
 XMMATRIX Camera::getViewMatrix() {
 	return XMLoadFloat4x4(&view);
+}
+
+XMMATRIX Camera::getReflectionViewMatrix() {
+	return XMLoadFloat4x4(&reflectionView);
 }
 
 XMMATRIX Camera::getProjectionMatrix() {

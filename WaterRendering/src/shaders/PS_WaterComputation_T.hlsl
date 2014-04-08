@@ -60,6 +60,7 @@ float4 compute(PixelInput input)
 	float dhLeft = 0.0f;
 
 	double dt = min(time / (double) timeStep, 1);
+	dt = 1;
 
 	// boundaries
 	if (posX - 1 >= 0.0f)		dhLeft = (hLeft - prevHeight);
@@ -112,7 +113,7 @@ float4 main(PixelInput input) : SV_TARGET
 
 		// reset to calm surface (first frame and on backspace key press)
 		if (reset == 1) {
-			return float4(0, 0.02, 1, 1); // r - momentum, g - height
+			return float4(0, 0, 1, 1); // r - momentum, g - height
 		}
 
 		// generate water drop (on enter key press)
