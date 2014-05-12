@@ -4,15 +4,16 @@
 
 namespace DDEngine
 {
-struct DLLDataContainer
+
+struct DataContainer
 {
 
-	DLLDataContainer() {
+	DataContainer() {
 		dataBlob = NULL;
 		dataSize = 0;
 	}
 
-	DLLDataContainer (LPVOID dataBlob, 
+	DataContainer (LPVOID dataBlob, 
 						DWORD dataSize)
 						:
 						dataBlob(dataBlob),
@@ -24,28 +25,19 @@ struct DLLDataContainer
 	DWORD dataSize;
 };
 
-class DLLResourceLoader {
+namespace DLLResourceLoader {
 
-	private:
-		
-		DLLResourceLoader() { }
-
-		static DLLDataContainer loadFromDLL(HMODULE hModule, LPCWSTR type, int ID);
-
-	public:
-		
-		~DLLResourceLoader() { }
+		DataContainer loadFromDLL(HMODULE hModule, LPCWSTR type, int ID);
 	
-		static DLLDataContainer loadCEGUI_scheme(HMODULE hModule);
-		static DLLDataContainer loadCEGUI_imageset(HMODULE hModule);
-		static DLLDataContainer loadCEGUI_image(HMODULE hModule);
-		static DLLDataContainer loadCEGUI_font(HMODULE hModule);
-		static DLLDataContainer loadCEGUI_fontTTF(HMODULE hModule);
-		static DLLDataContainer loadCEGUI_looknfeel(HMODULE hModule);
+		DataContainer loadCEGUI_scheme(HMODULE hModule);
+		DataContainer loadCEGUI_imageset(HMODULE hModule);
+		DataContainer loadCEGUI_image(HMODULE hModule);
+		DataContainer loadCEGUI_font(HMODULE hModule);
+		DataContainer loadCEGUI_fontTTF(HMODULE hModule);
+		DataContainer loadCEGUI_looknfeel(HMODULE hModule);
 
-		static DLLDataContainer loadHUD_spritefont(HMODULE hModule);
-
-	protected:
+		DataContainer loadHUD_spritefont(HMODULE hModule);
 	
+		HICON loadWindowIcon();
 };
 }

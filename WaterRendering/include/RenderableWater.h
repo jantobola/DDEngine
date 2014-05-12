@@ -21,7 +21,7 @@ struct WaterProps_CB
 	float viscosity = 0.9948f;			// some constat for a momentum (representing something like viscosity)
 	int waterDrop = 0;					// 0 - off; 1 - on
 	int reset = 1;						// 0 - ignore; 1 - reset
-	float heightOffset = -0.0001f;		// water surface Y position + heightOffset = final Y position
+	float heightOffset = -0.002f;		// water surface Y position + heightOffset = final Y position
 
 	// c2
 	DirectX::XMFLOAT2 refractiveTextureScale;
@@ -50,8 +50,9 @@ class RenderableWater : public DDEngine::IRenderable {
 		DDEngine::Grid waterSurface;
 		DDEngine::Grid bottomSurface;
 
-		DDEngine::SamplerState* waterSampler = nullptr;			// point sampler
-		DDEngine::SamplerState* linearSampler = nullptr;
+		DDEngine::SamplerState* samplerPointClamp = nullptr;			// point sampler
+		DDEngine::SamplerState* samplerLinearClamp = nullptr;
+		DDEngine::SamplerState* samplerLinearWrap = nullptr;
 
 		DDEngine::RenderToTexture computeTexture_0;				// new values
 		DDEngine::RenderToTexture computeTexture_1;				// storage (previous state)

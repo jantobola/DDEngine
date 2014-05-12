@@ -12,10 +12,10 @@ void QuadObject::loadGeometry(std::vector<Vertex>* vertices, std::vector<DWORD>*
 
 	// ---------- Vertex Buffer ------------
 
-	VB( /* POS */ -1, +1, 0, /* TEX */ 1, 0, /* NOR */  0, 0, 0)
-	VB( /* POS */ -1, -1, 0, /* TEX */ 0, 0, /* NOR */  0, 0, 0)
-	VB( /* POS */ +1, -1, 0, /* TEX */ 0, 1, /* NOR */  0, 0, 0)
-	VB( /* POS */ +1, +1, 0, /* TEX */ 1, 1, /* NOR */  0, 0, 0)
+	VB( /* POS */ -1, +1, 0, /* TEX */ 0, 0, /* NOR */  0, 0, 0)
+	VB( /* POS */ -1, -1, 0, /* TEX */ 1, 0, /* NOR */  0, 0, 0)
+	VB( /* POS */ +1, -1, 0, /* TEX */ 1, 1, /* NOR */  0, 0, 0)
+	VB( /* POS */ +1, +1, 0, /* TEX */ 0, 1, /* NOR */  0, 0, 0)
 
 	// ------------ Index Buffer ---------------
 

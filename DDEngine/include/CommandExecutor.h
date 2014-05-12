@@ -11,6 +11,7 @@ class CommandExecutor : public AbstractCommandExecutor {
 		~CommandExecutor() { };
 
 		virtual void executeCommand(std::string command) override;
+		virtual void executeCommand(std::string command, std::function<void()>&& funct) override;
 
 };
 }

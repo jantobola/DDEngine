@@ -15,11 +15,15 @@
 
 #pragma once
 
-#define D3DX11_EFFECTS_VERSION 1108
+#define D3DX11_EFFECTS_VERSION 1109
 
 #include <d3d11.h>
 #include <d3d11shader.h>
 
+#pragma comment( lib, "d3dcompiler.lib" )
+#pragma comment( lib, "dxguid.lib" )
+
+// VS 2010's stdint.h conflicts with intsafe.h
 #pragma warning(push)
 #pragma warning(disable : 4005)
 #include <stdint.h>

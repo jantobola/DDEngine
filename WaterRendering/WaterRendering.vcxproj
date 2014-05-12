@@ -230,6 +230,10 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug_precompiled_shaders|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">Pixel</ShaderType>
     </FxCompile>
+    <FxCompile Include="src\shaders\PS_TerrainGeneration_T.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="src\shaders\PS_WaterComputation_T.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

@@ -14,7 +14,7 @@ Skybox::~Skybox() {
 void Skybox::initContext() {
 
 	DXUtils::createCubeTextureResource(device, StringUtils::toWstring(ddsPath).c_str(), &skyboxTexture);
-	DXUtils::createSamplerState(device, &skyboxSampler, DXUtils::SamplerType::MIN_MAG_MIP_LINEAR);
+	DXUtils::createSamplerState(device, &skyboxSampler, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 	DXUtils::createRasterizerState(device, &skyboxRasterizer, D3D11_CULL_NONE, D3D11_FILL_SOLID, 0);
 	
 	D3D11_DEPTH_STENCIL_DESC depthStateDesc;

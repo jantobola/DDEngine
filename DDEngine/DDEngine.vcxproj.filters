@@ -182,11 +182,11 @@
     <ClInclude Include="include\Vertex.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
-    <ClInclude Include="include\D3DUtils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
     <ClInclude Include="include\QuadObject.h">
       <Filter>Header Files\object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\D3DUtils.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -222,9 +222,6 @@
     </ClCompile>
     <ClCompile Include="src\D3DRenderer.cpp">
       <Filter>Source Files\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\D3DUtils.cpp">
-      <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\DDE_CEGUIResourceProvider.cpp">
       <Filter>Source Files\resource</Filter>
@@ -285,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="src\QuadObject.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\D3DUtils.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

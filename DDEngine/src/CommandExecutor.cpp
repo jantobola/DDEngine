@@ -151,3 +151,7 @@ void CommandExecutor::executeCommand(std::string command) {
 	QUIT // Quit statement ####################################
 // ############################################################
 }
+
+void DDEngine::CommandExecutor::executeCommand(std::string command, std::function<void()>&& funct) {
+	funct();
+}

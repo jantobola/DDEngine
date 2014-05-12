@@ -45,7 +45,7 @@ void InputHandler::handleAsyncInput() {
 		}
 	}
 
-	onKeyDownAsync();
+	if(console->isHidden()) onKeyDownAsync();
 
 }
 
@@ -78,7 +78,7 @@ bool InputHandler::handle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) {
 			break;
 
 		case WM_KEYUP:
-			onKeyTyped(wParam);
+			if (console->isHidden()) onKeyTyped(wParam);
 			CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(scan);
 			break;
 

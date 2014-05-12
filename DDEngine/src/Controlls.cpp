@@ -5,7 +5,7 @@
 
 using namespace DDEngine;
 
-Controlls::Controlls(Camera& camera, Timer& timer) : camera(camera), timer(timer) {
+Controls::Controls(Camera& camera, Timer& timer) : camera(camera), timer(timer) {
 	mouseSensitivity = 3.0f;
 	moveSpeed = 3.0f;
 	mouseInverted = true;
@@ -16,40 +16,40 @@ Controlls::Controlls(Camera& camera, Timer& timer) : camera(camera), timer(timer
 	KEY_STRAFE_RIGHT	=	'D';
 }
 
-Controlls::~Controlls() {
+Controls::~Controls() {
 
 }
 
-void Controlls::moveForward() {
+void Controls::moveForward() {
 	camera.moveForward(timer.velocity(), moveSpeed);
 }
 
-void Controlls::moveBackward() {
+void Controls::moveBackward() {
 	camera.moveBackward(timer.velocity(), moveSpeed);
 }
 
-void Controlls::strafeRight() {
+void Controls::strafeRight() {
 	camera.strafeRight(timer.velocity(), moveSpeed);
 }
 
-void Controlls::strafeLeft() {
+void Controls::strafeLeft() {
 	camera.strafeLeft(timer.velocity(), moveSpeed);
 }
 
-void Controlls::mouseLook( LONG deltaX, LONG deltaY ) {
+void Controls::mouseLook( LONG deltaX, LONG deltaY ) {
 	camera.camYaw += deltaX * 0.001f * mouseSensitivity;
 	if(mouseInverted) camera.camPitch -= deltaY * 0.001f * mouseSensitivity;
 	else camera.camPitch += deltaY * 0.001f * mouseSensitivity;
 }
 
-void Controlls::setSensitivity( float sensitivity ) {
+void Controls::setSensitivity( float sensitivity ) {
 	this->mouseSensitivity = sensitivity;
 }
 
-void Controlls::setSpeed( float speed ) {
+void Controls::setSpeed( float speed ) {
 	this->moveSpeed = speed;
 }
 
-void Controlls::setMouseInverted( bool reversed ) {
+void Controls::setMouseInverted( bool reversed ) {
 	this->mouseInverted = reversed;
 }

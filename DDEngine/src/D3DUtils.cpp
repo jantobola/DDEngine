@@ -310,7 +310,7 @@ HRESULT DDEngine::DXUtils::createInputLayoutFromBinary(_In_ ID3D11Device* device
 	return result;
 }
 
-HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ ID3D11SamplerState** samplerState, _In_ D3D11_SAMPLER_DESC* samplerDesc /*= NULL */)
+HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ ID3D11SamplerState** samplerState, _In_opt_ D3D11_SAMPLER_DESC* samplerDesc /*= NULL */)
 {
 	if (samplerDesc != NULL) {
 		return device->CreateSamplerState(samplerDesc, samplerState);
@@ -318,10 +318,10 @@ HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ I
 
 	D3D11_SAMPLER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
-	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;	// default value point sampler
-	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;	// default value point sampler
+	desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	desc.MinLOD = 0;
 	desc.MaxLOD = D3D11_FLOAT32_MAX;
@@ -334,14 +334,15 @@ HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ I
 	return device->CreateSamplerState(&desc, samplerState);
 }
 
-HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ ID3D11SamplerState** samplerState, _In_ SamplerType samplerType)
+HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ ID3D11SamplerState** samplerState, _In_ FilterType filter, _In_ TextureAddressMode textureMode, _In_ ComparisonFunction comparison)
 {
 	D3D11_SAMPLER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
-	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	desc.Filter = filter;
+	desc.AddressU = textureMode;
+	desc.AddressV = textureMode;
+	desc.AddressW = textureMode;
+	desc.ComparisonFunc = comparison;
 	desc.MinLOD = 0;
 	desc.MaxLOD = D3D11_FLOAT32_MAX;
 	desc.MaxAnisotropy = 16;
@@ -350,20 +351,6 @@ HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ I
 	desc.BorderColor[2] = 1;
 	desc.BorderColor[3] = 1;
 	
-	switch (samplerType)
-	{
-		case MIN_MAG_MIP_POINT:
-			desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-			break;
-
-		case MIN_MAG_MIP_LINEAR:
-			desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-			break;
-
-		default:
-			break;
-	}
-
 	return DXUtils::createSamplerState(device, samplerState, &desc);
 }
 

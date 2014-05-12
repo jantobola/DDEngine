@@ -12,7 +12,8 @@ namespace DDEngine
 
 class ObjectManager;
 class GUIRenderer;
-class Controlls;
+class Controls;
+class HUDRenderer;
 
 class DDEComponent : public D3DRenderer {
 
@@ -35,7 +36,7 @@ class DDEComponent : public D3DRenderer {
 		ObjectManager* getObjectManager();
 		GUIRenderer* getGUI();
 		HUDRenderer* getHUD();
-		Controlls* getControlls();
+		Controls* getControlls();
 		ResourceProvider* getResources();
 
 		DDERenderPackage getRenderPackage();
@@ -55,7 +56,7 @@ class DDEComponent : public D3DRenderer {
 		ObjectManager* objects = nullptr;
 		GUIRenderer* gui = nullptr;
 		HUDRenderer* hud = nullptr;
-		Controlls* controlls = nullptr;
+		Controls* controlls = nullptr;
 		ResourceProvider* resources = nullptr;
 
 		// do not delete

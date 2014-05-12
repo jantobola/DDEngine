@@ -3,7 +3,7 @@
 // Vertex Shader
 //--------------------------------------------------------------------------------------
 
-Texture2D<float> heightMapTexture : register( t0 );
+Texture2D<float4> heightMapTexture : register( t0 );
 SamplerState samplerState : register( s0 );
 
 cbuffer Matrices : register ( b0 )
@@ -14,9 +14,14 @@ cbuffer Matrices : register ( b0 )
 };
 
 cbuffer TerrainProps : register ( b1 )
-{
-	float3 terrainSize;
+{	
+	//c0
 	float2 textureSize;
+	float elevationFactor;
+	float scaleFactor;
+	
+	//c1
+	float textureScaleFactor;
 }
 
 struct VertexInput 
@@ -31,13 +36,8 @@ struct VertexOutput
 	float3 nor : NORMAL;
 };
 
-// to CB -> terrain tweak bar
-#define ELEVATION_FACTOR 9
-#define SCALE_FACTOR 3
-#define TEXTURE_SCALE_FACTOR 10
-
 float3 elevate(float2 pos) {
-	return (float3(pos, heightMapTexture.SampleLevel(samplerState, pos, 0) / ELEVATION_FACTOR) * SCALE_FACTOR).xzy;
+	return (float3(pos, heightMapTexture.SampleLevel(samplerState, float2(pos.x, 1 - pos.y), 0).r * elevationFactor) * scaleFactor).xzy;
 }
 
 VertexOutput main( VertexInput input )
@@ -59,7 +59,7 @@ VertexOutput main( VertexInput input )
 	output.pos = mul(output.pos, view);
 	output.pos = mul(output.pos, projection);
 
-	output.tex = position2 * TEXTURE_SCALE_FACTOR;
+	output.tex = position2 * textureScaleFactor;
 
 	return output;
 }

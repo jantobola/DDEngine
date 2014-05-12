@@ -13,7 +13,7 @@ HUDRenderer::HUDRenderer(Config& config, RenderContext& renderContext) : config(
 	resourcesHmodule = LoadLibrary(L"dderes.dll");
 	isRendered = true;
 	
-	DLLDataContainer fontData = DLLResourceLoader::loadHUD_spritefont(resourcesHmodule);
+	DataContainer fontData = DLLResourceLoader::loadHUD_spritefont(resourcesHmodule);
 
 	spriteBatch.reset(new SpriteBatch(renderContext.context));
 	spriteFont.reset(new SpriteFont(renderContext.device, (uint8_t*) fontData.dataBlob, (size_t) fontData.dataSize));

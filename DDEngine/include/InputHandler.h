@@ -7,7 +7,7 @@ namespace DDEngine
 {
 
 class Console;
-class Controlls;
+class Controls;
 
 class InputHandler : public WndHandler {
 
@@ -29,7 +29,7 @@ class InputHandler : public WndHandler {
 	protected:
 
 		Console* console;
-		Controlls* controlls;
+		Controls* controlls;
 
 		virtual bool handle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
 		virtual void onKeyDownAsync();

@@ -2,15 +2,14 @@
 #include "RenderableWater.h"
 #include "RenderableTerrain.h"
 #include "RenderableSkybox.h"
+#include <DDEngine.h>
 
 using namespace DDEngine;
 using namespace std;
 using namespace DirectX;
 
 CustomRenderer::CustomRenderer(std::string configPath) : DDEComponent(configPath) {
-	terrain = NULL;
-	skybox = NULL;
-	water = NULL;
+	
 }
 
 CustomRenderer::~CustomRenderer() {
@@ -33,31 +32,17 @@ void CustomRenderer::create() {
 	water->setName("water");
 
 	skybox->setSkyboxPath("res/textures/Skybox.dds");
+	terrain->setProceduralGeneration(true);
 
 	objects->addObject(skybox);
 	objects->addObject(terrain);
 	objects->addObject(water);
 
-	// Tweak bar and light init values
-
-	tweakBar = TwNewBar("lightBar");
-
-	int barPos[2] = { 10, config.CFG_SCREEN_HEIGHT - 200 };
-
-	TwDefine(" lightBar size='350 160' ");
-	TwSetParam(tweakBar, NULL, "position", TW_PARAM_INT32, 2, &barPos);
-
-	light.direction = XMFLOAT3(0.0f, -1.0f, -1.0f);
-	light.ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	light.diffuse = XMFLOAT4(1, 1, 1, 1.0f);
-	XMStoreFloat4x4(&light.identity, XMMatrixIdentity());
-
-	TwAddVarRW(tweakBar, "lightDirection", TW_TYPE_DIR3F, &light.direction, "opened=true");
-	TwDefine(" lightBar visible=false valueswidth=150");
+	setTweakBars();
 }
 
 void CustomRenderer::render() {
- 	shaders->updateConstantBufferPS("CB_LightProps", &light, 5);
+ 	shaders->updateConstantBufferPS("CB_LightProps", &light, 10);
 }
 
 void CustomRenderer::initShaders() {
@@ -77,6 +62,7 @@ void CustomRenderer::initShaders() {
 		shaders->addPixelShaderBinary("PS_BasicLightMesh", _shader(PS_BasicLightMesh.cso));
 
 		shaders->addVertexShaderBinary("VS_TerrainVDisplacement", _shader(VS_TerrainVDisplacement.cso));
+		shaders->addPixelShaderBinary("PS_TerrainGeneration_T", _shader(PS_TerrainGeneration_T.cso));
 
 		shaders->addVertexShaderBinary("VS_WaterVDisplacement", _shader(VS_WaterVDisplacement.cso));
 		shaders->addPixelShaderBinary("PS_WaterOptical", _shader(PS_WaterOptical.cso));
@@ -91,6 +77,7 @@ void CustomRenderer::initShaders() {
 		shaders->addPixelShader("PS_BasicLightMesh", _shader(PS_BasicLightMesh.hlsl));
 
 		shaders->addVertexShader("VS_TerrainVDisplacement", _shader(VS_TerrainVDisplacement.hlsl));
+		shaders->addPixelShader("PS_TerrainGeneration_T", _shader(PS_TerrainGeneration_T.hlsl));
 
 		shaders->addVertexShader("VS_WaterVDisplacement", _shader(VS_WaterVDisplacement.hlsl));
 		shaders->addVertexShader("VS_WaterBottom", _shader(VS_WaterBottom.hlsl));
@@ -142,4 +129,20 @@ void CustomRenderer::cleanUp() {
 	delete terrain;
 	delete skybox;
 	delete water;
+}
+
+void CustomRenderer::setTweakBars() {
+	tweakBar = TwNewBar("lightBar");
+
+	int barPos[2] = { 10, config.CFG_SCREEN_HEIGHT - 200 };
+
+	TwDefine(" lightBar size='350 160' ");
+	TwSetParam(tweakBar, NULL, "position", TW_PARAM_INT32, 2, &barPos);
+
+	light.direction = XMFLOAT3(0.0f, -1.0f, -1.0f);
+	light.ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	light.diffuse = XMFLOAT4(1, 1, 1, 1.0f);
+
+	TwAddVarRW(tweakBar, "lightDirection", TW_TYPE_DIR3F, &light.direction, "opened=true");
+	TwDefine(" lightBar visible=false valueswidth=150");
 }

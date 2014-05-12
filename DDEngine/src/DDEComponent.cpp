@@ -33,7 +33,7 @@ void DDEComponent::compose(HWND hWnd) {
 		PostQuitMessage(-1);
 	}
 
-	controlls	= new Controlls(camera, timer);
+	controlls	= new Controls(camera, timer);
 	objects		= new ObjectManager(config, Ctx);
 	hud			= new HUDRenderer(config, Ctx);
 	gui			= new GUIRenderer(config, Ctx);
@@ -103,7 +103,7 @@ HUDRenderer* DDEComponent::getHUD() {
 	return hud;
 }
 
-Controlls* DDEComponent::getControlls() {
+Controls* DDEComponent::getControlls() {
 	return controlls;
 }
 

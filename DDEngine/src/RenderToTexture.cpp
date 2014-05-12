@@ -4,16 +4,10 @@
 using namespace DDEngine;
 
 RenderToTexture::RenderToTexture() {
-	renderTargetView = NULL;
-	texture2D = NULL;
-	shaderResourceView = NULL;
+
 }
 
 RenderToTexture::RenderToTexture(ID3D11Device* device, ID3D11DeviceContext* context) {
-	renderTargetView = NULL;
-	texture2D = NULL;
-	shaderResourceView = NULL;
-
 	this->device = device;
 	this->context = context;
 }
@@ -66,7 +60,7 @@ HRESULT RenderToTexture::create( int width, int height ) {
 	return result;
 }
 
-ID3D11ShaderResourceView* RenderToTexture::getShaderResourceView() {
+ShaderResourceView* RenderToTexture::getShaderResourceView() {
 	return shaderResourceView;
 }
 

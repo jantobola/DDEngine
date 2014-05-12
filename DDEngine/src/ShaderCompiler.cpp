@@ -21,7 +21,7 @@ ShaderCompilationResult ShaderCompiler::compile( WCHAR* fileName, LPCSTR entryPo
 	#endif
 		
 	ID3DBlob* pErrorBlob = NULL;
-	hr = D3DCompileFromFile( fileName, NULL, NULL, entryPoint, shaderModel, 
+	hr = D3DCompileFromFile(fileName, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel,
 		dwShaderFlags, 0, ppBlobOut, &pErrorBlob );
 
 	result.result = hr;

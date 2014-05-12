@@ -15,8 +15,8 @@ class Application {
     
 		HINSTANCE hInstance;
 		DDEComponent& component;
-		Window* window;
-		InputHandler* input;
+		Window* window = nullptr;
+		InputHandler* input = nullptr;
 
 	public:
 
@@ -25,6 +25,7 @@ class Application {
 
 		int run();
 		void setKeyListener(InputHandler* input);
+		Window& getWindow();
 
 		static int bootstrap(HINSTANCE hInstance, DDEComponent& component);
 

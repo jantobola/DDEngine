@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 #include "DDE_CEGUIResourceProvider.h"
 
 namespace CEGUI

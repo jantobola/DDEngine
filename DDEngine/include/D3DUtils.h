@@ -11,15 +11,13 @@ namespace DDEngine
 	typedef ID3D11ShaderResourceView ShaderResourceView;
 	typedef ID3D11SamplerState SamplerState;
 
+	typedef D3D11_FILTER FilterType;
+	typedef D3D11_TEXTURE_ADDRESS_MODE TextureAddressMode;
+	typedef D3D11_COMPARISON_FUNC ComparisonFunction;
+
 	namespace DXUtils
 	{
 		
-		enum SamplerType
-		{
-			MIN_MAG_MIP_POINT,
-			MIN_MAG_MIP_LINEAR,
-		};
-
 		HRESULT createDeviceAndSwapChain(
 			_Out_	ID3D11Device** device,
 			_Out_	ID3D11DeviceContext** context, 
@@ -113,13 +111,15 @@ namespace DDEngine
 		HRESULT createSamplerState(
 			_In_	ID3D11Device* device,
 			_Out_	ID3D11SamplerState** samplerState, 
-			_In_	D3D11_SAMPLER_DESC* samplerDesc = NULL
+			_In_opt_ D3D11_SAMPLER_DESC* samplerDesc = NULL
 		);
 
 		HRESULT createSamplerState(
 			_In_	ID3D11Device* device,
 			_Out_	ID3D11SamplerState** samplerState,
-			_In_	SamplerType samplerType
+			_In_	FilterType filter,
+			_In_	TextureAddressMode textureMode,
+			_In_	ComparisonFunction comparison
 		);
 
 		HRESULT createBlendState(

@@ -90,8 +90,7 @@
       <ObjectFileOutput>$(OutDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>call $(ProjectDir)script\composeDLLs.bat $(ProjectDir) $(Configuration)
-call $(ProjectDir)script\composeIncludes.bat $(ProjectDir)</Command>
+      <Command>call $(ProjectDir)script\composeIncludes.bat $(ProjectDir)</Command>
       <Message>
       </Message>
     </PreBuildEvent>
@@ -107,8 +106,7 @@ call $(ProjectDir)script\composeIncludes.bat $(ProjectDir)</Command>
       </IgnoreSpecificDefaultLibraries>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>call $(ProjectDir)script\composeDLLs.bat $(ProjectDir) $(Configuration)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

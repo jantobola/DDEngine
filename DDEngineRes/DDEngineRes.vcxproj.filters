@@ -84,4 +84,9 @@
       <Filter>Files</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\icons\icon.ico">
+      <Filter>Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

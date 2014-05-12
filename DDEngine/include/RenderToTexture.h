@@ -7,15 +7,17 @@
 namespace DDEngine
 {
 
+typedef ID3D11ShaderResourceView ShaderResourceView;
+
 class RenderToTexture {
 
 	private:
-		ID3D11Device* device;
-		ID3D11DeviceContext* context;
+		ID3D11Device* device = nullptr;
+		ID3D11DeviceContext* context = nullptr;
 
-		ID3D11Texture2D* texture2D;
-		ID3D11RenderTargetView* renderTargetView;
-		ID3D11ShaderResourceView* shaderResourceView;
+		ID3D11Texture2D* texture2D = nullptr;
+		ID3D11RenderTargetView* renderTargetView = nullptr;
+		ShaderResourceView* shaderResourceView = nullptr;
 
 		int width = 1;
 		int height = 1;
@@ -30,7 +32,7 @@ class RenderToTexture {
 		~RenderToTexture();
 	
 		HRESULT create(int width, int height);
-		ID3D11ShaderResourceView* getShaderResourceView();
+		ShaderResourceView* getShaderResourceView();
 		ID3D11RenderTargetView* getRenderTargetView();
 
 		QuadObject& getQuad();

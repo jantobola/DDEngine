@@ -12,7 +12,8 @@ class Window {
 		LPCTSTR			title;
 		HWND			hwnd;
 		HINSTANCE		hInstance;
-		WndHandler*		handler;
+		WndHandler*		handler = nullptr;
+		HICON			icon = NULL;
 	
 	public:
 		int	width;
@@ -27,6 +28,7 @@ class Window {
 	
 		void setHandler(WndHandler* handler);
 		void setTitle(LPCTSTR title);
+		void setIcon(HICON icon);
 
 		HWND getHwnd();
 

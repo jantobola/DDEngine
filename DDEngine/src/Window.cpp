@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "DLLResourceLoader.h"
 
 using namespace DDEngine;
 
@@ -28,12 +29,19 @@ HRESULT Window::initWindow( int width, int height ) {
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = hInstance;
-	wcex.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+
+	if(this->icon == NULL) {
+		wcex.hIcon = DLLResourceLoader::loadWindowIcon();
+		wcex.hIconSm = DLLResourceLoader::loadWindowIcon();	
+	} else {
+		wcex.hIcon = this->icon;
+		wcex.hIconSm = this->icon;
+	}
+
 	wcex.hCursor = LoadCursor( NULL, IDC_ARROW );
 	wcex.hbrBackground = ( HBRUSH )( COLOR_WINDOW + 1 );
 	wcex.lpszMenuName = NULL;
 	wcex.lpszClassName = wndClass;
-	wcex.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
 
 	if( !RegisterClassEx( &wcex ) ) {
 		return E_FAIL;	
@@ -109,4 +117,8 @@ void Window::setTitle( LPCTSTR title ) {
 
 HWND Window::getHwnd() {
 	return hwnd;
+}
+
+void DDEngine::Window::setIcon(HICON icon) {
+	this->icon = icon;
 }

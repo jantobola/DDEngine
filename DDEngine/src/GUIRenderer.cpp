@@ -38,7 +38,7 @@ void GUIRenderer::initialize() {
 	WidgetLookManager::setDefaultResourceGroup("looknfeels");
 	WindowManager::setDefaultResourceGroup("layouts");
 	
-	DLLDataContainer dllData = DLLResourceLoader::loadCEGUI_scheme(resourcesHmodule);
+	DataContainer dllData = DLLResourceLoader::loadCEGUI_scheme(resourcesHmodule);
 
 	RawDataContainer cScheme;
 	cScheme.setData((CEGUI::uint8*) dllData.dataBlob);

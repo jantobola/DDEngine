@@ -93,5 +93,8 @@
     <FxCompile Include="src\shaders\VS_WaterVDisplacement.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="src\shaders\PS_TerrainGeneration_T.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

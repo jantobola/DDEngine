@@ -8,7 +8,7 @@ namespace DDEngine
 class Camera;
 class Timer;
 
-class Controlls {
+class Controls {
 	
 	public:
 		int KEY_MOVE_FORWARD;
@@ -25,8 +25,8 @@ class Controlls {
 		bool mouseInverted;
 
 	public:
-		Controlls(Camera& camera, Timer& timer);
-		~Controlls();
+		Controls(Camera& camera, Timer& timer);
+		~Controls();
 
 		void moveForward();
 		void moveBackward();

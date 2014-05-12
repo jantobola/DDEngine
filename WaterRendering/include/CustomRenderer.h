@@ -13,10 +13,11 @@ class CustomRenderer : public DDEngine::DDEComponent {
 	private:
 		
 		Light_CB light;
-		TwBar* tweakBar;
+		TwBar* tweakBar = nullptr;
 				
 		void cleanUp();
 		void initShaders();
+		void setTweakBars();
 
 	public:
 

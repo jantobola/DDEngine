@@ -12,8 +12,11 @@ Application::Application( HINSTANCE hInstance, DDEComponent& component ) :
 	hInstance( hInstance ), 
 	component( component ) {
 	
-	window = NULL;
-	input = NULL;
+	Config& cfg = component.getConfig();
+
+	// WINAPI part - create window
+	window = new Window(hInstance);
+	window->setTitle(cfg.CFG_WINDOW_TITLE.c_str());
 }
 
 Application::~Application() {
@@ -23,11 +26,9 @@ Application::~Application() {
 int Application::run() {
 
     MSG msg = { 0 };
-	Config& cfg = component.getConfig();
 
-	// WINAPI part - create window
-	window = new Window(hInstance);
-	window->setTitle(cfg.CFG_WINDOW_TITLE.c_str());
+	Config& cfg = component.getConfig();
+	
 	window->initWindow(cfg.CFG_SCREEN_WIDTH, cfg.CFG_SCREEN_HEIGHT);
 
 	// build DDEComponent using D3DRenderer
@@ -55,7 +56,7 @@ int Application::run() {
 		if( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) ) {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
-        } //else {
+        } else {
 
 			if (input) {
 				if (console.isHidden() && input->hasFocus()) {
@@ -64,7 +65,7 @@ int Application::run() {
 			}
 
             component.renderFrame();
-       //}
+       }
     }
 
 	return (int) msg.wParam;
@@ -82,4 +83,8 @@ int Application::bootstrap( HINSTANCE hInstance, DDEComponent& component ) {
 	int result = application.run();
 
 	return result;
+}
+
+Window& DDEngine::Application::getWindow() {
+	return *window;
 }

@@ -22,7 +22,7 @@ void DDE_CEGUIResourceProvider::loadRawDataContainer( const CEGUI::String& filen
 													 CEGUI::RawDataContainer& output,
 													 const CEGUI::String& resourceGroup ) {
 
-	DLLDataContainer dllData;
+	DataContainer dllData;
 
 	LOAD_RESOURCE("AlfiskoSkin.imageset") {
 		dllData = DLLResourceLoader::loadCEGUI_imageset(dllHmodule);

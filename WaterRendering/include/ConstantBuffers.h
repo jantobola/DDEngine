@@ -18,7 +18,6 @@ struct Light_CB
 	float pad;
 	DirectX::XMFLOAT4 ambient;
 	DirectX::XMFLOAT4 diffuse;
-	DirectX::XMFLOAT4X4 identity;
 };
 
 struct WVP_CB

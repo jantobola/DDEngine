@@ -2,23 +2,24 @@
 
 #include <DDEngine.h>
 #include <Grid.h>
+#include <RenderToTexture.h>
+#include <AntTweakBar/AntTweakBar.h>
 #include "ConstantBuffers.h"
 
 // to tweak bar
-#define TERRAIN_GRID_SIZE 1000, 1000
-#define TERRAIN_SIZE 3000, 3000, 50
+#define TERRAIN_GRID_SIZE 256, 256
 #define TERRAIN_SHADERS "VS_TerrainVDisplacement", "PS_BasicLightMesh", "POS2"
 
 struct Terrain_CB {
 
-	Terrain_CB() {
-		ZeroMemory(this, sizeof(Terrain_CB));
-	}
-
-	DirectX::XMFLOAT3 customSize;
-	float pad;
+	//c0
 	DirectX::XMFLOAT2 textureSize;
-	DirectX::XMFLOAT2 pad2;
+	float elevationFactor = 0.2f;
+	float scaleFactor = 1;
+
+	//c1
+	float textureScaleFactor = 6;
+	DirectX::XMFLOAT3 pad2;
 };
 
 class RenderableTerrain : public DDEngine::IRenderable {
@@ -30,8 +31,10 @@ class RenderableTerrain : public DDEngine::IRenderable {
 		Terrain_CB vsCB_1;
 
 		DDEngine::ShaderResourceView* grassTexture = nullptr;
+		DDEngine::ShaderResourceView* dustTexture = nullptr;
 		DDEngine::ShaderResourceView* terrainTexture = nullptr;
-		DDEngine::SamplerState* terrainSampler = nullptr;
+		DDEngine::SamplerState* samplerLinearClamp = nullptr;
+		DDEngine::SamplerState* samplerLinearWrap = nullptr;
 
 		RenderableTerrain(DDEngine::DDERenderPackage pkg) : DDEngine::IRenderable(pkg) { }
 		~RenderableTerrain();
@@ -39,6 +42,16 @@ class RenderableTerrain : public DDEngine::IRenderable {
 		virtual void create() override;
 		virtual void render() override;
 
+		void setProceduralGeneration(bool procedural);
+
 	protected:
-	
+		
+		bool procedural = false;
+		DDEngine::RenderToTexture proceduralTerrainTexture;
+
+		TwBar* terrainBar = nullptr;
+
+	private:
+
+		void setTweakBars();
 };

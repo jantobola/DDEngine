@@ -39,17 +39,23 @@ void KeyListener::onKeyTyped(WPARAM wParam)
 		if (tweakBarHidden) {
 			TwDefine(" lightBar visible=true ");
 			TwDefine(" waterBar visible=true ");
+			TwDefine(" terrainBar visible=true ");
 			tweakBarHidden = false;
 		}
 		else {
 			TwDefine(" lightBar visible=false ");
 			TwDefine(" waterBar visible=false ");
+			TwDefine(" terrainBar visible=false ");
 			tweakBarHidden = true;
 		}
 	}
 
 	// ENTER - water drop
 	KEY(VK_RETURN, wParam) {
+		renderer->water->setWaterDrop(true);
+	}
+
+	KEY(VK_SPACE, wParam) {
 		renderer->water->setWaterDrop(true);
 	}
 

@@ -12,17 +12,19 @@ RenderableWater::~RenderableWater() {
 	waterSurface.releaseBuffers();
 	bottomSurface.releaseBuffers();
 
-	RELEASE(waterSampler)
-	RELEASE(linearSampler)
+	RELEASE(samplerPointClamp)
+	RELEASE(samplerLinearClamp)
+	RELEASE(samplerLinearWrap)
 	RELEASE(texture_bottom)
 }
 
 void RenderableWater::create() {
 
-	setSize(500, 500);
+	setSize(150, 150);
 
-	DXUtils::createSamplerState(Ctx.device, &waterSampler, DXUtils::SamplerType::MIN_MAG_MIP_POINT);
-	DXUtils::createSamplerState(Ctx.device, &linearSampler, DXUtils::SamplerType::MIN_MAG_MIP_LINEAR);
+	DXUtils::createSamplerState(Ctx.device, &samplerPointClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_POINT, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
+	DXUtils::createSamplerState(Ctx.device, &samplerLinearClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
+	DXUtils::createSamplerState(Ctx.device, &samplerLinearWrap, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_WRAP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 
 	waterSurface = Grid(size.WIDTH, size.HEIGHT);
 	waterSurface.registerObject(Ctx.device, Ctx.context);
@@ -63,7 +65,7 @@ void RenderableWater::render() {
 
 	// RENDER BOTTOM SURFACE
 	// #################################################################################################################
-
+	/*
 	XMStoreFloat4x4(&vsCB_0.world, bottomSurface.getWorldMatrix());
 
 	resources.assignResources(bottomSurface);
@@ -74,7 +76,7 @@ void RenderableWater::render() {
 	Ctx.setPSSampler(linearSampler, 0);
 
 	bottomSurface.draw();
-
+	*/
 	// COMPUTE SIMULATION (computeTexture_0, RenderToTextureVS, RenderToTexturePS)
 	// #################################################################################################################
 	
@@ -94,14 +96,16 @@ void RenderableWater::render() {
 	resources.assignResources(computeTexture_0.getQuad()); // set current shaders
 	shaders.updateConstantBufferPS("CB_WaterProps", &vsCB_2, 0); // update CB values
 	shaders.updateConstantBufferPS("CB_Timer", &vsCB_1, 1);
+	shaders.updateConstantBufferPS("CB_TerrainProps", &terrain->vsCB_1, 2);
 
 	Ctx.setPSResource(computeTexture_1.getShaderResourceView(), 0); // set previous state texture to shader
-	Ctx.setPSSampler(waterSampler, 0); // set point sampler
+	Ctx.setPSResource(terrain->terrainTexture, 1);
+	Ctx.setPSSampler(samplerLinearClamp, 0); // set point sampler
 
 	Ctx.context->RSSetState(Ctx.RSSolidCullNone); // solid no culling
 	
 	computeTexture_0.draw(); // compute, store new values
-
+	
 	Ctx.setRasterizerState(Ctx.currentRasterizerState); // set original rasterizer state
  	// #################################################################################################################
 	
@@ -119,13 +123,16 @@ void RenderableWater::render() {
 	shaders.updateConstantBufferVS("CB_Timer", &vsCB_1, 1); // update time
 	shaders.updateConstantBufferVS("CB_WaterProps", &vsCB_2, 2); // update surface props
 	shaders.updateConstantBufferVS("CB_Camera", &vsCB_3, 3); // update camera vectors
+	shaders.updateConstantBufferVS("CB_TerrainProps", &terrain->vsCB_1, 4);
 
 	ID3D11ShaderResourceView* computedTexture_0 = computeTexture_0.getShaderResourceView(); // set computed texture as resource
 	Ctx.setVSResource(computedTexture_0, 0);
-	Ctx.setVSSampler(waterSampler, 0);
+	Ctx.setVSResource(terrain->terrainTexture, 1);
+	Ctx.setVSSampler(samplerLinearClamp, 0);
 	Ctx.setPSResource(skybox->getSkyboxTexture(), 0);
-	Ctx.setPSResource(texture_bottom, 1);
-	Ctx.setPSSampler(waterSampler, 0);
+	Ctx.setPSResource(terrain->grassTexture, 1);
+	Ctx.setPSResource(terrain->terrainTexture, 2);
+	Ctx.setPSSampler(samplerLinearWrap, 0);
 
 	waterSurface.draw(); // draw grid (vertex displacement)
 	// #################################################################################################################
@@ -140,7 +147,7 @@ void RenderableWater::render() {
 	shaders.updateConstantBufferPS("CB_WaterProps", &vsCB_2, 0); // update CB values
 
 	Ctx.setPSResource(computeTexture_0.getShaderResourceView(), 0); // set previous state texture to shader
-	Ctx.setPSSampler(waterSampler, 0); // set point sampler
+	Ctx.setPSSampler(samplerPointClamp, 0); // set point sampler
 
 	Ctx.context->RSSetState(Ctx.RSSolidCullNone); // solid no culling
 	computeTexture_1.draw(); // compute, store new values
@@ -151,12 +158,16 @@ void RenderableWater::render() {
  	computedTexture_0 = NULL;
  	Ctx.setVSResource(computedTexture_0, 0);
 	Ctx.setPSResource(computedTexture_0, 0);
+	Ctx.setVSResource(nullptr, 1);
+	Ctx.setPSResource(nullptr, 2);
 
 	Ctx.setBackbufferRenderTarget();
 	setWaterDrop(false); // turn off water drop
 	resetSurface(false); // switch reset state to ignore in next frames
 
-	if(vsCB_1.timeCycle > vsCB_1.timeStep) vsCB_1.timeCycle = 0.0;
+	if (vsCB_1.timeCycle > vsCB_1.timeStep) {
+		vsCB_1.timeCycle = 0.0;
+	}
 }
 
 void RenderableWater::setSize( int width, int height ) {
@@ -174,12 +185,12 @@ void RenderableWater::setTweakBars()
 
 	int barPos[2] = { config.CFG_SCREEN_WIDTH - 210, 10 };
 
-	TwDefine(" waterBar size='200 50' ");
+	TwDefine(" waterBar size='200 120' ");
 	TwSetParam(waterBar, NULL, "position", TW_PARAM_INT32, 2, &barPos);
 	TwDefine(" waterBar visible=false ");
 	TwAddVarRW(waterBar, "Drop Strength", TW_TYPE_FLOAT, &vsCB_2.height, "min=0 max=10 step=0.001");
 	TwAddVarRW(waterBar, "Viscosity", TW_TYPE_FLOAT, &vsCB_2.viscosity, "min=0 max=1 step=0.0001");
-	TwAddVarRW(waterBar, "Time Step", TW_TYPE_FLOAT, &vsCB_1.timeStep, "min=1 max=10000 step=1");
+	TwAddVarRW(waterBar, "Time Step", TW_TYPE_FLOAT, &vsCB_1.timeStep, "min=0 max=20000 step=1");
 	TwAddVarRW(waterBar, "Bottom Scale X", TW_TYPE_FLOAT, &vsCB_2.refractiveTextureScale.x, "min=1 max=100 step=1");
 	TwAddVarRW(waterBar, "Bottom Scale Y", TW_TYPE_FLOAT, &vsCB_2.refractiveTextureScale.y, "min=1 max=100 step=1");
 }
