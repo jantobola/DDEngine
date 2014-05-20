@@ -25,13 +25,13 @@ DDEngineRes
 
 WaterRendering
 - It is a demo project. It demonstrates how DDEngine can be used.
-- Simple water simulation based od spring field.
 
 ![Wireframe](http://puu.sh/82gEN/3625c118e7.jpg)
 ![Skybox, texturing](http://fii.cz/vbhhaepq)
-![Reflection, Refraction, Fresnel](http://puu.sh/82fTs/85ce79c53f.jpg)
-![Heightmap terrain](http://puu.sh/7J26M/01804c5434.jpg)
 ![Water simulation](http://puu.sh/7J1XQ/53a0da53e6.jpg)
+![Water simulation 2](https://scontent-a.xx.fbcdn.net/hphotos-prn2/t31.0-8/10286810_10202082145115757_252098159032020820_o.jpg)
+![Water simulation 3](https://scontent-a.xx.fbcdn.net/hphotos-prn2/l/t31.0-8/10275344_10202088807242306_7099633422965902923_o.jpg)
+
 
 ---------------------
 Jan Tobola, 2013-2014
