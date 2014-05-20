@@ -69,12 +69,12 @@ void RenderContext::setRenderTarget( ID3D11RenderTargetView* renderTarget, ID3D1
 
 void RenderContext::clearRenderTarget( ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView) {
 	context->ClearRenderTargetView(renderTarget, bgColor);
-	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	if(depthStencilView) context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void DDEngine::RenderContext::clearRenderTarget(float bgColor[], ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView) {
 	context->ClearRenderTargetView(renderTarget, bgColor);
-	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	if(depthStencilView) context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void RenderContext::setViewport( int x, int y, int width, int height ) {

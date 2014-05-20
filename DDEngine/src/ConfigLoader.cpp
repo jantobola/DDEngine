@@ -15,7 +15,7 @@ ConfigLoader::~ConfigLoader() {
 
 void ConfigLoader::parseConfig(string filename) {
 	ifstream input(filename);
-	if(!input) return;
+	if(!input.is_open()) return;
 
 	CFG_SECTION section;
 
@@ -44,4 +44,6 @@ void ConfigLoader::parseConfig(string filename) {
 				break;
 		}
 	}
+
+	input.close();
 }

@@ -21,6 +21,7 @@ using namespace DDEngine;
 #define EXECUTE(CMD) if(tokens.at(0) == CMD)
 #define CMD_NO_ARGS if(tokens.size() < 1) return; 
 #define CMD_ARGS(X) if(tokens.size() < (X + 1)) return;
+#define INFO(X, T) component.getHUD()->notification(X, T);
 
 void CommandExecutor::executeCommand(std::string command) {
 	START(command)
@@ -36,28 +37,44 @@ void CommandExecutor::executeCommand(std::string command) {
 
 	EXECUTE("cam_reset") {
 		component.getCamera().resetCamera();
+		INFO("Camera position reset", 2500)
 		END
 	}
 
 	EXECUTE("cam_ortho") {
 		component.getCamera().toOrthographicProjection();
+		INFO("Orthographic projection activated", 2500)
 		END
 	}
 
 	EXECUTE("cam_persp") {
 		component.getCamera().toPerspectiveProjection();
+		INFO("Perspective projection activated", 2500)
+		END
+	}
+
+	EXECUTE("cam_save") {
+		component.getCamera().saveCamera();
+		INFO("Camera position saved", 2500)
+		END
+	}
+
+	EXECUTE("cam_load") {
+		component.getCamera().loadCamera();
+		INFO("Camera position loaded", 2500)
 		END
 	}
 
 	EXECUTE("shaders_listen_all") {
 		component.getResources()->getShaderHolder().runRealTimeCompilerAll();
-		component.getHUD()->addText("shaders", "Shaders are listening to all changes.", 100.0f, 10.0f, DirectX::Colors::Red, true);
+		component.getHUD()->addText("shaders", "Shaders are listening to all changes.", 100.0f, 10.0f, DirectX::Colors::White, true);
 		END
 	}
 
 	EXECUTE("shaders_stop") {
 		component.getResources()->getShaderHolder().stopRealTimeCompiler();
 		component.getHUD()->removeText("shaders");
+		INFO("Shader compiler deactivated", 2500)
 		END
 	}
 
@@ -77,16 +94,20 @@ void CommandExecutor::executeCommand(std::string command) {
 
 	EXECUTE("mouse_sensitivity") {
 		component.getControlls()->setSensitivity(ARG_FLOAT(0));
+		INFO("Mouse sensitivity changed", 2500)
 		END
 	}
 
 	EXECUTE("move_speed") {
 		component.getControlls()->setSpeed(ARG_FLOAT(0));
+		INFO("Move speed changed", 2500)
 		END
 	}
 
 	EXECUTE("mouse_inverted") {
 		component.getControlls()->setMouseInverted(ARG_BOOL(0));
+		if(ARG_BOOL(0)) INFO("Mouse movement is now inverted", 2500)
+		else INFO("Mouse movement is now normal", 2500)
 		END
 	}
 
@@ -97,21 +118,25 @@ void CommandExecutor::executeCommand(std::string command) {
 
 	EXECUTE("shaders_recompileVS") {
 		component.getResources()->getShaderHolder().recompileVertexShader(ARG(0));
+		INFO("Recompiling vertex shader: " + ARG(0), 2500);
 		END
 	}
 
 	EXECUTE("shaders_recompilePS") {
 		component.getResources()->getShaderHolder().recompilePixelShader(ARG(0));
+		INFO("Recompiling pixel shader: " + ARG(0), 2500);
 		END
 	}
 
 	EXECUTE("object_hide") {
 		component.getObjectManager()->hide(ARG(0));
+		INFO(ARG(0) + " object hidden", 2500);
 		END
 	}
 
 	EXECUTE("object_show") {
 		component.getObjectManager()->show(ARG(0));
+		INFO(ARG(0) + " object shown", 2500);
 		END
 	}
 
@@ -121,6 +146,7 @@ void CommandExecutor::executeCommand(std::string command) {
 
 	EXECUTE("cam_znear_zfar") {
 		component.getCamera().changeNearFar(ARG_FLOAT(0), ARG_FLOAT(1));
+		INFO("Camera ZNEAR, ZFAR changed", 2500);
 		END
 	}
 
@@ -131,6 +157,7 @@ void CommandExecutor::executeCommand(std::string command) {
 
 	EXECUTE("shaders_listen_on") {
 		component.getResources()->getShaderHolder().runRealTimeCompiler(ARG(0), ARG(1));
+		INFO("Listening...", 2500);
 		END
 	}
 
@@ -144,6 +171,7 @@ void CommandExecutor::executeCommand(std::string command) {
 
 	EXECUTE("render_bgcolor") {
 		component.setBackgroundColor(ARG_INT(0), ARG_INT(1), ARG_INT(2), ARG_INT(3));
+		INFO("Background window color changed", 2500);
 		END
 	}
 

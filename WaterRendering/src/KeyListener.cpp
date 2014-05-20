@@ -9,31 +9,6 @@ void KeyListener::onKeyTyped(WPARAM wParam)
 {
 	CommandExecutor& cmd = console->getExecutor();
 
-	// F1 - solid
-	KEY(VK_F1, wParam) {
-		cmd.executeCommand("render_wireframe = false");
-	}
-
-	//F2 - wireframe
-	KEY(VK_F2, wParam) {
-		cmd.executeCommand("render_wireframe = true");
-	}
-
-	//F5 - listen all shaders to changes
-	KEY(VK_F5, wParam) {
-		cmd.executeCommand("shaders_listen_all");
-	}
-
-	//F6 - stop listening to changes
-	KEY(VK_F6, wParam) {
-		cmd.executeCommand("shaders_stop");
-	}
-
-	//F8 - reset camera
-	KEY(VK_F8, wParam) {
-		cmd.executeCommand("cam_reset");
-	}
-
 	//ESCAPE - toggle AntTweakBar
 	KEY(VK_ESCAPE, wParam) {
 		if (tweakBarHidden) {

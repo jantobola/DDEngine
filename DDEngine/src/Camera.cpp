@@ -1,7 +1,11 @@
 #include "Camera.h"
+#include "DDEUtils.h"
+#include <iostream>
+#include <fstream>
 
 using namespace DDEngine;
 using namespace DirectX;
+using namespace std;
 
 Camera::Camera() {
 	isPerspectiveProjection = true;
@@ -14,7 +18,7 @@ Camera::Camera() {
 	XMMATRIX v = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&at), XMLoadFloat3(&up));
 	
 	XMStoreFloat4x4(&world, w);
-	XMStoreFloat4x4(&view, v);	
+	XMStoreFloat4x4(&view, v);
 }
 
 Camera::~Camera() {
@@ -33,7 +37,6 @@ void Camera::resetCamera() {
 	XMStoreFloat3(&up, u);
 
 	setDefaultState();
-	camPitch = XMConvertToRadians(0);
 }
 
 void Camera::update() {
@@ -110,6 +113,66 @@ void DDEngine::Camera::makeReflection(float height) {
 
 void DDEngine::Camera::setViewMatrix(XMFLOAT4X4 viewMatrix) {
 	view = viewMatrix;
+}
+
+void DDEngine::Camera::saveCamera() {
+
+	ofstream saveFile(savePath);
+	if (saveFile.is_open()) {
+
+		saveFile << to_string(eye.x) << endl;
+		saveFile << to_string(eye.y) << endl;
+		saveFile << to_string(eye.z) << endl;
+		saveFile << to_string(camYaw) << endl;
+		saveFile << to_string(camPitch);
+		
+		saveFile.close();
+	}
+}
+
+void DDEngine::Camera::loadCamera() {
+	string line;
+	int iter = 0;
+	ifstream saveFile(savePath);
+	if (saveFile.is_open()) {
+		while (getline(saveFile, line)) {
+			iter++;
+			float value = StringUtils::toFloat(line);
+
+			switch (iter) {
+
+				case 1:
+					eye.x = value;
+					break;
+
+				case 2:
+					eye.y = value;
+					break;
+
+				case 3:
+					eye.z = value;
+					break;
+
+				case 4:
+					camYaw = value;
+					break;
+
+				case 5:
+					camPitch = value;
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		saveFile.close();
+	}
+}
+
+void DDEngine::Camera::setSavePath(std::string path) {
+	if (!path.empty()) savePath = path + "/save.cam";
+	else savePath = "save.cam";
 }
 
 void Camera::setDefaultState() {

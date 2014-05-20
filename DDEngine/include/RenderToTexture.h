@@ -18,6 +18,10 @@ class RenderToTexture {
 		ID3D11Texture2D* texture2D = nullptr;
 		ID3D11RenderTargetView* renderTargetView = nullptr;
 		ShaderResourceView* shaderResourceView = nullptr;
+		ID3D11DepthStencilView*	depthStencilView = nullptr;
+		ID3D11Texture2D* depthStencilBuffer = nullptr;
+
+		DXGI_FORMAT format;
 
 		int width = 1;
 		int height = 1;
@@ -31,9 +35,12 @@ class RenderToTexture {
 		RenderToTexture(ID3D11Device* device, ID3D11DeviceContext* context);
 		~RenderToTexture();
 	
-		HRESULT create(int width, int height);
+		HRESULT create(int width, int height, DXGI_FORMAT format = DXGI_FORMAT_R32G32B32A32_FLOAT);
+		HRESULT createDepth();
+
 		ShaderResourceView* getShaderResourceView();
 		ID3D11RenderTargetView* getRenderTargetView();
+		ID3D11DepthStencilView* getDepthStencilView();
 
 		QuadObject& getQuad();
 		void setShaders(std::string vs, std::string ps, std::string il);

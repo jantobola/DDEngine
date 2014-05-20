@@ -119,7 +119,8 @@ namespace DDEngine
 			_Out_	ID3D11SamplerState** samplerState,
 			_In_	FilterType filter,
 			_In_	TextureAddressMode textureMode,
-			_In_	ComparisonFunction comparison
+			_In_	ComparisonFunction comparison,
+			_In_opt_ UINT maxAnisotropy = 1
 		);
 
 		HRESULT createBlendState(

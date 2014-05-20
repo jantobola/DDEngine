@@ -29,14 +29,14 @@ void RenderableTerrain::create() {
 
 	if(procedural) {
 		int width, height;
-		width = height = 150;
+		width = height = 248;
 		hmapInfo.Width = width;
 		hmapInfo.Height = height;
 
 		proceduralTerrainTexture = RenderToTexture(Ctx.device, Ctx.context);
 		proceduralTerrainTexture.create(width, height);
 
-		Ctx.setRenderTarget(proceduralTerrainTexture.getRenderTargetView(), NULL);
+		Ctx.setRenderTarget(proceduralTerrainTexture.getRenderTargetView(), nullptr);
 		Ctx.context->RSSetState(Ctx.RSSolidCullNone);
 		Ctx.setViewport(0, 0, proceduralTerrainTexture.getWidth(), proceduralTerrainTexture.getHeight());
 
@@ -49,15 +49,16 @@ void RenderableTerrain::create() {
 		Ctx.setBackbufferRenderTarget();
 		terrainTexture = proceduralTerrainTexture.getShaderResourceView();
 	} else {
-		D3DX11CreateShaderResourceViewFromFile(Ctx.device, heightmapPath.c_str(), NULL, NULL, &terrainTexture, NULL);
-		D3DX11GetImageInfoFromFile(heightmapPath.c_str(), NULL, &hmapInfo, &result);
+		D3DX11CreateShaderResourceViewFromFile(Ctx.device, heightmapPath.c_str(), nullptr, nullptr, &terrainTexture, nullptr);
+		D3DX11GetImageInfoFromFile(heightmapPath.c_str(), nullptr, &hmapInfo, &result);
 	}
 
 	//CreateDDSTextureFromFile(Ctx.device, L"res/textures/grass.dds", nullptr, &grassTexture);
-	D3DX11CreateShaderResourceViewFromFile(Ctx.device, L"res/textures/greengrasstex.jpg", NULL, NULL, &grassTexture, NULL);
-	D3DX11CreateShaderResourceViewFromFile(Ctx.device, L"res/textures/graygrasstex.jpg", NULL, NULL, &dustTexture, NULL);
+	D3DX11CreateShaderResourceViewFromFile(Ctx.device, L"res/textures/rock.jpg", nullptr, nullptr, &grassTexture, nullptr);
+	D3DX11CreateShaderResourceViewFromFile(Ctx.device, L"res/textures/greengrasstex.jpg", nullptr, nullptr, &dustTexture, nullptr);
 	DXUtils::createSamplerState(Ctx.device, &samplerLinearClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 	DXUtils::createSamplerState(Ctx.device, &samplerLinearWrap, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_WRAP, ComparisonFunction::D3D11_COMPARISON_NEVER);
+	DXUtils::createSamplerState(Ctx.device, &samplerAnisotropicWrap, FilterType::D3D11_FILTER_ANISOTROPIC, TextureAddressMode::D3D11_TEXTURE_ADDRESS_WRAP, ComparisonFunction::D3D11_COMPARISON_NEVER, 16);
 
 	terrain = Grid(TERRAIN_GRID_SIZE);
 	
@@ -66,12 +67,16 @@ void RenderableTerrain::create() {
 	terrain.setShaders(TERRAIN_SHADERS);
 	terrain.registerObject(Ctx.device, Ctx.context);
 
+	perspectiveView = RenderToTexture(Ctx.device, Ctx.context);
+	perspectiveView.create(Ctx.screenDimension.WIDTH, Ctx.screenDimension.HEIGHT, DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM);
+	perspectiveView.createDepth();
+
 	setTweakBars();
 }
 
 void RenderableTerrain::render() {
 	if(procedural) {
-		Ctx.setRenderTarget(proceduralTerrainTexture.getRenderTargetView(), NULL);
+		Ctx.setRenderTarget(proceduralTerrainTexture.getRenderTargetView(), nullptr);
 		Ctx.context->RSSetState(Ctx.RSSolidCullNone);
 		Ctx.setViewport(0, 0, proceduralTerrainTexture.getWidth(), proceduralTerrainTexture.getHeight());
 		resources.assignResources(proceduralTerrainTexture.getQuad());
@@ -97,7 +102,7 @@ void RenderableTerrain::render() {
  
  	Ctx.setPSResource(grassTexture, 0);
 	Ctx.setPSResource(dustTexture, 1);
- 	Ctx.setPSSampler(samplerLinearWrap, 0);
+ 	Ctx.setPSSampler(samplerAnisotropicWrap, 0);
 
 	if(procedural) {
 		Ctx.setPSResource(proceduralTerrainTexture.getShaderResourceView(), 10);
@@ -106,10 +111,16 @@ void RenderableTerrain::render() {
 	shaders.updateConstantBufferVS("CB_Matrices", &vsCB_0, 0);
 	shaders.updateConstantBufferVS("CB_TerrainProps", &vsCB_1, 1);
 
+	Ctx.setRenderTarget(perspectiveView.getRenderTargetView(), perspectiveView.getDepthStencilView());
+	float bgColor[] = { 0, 0, 0, 0 };
+	Ctx.clearRenderTarget(bgColor, perspectiveView.getRenderTargetView(), perspectiveView.getDepthStencilView());
+	terrain.draw();
+	Ctx.setBackbufferRenderTarget();
+
 	terrain.draw();
 
-	Ctx.setVSResource(NULL, 0);
-	Ctx.setPSResource(NULL, 10);
+	Ctx.setVSResource(nullptr, 0);
+	Ctx.setPSResource(nullptr, 10);
 }
 
 void RenderableTerrain::setProceduralGeneration(bool procedural) {
@@ -126,5 +137,5 @@ void RenderableTerrain::setTweakBars() {
 	int barPos[2] = { 370, config.CFG_SCREEN_HEIGHT - 130 };
 
 	TwDefine(" terrainBar size='250 90' ");
-	TwSetParam(terrainBar, NULL, "position", TW_PARAM_INT32, 2, &barPos);
+	TwSetParam(terrainBar, nullptr, "position", TW_PARAM_INT32, 2, &barPos);
 }

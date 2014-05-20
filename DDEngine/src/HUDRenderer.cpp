@@ -1,6 +1,7 @@
 #include "HUDRenderer.h"
 #include "RenderContext.h"
 #include "Config.h"
+#include "Timer.h"
 #include "DLLResourceLoader.h"
 #include <DirectXTK/SpriteBatch.h>
 #include <DirectXTK/SpriteFont.h>
@@ -9,7 +10,7 @@ using namespace DDEngine;
 using namespace std;
 using namespace DirectX;
 
-HUDRenderer::HUDRenderer(Config& config, RenderContext& renderContext) : config(config), renderContext(renderContext) {
+HUDRenderer::HUDRenderer(Config& config, RenderContext& renderContext, Timer& timer) : config(config), renderContext(renderContext), timer(timer) {
 	resourcesHmodule = LoadLibrary(L"dderes.dll");
 	isRendered = true;
 	
@@ -33,18 +34,27 @@ void HUDRenderer::setRender(string hudKey, bool isRender) {
 
 void HUDRenderer::render() {
 	if(isRendered) {
+		timeCycle += timer.delta;
+
 		spriteBatch->Begin();
 
 		for (HUDBuffer::const_iterator it = buffer.begin(); it != buffer.end(); ++it) {
 			HUD hud = it->second;
 			if(hud.render) {
+
 				string s = hud.text;
 				wstring ws;
 				ws.assign(s.begin(), s.end());
 				spriteFont->DrawString(spriteBatch.get(), ws.c_str(), XMFLOAT2((FLOAT) hud.coords.x, (FLOAT) hud.coords.y), DirectX::XMLoadFloat3(&hud.textColor));
 			}
 		}
+
 		spriteBatch->End();
+
+		if (timeCycle > notificationTime) {
+			timeCycle = 0;
+			clearNotifications();
+		}
 	}
 }
 
@@ -79,4 +89,15 @@ void HUDRenderer::addText(string name, string text, float x, float y, XMVECTOR c
 
 void HUDRenderer::removeText( string name ) {
 	buffer.erase(name);
+}
+
+void HUDRenderer::notification(string text, long time, DirectX::XMVECTOR color /*= DirectX::Colors::White*/) {
+	notificationTime = time;
+	timeCycle = 0;
+	clearNotifications();
+	addText("hud_notification", text, 5, (float) config.CFG_SCREEN_HEIGHT - 60, color, true);
+}
+
+void DDEngine::HUDRenderer::clearNotifications() {
+	removeText("hud_notification");
 }

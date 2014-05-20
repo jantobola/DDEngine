@@ -83,14 +83,14 @@ HRESULT DDEngine::DXUtils::createRasterizerState(_In_ ID3D11Device* device, _Out
 	HRESULT result = S_OK;
 	D3D11_RASTERIZER_DESC rasterDesc;
 
-	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.AntialiasedLineEnable = true;
 	rasterDesc.CullMode = cullMode;
 	rasterDesc.DepthBias = depthBias;
 	rasterDesc.DepthBiasClamp = 0.0f;
 	rasterDesc.DepthClipEnable = true;
 	rasterDesc.FillMode = fillMode;
 	rasterDesc.FrontCounterClockwise = false;
-	rasterDesc.MultisampleEnable = false;
+	rasterDesc.MultisampleEnable = true;
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
@@ -334,7 +334,7 @@ HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ I
 	return device->CreateSamplerState(&desc, samplerState);
 }
 
-HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ ID3D11SamplerState** samplerState, _In_ FilterType filter, _In_ TextureAddressMode textureMode, _In_ ComparisonFunction comparison)
+HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ ID3D11SamplerState** samplerState, _In_ FilterType filter, _In_ TextureAddressMode textureMode, _In_ ComparisonFunction comparison, _In_opt_ UINT maxAnisotropy)
 {
 	D3D11_SAMPLER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
@@ -345,7 +345,7 @@ HRESULT DDEngine::DXUtils::createSamplerState(_In_ ID3D11Device* device, _Out_ I
 	desc.ComparisonFunc = comparison;
 	desc.MinLOD = 0;
 	desc.MaxLOD = D3D11_FLOAT32_MAX;
-	desc.MaxAnisotropy = 16;
+	desc.MaxAnisotropy = maxAnisotropy;
 	desc.BorderColor[0] = 1;
 	desc.BorderColor[1] = 1;
 	desc.BorderColor[2] = 1;

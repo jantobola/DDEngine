@@ -1,5 +1,5 @@
 #include "DDEComponent.h"
-
+#include "DDEUtils.h"
 #include "Controlls.h"
 #include "ResourceProvider.h"
 #include "ObjectManager.h"
@@ -13,6 +13,8 @@ using namespace std;
 DDEComponent::DDEComponent(std::string configPath /* = DDE_CONFIG_PATH */) {
 	config.setConfigPath(configPath);
 	config.load();
+	camera.setSavePath(FileUtils::splitFilename(configPath));
+	camera.loadCamera();
 }
 
 DDEComponent::~DDEComponent() {
@@ -35,7 +37,7 @@ void DDEComponent::compose(HWND hWnd) {
 
 	controlls	= new Controls(camera, timer);
 	objects		= new ObjectManager(config, Ctx);
-	hud			= new HUDRenderer(config, Ctx);
+	hud			= new HUDRenderer(config, Ctx, timer);
 	gui			= new GUIRenderer(config, Ctx);
 	resources	= new ResourceProvider(config, Ctx);
 	shaders		= &resources->getShaderHolder();

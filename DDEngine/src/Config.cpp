@@ -71,6 +71,12 @@ void Config::load() {
 			NEXT
 		}
 
+		LOAD("MSAA")
+		{
+			MSAA = ARG_INT(0);
+			NEXT
+		}
+
 		CONFIG_ARGS(2)
 
 		LOAD("screen_resolution")

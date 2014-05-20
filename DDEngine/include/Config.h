@@ -31,5 +31,6 @@ class Config : public ConfigLoader {
 		wstring CFG_WINDOW_TITLE;
 		int CFG_SCREEN_WIDTH;
 		int CFG_SCREEN_HEIGHT;
+		int MSAA = 1;
 };
 }

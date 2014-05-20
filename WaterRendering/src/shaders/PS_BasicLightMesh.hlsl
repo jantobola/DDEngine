@@ -18,5 +18,27 @@ struct PixelInput
 
 float4 main(PixelInput input) : SV_TARGET
 {
-	return BaseLight(texture_0, sampler_0, input.nor, input.tex);
+
+	float3 normal = normalize(-input.nor);
+
+	float4 rock = texture_0.Sample(sampler_0, input.tex);
+	float4 grass = texture_1.Sample(sampler_0, input.tex);
+
+	float slope = 1 - normal.y;
+	float blend = 0;
+	float4 final = (1, 1, 1, 1);
+
+	float slopeFactor = 0.3;
+
+	if(slope < slopeFactor) {
+		blend = slope / slopeFactor;
+        final = lerp(grass, rock, blend);
+    }
+
+	if(slope >= slopeFactor) {
+        //blend = (slope - slopeFactor) / (1 - slopeFactor);
+        final = rock;
+    }
+
+	return BaseLight(final, normal, input.tex);
 }

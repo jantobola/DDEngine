@@ -19,6 +19,7 @@ namespace DDEngine
 
 class RenderContext;
 class Config;
+class Timer;
 
 struct HUD
 {
@@ -45,12 +46,16 @@ class HUDRenderer {
 
 		Config& config;
 		RenderContext& renderContext;
+		Timer& timer;
 		bool isRendered;
+
+		long notificationTime = 2500;
+		long timeCycle = 0;
 
 		HMODULE resourcesHmodule;
 
 	public:
-		HUDRenderer(Config& config, RenderContext& renderContext);
+		HUDRenderer(Config& config, RenderContext& renderContext, Timer& timer);
 		~HUDRenderer();
 
 		void addText(string name, string text, float x, float y, DirectX::XMVECTOR color = DirectX::Colors::White, bool renderedByDefault = false);
@@ -59,5 +64,7 @@ class HUDRenderer {
 		void render();
 		void setHUDRendered(bool isRendered);
 		void removeText(string name);
+		void notification(string text, long time, DirectX::XMVECTOR color = DirectX::Colors::White);
+		void clearNotifications();
 };
 }

@@ -2,6 +2,7 @@
 
 #include "Dimension.h"
 #include <d3d11.h>
+#include <DirectXTK/CommonStates.h>
 
 namespace DDEngine
 {
@@ -33,6 +34,8 @@ class RenderContext {
 		ID3D11RenderTargetView*	renderTargetView;
 		ID3D11DepthStencilView*	depthStencilView;
 		ID3D11Texture2D* depthStencilBuffer;
+
+		DirectX::CommonStates* commonStates;
 
 		Dimension screenDimension;
 		float bgColor[4];

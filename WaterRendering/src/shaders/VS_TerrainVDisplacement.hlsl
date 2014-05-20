@@ -37,7 +37,7 @@ struct VertexOutput
 };
 
 float3 elevate(float2 pos) {
-	return (float3(pos, heightMapTexture.SampleLevel(samplerState, float2(pos.x, 1 - pos.y), 0).r * elevationFactor) * scaleFactor).xzy;
+	return (float3(pos, heightMapTexture.SampleLevel(samplerState, float2(pos.x + 0.5 / textureSize.x, 1 - pos.y + 0.5 / textureSize.y), 0).r * elevationFactor) * scaleFactor).xzy;
 }
 
 VertexOutput main( VertexInput input )
@@ -49,11 +49,12 @@ VertexOutput main( VertexInput input )
 	// get height for current vertex
 	float4 position4 = float4(elevate(input.pos), 1);
 
-	float3 xVec = elevate(position2 + float2(1.0 / (textureSize.x - 1), 0)) - elevate(position2 - float2(1.0 / (textureSize.x - 1), 0));
-	float3 zVec = elevate(position2 + float2(0, 1.0 / (textureSize.y - 1))) - elevate(position2 - float2(0, 1.0 / (textureSize.y - 1)));
+	float3 xVec = elevate(position2 + float2(1.0 / (textureSize.x), 0)) - elevate(position2 - float2(1.0 / (textureSize.x), 0));
+	float3 zVec = elevate(position2 + float2(0, 1.0 / (textureSize.y))) - elevate(position2 - float2(0, 1.0 / (textureSize.y)));
 
 	// get cross product
 	output.nor = cross(xVec, zVec);
+	output.nor = normalize(mul(output.nor, world));
 
     output.pos = mul(position4, world);
 	output.pos = mul(output.pos, view);

@@ -10,24 +10,22 @@ struct PixelInput
 };
 
 #define HEIGHT 0.1f
-#define TROUGH_FACTOR 0
+#define TROUGH_FACTOR 4
 #define TILT_FACTOR 0.5
 
 // SHADER ENTRY POINT
 float4 main(PixelInput input) : SV_TARGET
 {
-	float dust = 1;
 	float z = HEIGHT;
 	float height = z;
-	float y = 0.5f - input.tex.y;
+	float y = input.tex.y - 0.5;
 
 	height = pow(y * TROUGH_FACTOR, 2);
 	if(height > z) {
 		height = z;
-		dust = 0;
 	}
-	
+
 	height += input.tex.x * TILT_FACTOR;
 	
-	return float4(height, height, dust, 1);
+	return float4(height, height, height, 1);
 }

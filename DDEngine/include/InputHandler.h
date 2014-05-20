@@ -17,6 +17,8 @@ class InputHandler : public WndHandler {
 		bool focused;
 		POINT mousePrevState;
 
+		void onKeyTypedInternal(WPARAM wParam);
+
 	public:
 
 		InputHandler();
@@ -34,7 +36,7 @@ class InputHandler : public WndHandler {
 		virtual bool handle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
 		virtual void onKeyDownAsync();
 		virtual void onKeyTyped(WPARAM wParam);
-	
+		
 };
 }
 

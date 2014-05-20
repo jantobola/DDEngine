@@ -4,6 +4,7 @@
 #include "DDEComponent.h"
 #include "InputHandler.h"
 #include "Console.h"
+#include "HUDRenderer.h"
 #include <CommandExecutor.h>
 
 using namespace DDEngine;
@@ -33,6 +34,7 @@ int Application::run() {
 
 	// build DDEComponent using D3DRenderer
 	component.setHInstance(hInstance);
+	component.setMultiSamplingValue(cfg.MSAA);
 	component.compose(window->getHwnd());
 
 	// create console for a given DDEComponent
@@ -44,6 +46,7 @@ int Application::run() {
 	}
 
 	console.getExecutor().executeBatch(cfg.getRenderConfig());
+	component.getHUD()->clearNotifications();
 	window->show();
 
 	component.getTimer().init();

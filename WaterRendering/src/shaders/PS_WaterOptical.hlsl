@@ -6,9 +6,10 @@
 #include "fragment/ILight.psi"
 
 TextureCube textureSkybox : register ( t0 );
-Texture2D<float4> textureBottom : register ( t1 );
+Texture2D<float4> textureTerrainPersp : register ( t1 );
 Texture2D<float4> terrainTexture : register( t2 );
-SamplerState samplerState : register ( s0 );
+SamplerState samplerLinearWrap : register ( s0 );
+SamplerState samplerLinearClamp : register ( s1 );
 
 struct PixelInput
 {
@@ -21,21 +22,37 @@ struct PixelInput
 	float3 surfacesPos : POSITION1;
 };
 
+static float h0 = 0.0013; // with terrain elevation factor
+
 float4 main(PixelInput input) : SV_TARGET
 {
 
 	clip(input.surfacesPos.y /*+ input.surfacesPos.z*/ <= input.surfacesPos.x ? -1 : 1);
 
-	float4 reflectiveColor = float4(textureSkybox.Sample(samplerState, input.reflection).rgb, 1);
+	float4 reflectiveColor = float4(textureSkybox.Sample(samplerLinearWrap, input.reflection).rgb, 1);
 
 	// here sample from refraction map instead of textureBoorom with BaseLight function
-	float4 refractiveColor = BaseLight(textureBottom, samplerState, -input.surfaceNormal, input.refraction);
+	//float4 refractiveColor = BaseLight(textureTerrainPersp, samplerLinearWrap, -input.surfaceNormal, input.refraction);
+	
+	float4 refractiveColor = textureTerrainPersp.Sample(samplerLinearClamp, input.refraction);
 
-	refractiveColor = float4(0.2, 0.2, 0.8, 1);
+	if (refractiveColor.r == 0 && refractiveColor.g == 0 && refractiveColor.b == 0) 
+		refractiveColor = float4(textureSkybox.Sample(samplerLinearWrap, -input.reflection).rgb, 1);
 
-	//float3 normalVec = float3(0, 1, 0);
+	//refractiveColor = float4(0, 0, 0, 1);
+
 	float fresnel = dot(normalize(input.viewDirection), input.surfaceNormal);
 	float4 fresnelColor = lerp(reflectiveColor, refractiveColor, fresnel);
+
+	float h = input.surfacesPos.y - input.surfacesPos.x;
+
+	fresnelColor = lerp(refractiveColor, fresnelColor, 0.8);
+	fresnelColor = lerp(float4(0, 0.13, 0.05, 1), fresnelColor, 0.7);
+	if(h < h0) {
+			// normal texture instead of refractive
+			fresnelColor = lerp(refractiveColor, fresnelColor, h/h0);
+	}
+
 
 	return fresnelColor;
 }

@@ -18,7 +18,7 @@ struct Terrain_CB {
 	float scaleFactor = 1;
 
 	//c1
-	float textureScaleFactor = 6;
+	float textureScaleFactor = 20;
 	DirectX::XMFLOAT3 pad2;
 };
 
@@ -35,6 +35,9 @@ class RenderableTerrain : public DDEngine::IRenderable {
 		DDEngine::ShaderResourceView* terrainTexture = nullptr;
 		DDEngine::SamplerState* samplerLinearClamp = nullptr;
 		DDEngine::SamplerState* samplerLinearWrap = nullptr;
+		DDEngine::SamplerState* samplerAnisotropicWrap = nullptr;
+
+		DDEngine::RenderToTexture perspectiveView;
 
 		RenderableTerrain(DDEngine::DDERenderPackage pkg) : DDEngine::IRenderable(pkg) { }
 		~RenderableTerrain();

@@ -2,6 +2,7 @@
 
 #include "Dimension.h"
 #include <DirectXMath.h>
+#include <string>
 
 namespace DDEngine
 {
@@ -36,6 +37,8 @@ class Camera {
 		float zNear;
 		float zFar;
 
+		std::string savePath;
+
 		Dimension screenDimension;
 
 		void setDefaultState();
@@ -62,6 +65,11 @@ class Camera {
 		void toOrthographicProjection();
 		void changeNearFar(float zNear, float zFar);
 		void makeReflection(float height);
+
+		void setSavePath(std::string path);
+
+		void saveCamera();
+		void loadCamera();
 
 		XMMATRIX getViewMatrix();
 		void setViewMatrix(XMFLOAT4X4 viewMatrix);

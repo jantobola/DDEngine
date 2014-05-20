@@ -39,6 +39,8 @@ HRESULT D3DRenderer::initialize(HWND hwnd) {
 	result = DXUtils::createBlendState(Ctx.device, &Ctx.blendState);
 	Win32Utils::showFailMessage(result, "Initialization error", "Cannot create Direct3D blend state.");
 
+	Ctx.commonStates = new DirectX::CommonStates(Ctx.device);
+
 	camera.setProjectionMatrices(screenDimension);
     return result;
 }
@@ -61,7 +63,7 @@ void D3DRenderer::renderFrame() {
 }
 
 void D3DRenderer::cleanUp() {
-	
+	delete Ctx.commonStates;
 }
 
 Camera& D3DRenderer::getCamera() {

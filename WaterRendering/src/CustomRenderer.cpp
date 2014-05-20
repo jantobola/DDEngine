@@ -31,8 +31,8 @@ void CustomRenderer::create() {
 	terrain->setName("terrain");
 	water->setName("water");
 
-	skybox->setSkyboxPath("res/textures/Skybox.dds");
-	terrain->setProceduralGeneration(true);
+	skybox->setSkyboxPath("res/textures/TropicalDaySkybox.dds");
+	terrain->setProceduralGeneration(false);
 
 	objects->addObject(skybox);
 	objects->addObject(terrain);
@@ -137,7 +137,7 @@ void CustomRenderer::setTweakBars() {
 	int barPos[2] = { 10, config.CFG_SCREEN_HEIGHT - 200 };
 
 	TwDefine(" lightBar size='350 160' ");
-	TwSetParam(tweakBar, NULL, "position", TW_PARAM_INT32, 2, &barPos);
+	TwSetParam(tweakBar, nullptr, "position", TW_PARAM_INT32, 2, &barPos);
 
 	light.direction = XMFLOAT3(0.0f, -1.0f, -1.0f);
 	light.ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);

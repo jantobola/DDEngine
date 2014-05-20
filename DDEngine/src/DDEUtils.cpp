@@ -66,6 +66,12 @@ FILETIME FileUtils::getLastWriteTime( std::wstring path ) {
 	return writeTime;
 }
 
+std::string DDEngine::FileUtils::splitFilename(const std::string path)
+{
+		unsigned found = path.find_last_of("/\\");
+		return (found != std::string::npos) ? path.substr(0, found) : "";
+}
+
 #include <comdef.h>
 
 void DDEngine::Win32Utils::showFailMessage(HRESULT result, std::string title, std::string message)

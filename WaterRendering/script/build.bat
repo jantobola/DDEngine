@@ -23,7 +23,7 @@ if "%active_conf%"=="Release_precompiled_shaders" (
 
 xcopy "%project_dir%\lib\DDEngine\dll\%dllFolder%\*.dll" "%project_dir%\bin\%active_conf%\bin\" /s
 xcopy "%project_dir%\res\*.*" "%project_dir%\bin\%active_conf%\bin\res\" /s
-xcopy "%project_dir%\data\*.cfg" "%project_dir%\bin\%active_conf%\bin\"
+xcopy "%project_dir%\data\*" "%project_dir%\bin\%active_conf%\bin\"
 
 if NOT "%active_conf%"=="Debug" (
 	if NOT "%active_conf%"=="Debug_precompiled_shaders" (

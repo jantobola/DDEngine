@@ -1,5 +1,6 @@
 #include "RenderToTexture.h"
 #include "DDEUtils.h"
+#include "D3DUtils.h"
 
 using namespace DDEngine;
 
@@ -17,9 +18,10 @@ RenderToTexture::~RenderToTexture() {
 	cleanUp();
 }
 
-HRESULT RenderToTexture::create( int width, int height ) {
+HRESULT RenderToTexture::create(int width, int height, DXGI_FORMAT format) {
 	this->width = width;
 	this->height = height;
+	this->format = format;
 
 	HRESULT result  = S_OK;
 	D3D11_TEXTURE2D_DESC textureDesc;
@@ -31,8 +33,9 @@ HRESULT RenderToTexture::create( int width, int height ) {
 	textureDesc.Height = height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.Format = format;
 	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = D3D11_STANDARD_MULTISAMPLE_QUALITY_LEVELS::D3D11_STANDARD_MULTISAMPLE_PATTERN;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	textureDesc.CPUAccessFlags = 0;
@@ -58,6 +61,10 @@ HRESULT RenderToTexture::create( int width, int height ) {
 	quad.registerObject(device, context);
 
 	return result;
+}
+
+HRESULT DDEngine::RenderToTexture::createDepth() {
+	return DXUtils::createDepthStencilBuffer(device, context, DDEngine::Dimension(width, height), &depthStencilView, &depthStencilBuffer, 1);
 }
 
 ShaderResourceView* RenderToTexture::getShaderResourceView() {
@@ -88,8 +95,14 @@ int DDEngine::RenderToTexture::getHeight() {
 	return height;
 }
 
+ID3D11DepthStencilView* DDEngine::RenderToTexture::getDepthStencilView() {
+	return depthStencilView;
+}
+
 void RenderToTexture::cleanUp() {
 	RELEASE(texture2D)
 	RELEASE(shaderResourceView)
 	RELEASE(renderTargetView)
+	RELEASE(depthStencilBuffer)
+	RELEASE(depthStencilView)
 }

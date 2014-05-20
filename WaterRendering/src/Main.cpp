@@ -14,10 +14,10 @@ using namespace DDEngine;
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int	nCmdShow) {
 
 	CustomRenderer renderer(CONFIG_PATH);
+
 	KeyListener listener(&renderer);
 	Application app(hInstance, renderer);
 
-	app.getWindow();
 	app.setKeyListener(&listener);
 	return app.run();
 }

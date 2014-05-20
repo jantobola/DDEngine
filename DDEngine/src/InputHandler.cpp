@@ -2,6 +2,7 @@
 #include "Console.h"
 #include "Controlls.h"
 #include "DDEComponent.h"
+#include "CommandExecutor.h"
 #include <AntTweakBar/AntTweakBar.h>
 #include <CEGUI/CEGUI.h>
 
@@ -14,6 +15,41 @@ InputHandler::InputHandler() {
 
 InputHandler::~InputHandler() {
 
+}
+
+void DDEngine::InputHandler::onKeyTypedInternal(WPARAM wParam) {
+
+	CommandExecutor& cmd = console->getExecutor();
+
+	// F1 - solid
+	KEY(VK_F1, wParam) {
+		cmd.executeCommand("render_wireframe = false");
+	}
+
+	//F2 - wireframe
+	KEY(VK_F2, wParam) {
+		cmd.executeCommand("render_wireframe = true");
+	}
+
+	//F5 - listen all shaders to changes
+	KEY(VK_F5, wParam) {
+		cmd.executeCommand("shaders_listen_all");
+	}
+
+	//F6 - stop listening to changes
+	KEY(VK_F6, wParam) {
+		cmd.executeCommand("shaders_stop");
+	}
+
+	//F8 - reset camera
+	KEY(VK_F8, wParam) {
+		cmd.executeCommand("cam_reset");
+	}
+
+	//F9 - save camera
+	KEY(VK_F9, wParam) {
+		cmd.executeCommand("cam_save");
+	}
 }
 
 void InputHandler::handleAsyncInput() {
@@ -78,7 +114,11 @@ bool InputHandler::handle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) {
 			break;
 
 		case WM_KEYUP:
-			if (console->isHidden()) onKeyTyped(wParam);
+			if (console->isHidden()) {
+				onKeyTypedInternal(wParam);
+				onKeyTyped(wParam);
+			}
+
 			CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp(scan);
 			break;
 
@@ -162,7 +202,6 @@ void InputHandler::onKeyDownAsync() {
 
 }
 
-void InputHandler::onKeyTyped(WPARAM wParam)
-{
+void InputHandler::onKeyTyped(WPARAM wParam) {
 
 }
