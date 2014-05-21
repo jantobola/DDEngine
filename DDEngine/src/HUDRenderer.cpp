@@ -101,3 +101,13 @@ void HUDRenderer::notification(string text, long time, DirectX::XMVECTOR color /
 void DDEngine::HUDRenderer::clearNotifications() {
 	removeText("hud_notification");
 }
+
+void DDEngine::HUDRenderer::loadingScreen(std::string message) {
+
+	addText("hud_loading_screen", message, 10, (float)config.CFG_SCREEN_HEIGHT - 30, DirectX::Colors::White, true);
+	renderContext.setBackgroundColor(0, 0, 0, 255);
+	renderContext.clearRenderTarget(renderContext.renderTargetView, renderContext.depthStencilView);
+	render();
+	renderContext.swapChain->Present(0, 0);
+	removeText("hud_loading_screen");
+}

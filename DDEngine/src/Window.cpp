@@ -51,16 +51,15 @@ HRESULT Window::initWindow( int width, int height ) {
 	RECT rc = { 0, 0, this->width, this->height };
 	AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
 
-	hwnd = CreateWindow( wndClass, title, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
-						 rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance, this );
+	int posX = (GetSystemMetrics(SM_CXSCREEN) - (rc.right - rc.left)) / 2;
+	int posY = (GetSystemMetrics(SM_CYSCREEN) - (rc.bottom - rc.top)) / 2;
+
+	hwnd = CreateWindow(wndClass, title, WS_OVERLAPPEDWINDOW, posX, 
+		posY, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance, this );
 
 	if( !hwnd ) {
 		return E_FAIL;
 	}
-
-#if defined( DEBUG ) && defined( PRECOMPILED_SHADERS )
-	//SetWindowPos(hwnd, HWND_TOP, 2467, 241, 0, 0, SWP_NOSIZE);
-#endif
 
 	return S_OK;
 }

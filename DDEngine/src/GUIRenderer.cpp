@@ -4,6 +4,7 @@
 #include "DLLResourceLoader.h"
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Direct3D11/Renderer.h>
+#include <CEGUI/Logger.h>
 
 using namespace DDEngine;
 using namespace CEGUI;

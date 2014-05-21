@@ -1,6 +1,7 @@
 #include "RenderableTerrain.h"
 #include <d3dx11.h>
 #include <DirectXTK/DDSTextureLoader.h>
+#include <HUDRenderer.h>
 
 using namespace DDEngine;
 using namespace std;
@@ -21,6 +22,8 @@ RenderableTerrain::~RenderableTerrain() {
 }
 
 void RenderableTerrain::create() {
+
+	hud.loadingScreen("Building terrain...");
 
 	wstring heightmapPath = wstring(L"res/textures/hqterrain.png");
 

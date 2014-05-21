@@ -58,7 +58,7 @@ class HUDRenderer {
 		HUDRenderer(Config& config, RenderContext& renderContext, Timer& timer);
 		~HUDRenderer();
 
-		void addText(string name, string text, float x, float y, DirectX::XMVECTOR color = DirectX::Colors::White, bool renderedByDefault = false);
+		void addText(string name, string text, float x, float y, DirectX::XMVECTOR color = DirectX::Colors::White, bool renderedByDefault = true);
 		void update(string hudKey, string text);
 		void setRender(string hudKey, bool isRender);
 		void render();
@@ -66,5 +66,6 @@ class HUDRenderer {
 		void removeText(string name);
 		void notification(string text, long time, DirectX::XMVECTOR color = DirectX::Colors::White);
 		void clearNotifications();
+		void loadingScreen(std::string message);
 };
 }

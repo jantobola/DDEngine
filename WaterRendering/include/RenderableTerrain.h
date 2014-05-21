@@ -7,7 +7,7 @@
 #include "ConstantBuffers.h"
 
 // to tweak bar
-#define TERRAIN_GRID_SIZE 256, 256
+#define TERRAIN_GRID_SIZE 512, 512
 #define TERRAIN_SHADERS "VS_TerrainVDisplacement", "PS_BasicLightMesh", "POS2"
 
 struct Terrain_CB {

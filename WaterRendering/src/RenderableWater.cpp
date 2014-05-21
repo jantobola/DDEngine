@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 #include "RenderableSkybox.h"
 #include "RenderableTerrain.h"
+#include <HUDRenderer.h>
 
 using namespace DDEngine;
 using namespace std;
@@ -17,6 +18,8 @@ RenderableWater::~RenderableWater() {
 }
 
 void RenderableWater::create() {
+
+	hud.loadingScreen("Loading water resources...");
 
 	setSize(1024, 1024);
 

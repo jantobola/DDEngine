@@ -41,7 +41,8 @@ class DDEComponent : public D3DRenderer {
 
 		DDERenderPackage getRenderPackage();
 
-		void compose(HWND hWnd);
+		void initDevice(HWND hWnd);
+		void compose();
 
 		void setHInstance(HINSTANCE hInstance);
 		HINSTANCE getHInstance();

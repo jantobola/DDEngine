@@ -35,7 +35,12 @@ int Application::run() {
 	// build DDEComponent using D3DRenderer
 	component.setHInstance(hInstance);
 	component.setMultiSamplingValue(cfg.MSAA);
-	component.compose(window->getHwnd());
+
+	component.initDevice(window->getHwnd());
+	window->show();
+
+	component.getHUD()->loadingScreen("Initializing...");
+	component.compose();
 
 	// create console for a given DDEComponent
 	Console console = Console(component);
@@ -47,8 +52,6 @@ int Application::run() {
 
 	console.getExecutor().executeBatch(cfg.getRenderConfig());
 	component.getHUD()->clearNotifications();
-	window->show();
-
 	component.getTimer().init();
 
 	while ((msg.message != WM_QUIT) && component.isRunning()) {

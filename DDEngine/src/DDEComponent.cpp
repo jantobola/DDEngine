@@ -27,17 +27,21 @@ DDEComponent::~DDEComponent() {
 	delete controlls;
 }
 
-void DDEComponent::compose(HWND hWnd) {
-	
+void DDEngine::DDEComponent::initDevice(HWND hWnd) {
+
 	// Initialization of D3DRenderer
 	if (FAILED(this->initialize(hWnd))) {
 		// initialization error code
 		PostQuitMessage(-1);
 	}
 
+	hud = new HUDRenderer(config, Ctx, timer);
+}
+
+void DDEComponent::compose() {
+	
 	controlls	= new Controls(camera, timer);
 	objects		= new ObjectManager(config, Ctx);
-	hud			= new HUDRenderer(config, Ctx, timer);
 	gui			= new GUIRenderer(config, Ctx);
 	resources	= new ResourceProvider(config, Ctx);
 	shaders		= &resources->getShaderHolder();
@@ -50,6 +54,8 @@ void DDEComponent::compose(HWND hWnd) {
 	TwDefine(" TW_HELP visible=false ");
 	
 	create();
+
+	hud->loadingScreen("Loading objects...");
 	objects->create();
 }
 
