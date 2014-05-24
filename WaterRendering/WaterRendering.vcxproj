@@ -104,8 +104,8 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>call $(ProjectDir)script\referenceDLLs.bat $(ProjectDir) $(Configuration)
-call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
+      <Command>"$(ProjectDir)script\referenceDLLs.bat" "$(ProjectDir)" "$(Configuration)"
+"$(ProjectDir)script\build.bat" "$(ProjectDir)" "$(Configuration)"</Command>
     </PreBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -159,8 +159,8 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>call $(ProjectDir)script\referenceDLLs.bat $(ProjectDir) $(Configuration)
-call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
+      <Command>"$(ProjectDir)script\referenceDLLs.bat" "$(ProjectDir)" "$(Configuration)"
+"$(ProjectDir)script\build.bat" "$(ProjectDir)" "$(Configuration)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_precompiled_shaders|Win32'">

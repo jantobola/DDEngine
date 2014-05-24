@@ -1,5 +1,5 @@
-set project_dir=%1
-set active_conf=%2
+set project_dir=%~1
+set active_conf=%~2
 
 if "%project_dir:~-1%"=="\" (
 		set project_dir=%project_dir:~0,-1%

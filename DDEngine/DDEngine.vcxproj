@@ -77,7 +77,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,7 +90,7 @@
       <ObjectFileOutput>$(OutDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>call $(ProjectDir)script\composeIncludes.bat $(ProjectDir)</Command>
+      <Command>"$(ProjectDir)script\composeIncludes.bat" "$(ProjectDir)"</Command>
       <Message>
       </Message>
     </PreBuildEvent>
@@ -106,7 +106,7 @@
       </IgnoreSpecificDefaultLibraries>
     </Lib>
     <PostBuildEvent>
-      <Command>call $(ProjectDir)script\composeDLLs.bat $(ProjectDir) $(Configuration)</Command>
+      <Command>"$(ProjectDir)script\composeDLLs.bat" "$(ProjectDir)" "$(Configuration)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,14 +139,14 @@
       <ObjectFileOutput />
     </FxCompile>
     <PreBuildEvent>
-      <Command>call $(ProjectDir)script\composeDLLs.bat $(ProjectDir) $(Configuration)</Command>
+      <Command>"$(ProjectDir)script\composeDLLs.bat" "$(ProjectDir)" "$(Configuration)"</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0.lib;CEGUIDirect3D11Renderer-0.lib;CEGUICommonDialogs-0.lib;CEGUICoreWindowRendererSet.lib;CEGUIExpatParser.lib;CEGUISILLYImageCodec.lib;CEGUISTBImageCodec.lib;CEGUITGAImageCodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>call $(ProjectDir)script\composeIncludes.bat $(ProjectDir)</Command>
+      <Command>"$(ProjectDir)script\composeIncludes.bat" "$(ProjectDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
