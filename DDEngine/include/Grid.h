@@ -22,7 +22,7 @@ class Grid : public Object3D {
 		int columns;
 		int rows;
 
-		virtual void loadGeometry(std::vector<Vertex>* vertices, std::vector<DWORD>* indices) override;
+		virtual void loadGeometry() override;
 
 	public:
 		GridInfo getInfo();

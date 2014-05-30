@@ -24,9 +24,7 @@ class Config : public ConfigLoader {
 		void load();
 		std::vector<string> getRenderConfig();
 
-		string CFG_VERTEX_SHADER_ENTRY_POINT;
 		string CFG_VERTEX_SHADER_MODEL;
-		string CFG_PIXEL_SHADER_ENTRY_POINT;
 		string CFG_PIXEL_SHADER_MODEL;
 		wstring CFG_WINDOW_TITLE;
 		int CFG_SCREEN_WIDTH;

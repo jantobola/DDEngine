@@ -158,6 +158,7 @@
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\ConfigLoader.h" />
     <ClInclude Include="include\Console.h" />
+    <ClInclude Include="include\ConstantBuffers.h" />
     <ClInclude Include="include\Controlls.h" />
     <ClInclude Include="include\D3DRenderer.h" />
     <ClInclude Include="include\D3DUtils.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="include\ObjectManager.h" />
     <ClInclude Include="include\PixelShaderEnvelope.h" />
     <ClInclude Include="include\QuadObject.h" />
+    <ClInclude Include="include\RenderableSkybox.h" />
     <ClInclude Include="include\RenderContext.h" />
     <ClInclude Include="include\RenderToTexture.h" />
     <ClInclude Include="include\ResourceProvider.h" />
@@ -214,6 +216,7 @@
     <ClCompile Include="src\Object3D.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
     <ClCompile Include="src\QuadObject.cpp" />
+    <ClCompile Include="src\RenderableSkybox.cpp" />
     <ClCompile Include="src\RenderContext.cpp" />
     <ClCompile Include="src\RenderToTexture.cpp" />
     <ClCompile Include="src\ResourceProvider.cpp" />

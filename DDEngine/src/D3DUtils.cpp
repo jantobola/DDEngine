@@ -138,6 +138,46 @@ HRESULT DDEngine::DXUtils::createAndCompilePixelShader(_In_ ID3D11Device* device
 	return result;
 }
 
+HRESULT DDEngine::DXUtils::createVertexShaderFromMemory(_In_ ID3D11Device* device, _In_ LPVOID dataBlob, _In_ DWORD dataSize, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11VertexShader** vertexShader)
+{
+	HRESULT result = S_OK;
+
+	ID3DBlob* vertexShaderBlob = NULL;
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(dataBlob, dataSize, entryPoint, shaderModel, &vertexShaderBlob);
+	result = r.result;
+
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Vertex Shader Error", msg);
+		return result;
+	}
+
+	result = device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), NULL, vertexShader);
+
+	if (vertexShaderBlob) vertexShaderBlob->Release();
+	return result;
+}
+
+HRESULT DDEngine::DXUtils::createPixelShaderFromMemory(_In_ ID3D11Device* device, _In_ LPVOID dataBlob, _In_ DWORD dataSize, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11PixelShader** pixelShader)
+{
+	HRESULT result = S_OK;
+
+	ID3DBlob* pixelShaderBlob = NULL;
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(dataBlob, dataSize, entryPoint, shaderModel, &pixelShaderBlob);
+	result = r.result;
+
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Pixel Shader Error", msg);
+		return result;
+	}
+
+	result = device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), NULL, pixelShader);
+	if (pixelShaderBlob) pixelShaderBlob->Release();
+
+	return result;
+}
+
 HRESULT DDEngine::DXUtils::createVertexShaderFromBinary(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _Out_ ID3D11VertexShader** vertexShader)
 {
 	HRESULT result = S_OK;
@@ -275,6 +315,32 @@ HRESULT DDEngine::DXUtils::createInputLayout(_In_ ID3D11Device* device, _In_ WCH
 	HRESULT result = S_OK;
 	ID3DBlob* blob = nullptr;
 	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &blob);
+	result = r.result;
+
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Input Layout Error", msg);
+
+		if (blob) blob->Release();
+		return result;
+	}
+
+	result = device->CreateInputLayout(layoutDesc, numElements, blob->GetBufferPointer(), blob->GetBufferSize(), inputLayout);
+
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the creating an input layout.";
+		Win32Utils::showFailMessage(result, "Input Layout Error", msg);
+	}
+
+	if (blob) blob->Release();
+	return result;
+}
+
+HRESULT DDEngine::DXUtils::createInputLayoutFromMemory(_In_ ID3D11Device* device, _In_ LPVOID dataBlob, _In_ DWORD dataSize, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11InputLayout** inputLayout, _In_ D3D11_INPUT_ELEMENT_DESC layoutDesc[], _In_ UINT numElements)
+{
+	HRESULT result = S_OK;
+	ID3DBlob* blob = nullptr;
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(dataBlob, dataSize, entryPoint, shaderModel, &blob);
 	result = r.result;
 
 	if (FAILED(result)) {

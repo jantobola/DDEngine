@@ -23,7 +23,6 @@ RenderContext::RenderContext() {
 
 RenderContext::~RenderContext() {
 	if( swapChain ) swapChain->SetFullscreenState(false, NULL);
-    if( context ) context->ClearState();
 
 	RELEASE( depthStencilView )
 	RELEASE( depthStencilBuffer )
@@ -33,6 +32,8 @@ RenderContext::~RenderContext() {
 	RELEASE( RSSolidCullBack )
 	RELEASE( RSWiredCullNone )
 	RELEASE( RSSolidCullNone )
+
+	if( context ) context->ClearState();
 	RELEASE( context )
 	RELEASE( device )
 }

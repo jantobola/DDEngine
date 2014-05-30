@@ -1,7 +1,7 @@
 #include "CustomRenderer.h"
 #include "RenderableWater.h"
 #include "RenderableTerrain.h"
-#include "RenderableSkybox.h"
+#include <RenderableSkybox.h>
 #include <DDEngine.h>
 
 using namespace DDEngine;
@@ -20,7 +20,7 @@ void CustomRenderer::create() {
 	initShaders();
 	DDERenderPackage pkg = getRenderPackage();
 
-	skybox = new RenderableSkybox(pkg);
+	skybox = new DDEngine::RenderableSkybox(pkg);
 	terrain = new RenderableTerrain(pkg);
 	water = new RenderableWater(pkg);
 	
@@ -70,8 +70,6 @@ void CustomRenderer::initShaders() {
 		shaders->addVertexShaderBinary("VS_QuadObject", _shader(VS_QuadObject.cso));
 		shaders->addPixelShaderBinary("PS_WaterComputation_T", _shader(PS_WaterComputation_T.cso));
 
-		shaders->addVertexShaderBinary("VS_EnvMapping", _shader(VS_EnvMapping.cso));
-		shaders->addPixelShaderBinary("PS_EnvMapping", _shader(PS_EnvMapping.cso));
 	#else
 		shaders->addVertexShader("VS_BasicMesh", _shader(VS_BasicMesh.hlsl));
 		shaders->addPixelShader("PS_BasicLightMesh", _shader(PS_BasicLightMesh.hlsl));
@@ -86,9 +84,6 @@ void CustomRenderer::initShaders() {
 		shaders->addVertexShader("VS_QuadObject", _shader(VS_QuadObject.hlsl));
 		shaders->addPixelShader("PS_WaterComputation_T", _shader(PS_WaterComputation_T.hlsl));
 
-		shaders->addVertexShader("VS_EnvMapping", _shader(VS_EnvMapping.hlsl));
-		shaders->addPixelShader("PS_EnvMapping", _shader(PS_EnvMapping.hlsl));
-
 	#endif
 
 	D3D11_INPUT_ELEMENT_DESC layout1[] = {
@@ -97,27 +92,19 @@ void CustomRenderer::initShaders() {
 		{ "NORMAL",	 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	D3D11_INPUT_ELEMENT_DESC layout2[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
 	D3D11_INPUT_ELEMENT_DESC layout3[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	#ifdef PRECOMPILED_SHADERS
 		shaders->addInputLayoutBinary("POS3_TEX_NOR", "VS_BasicMesh", layout1, ARRAYSIZE(layout1));
-		shaders->addInputLayoutBinary("POS3_TEX", "VS_EnvMapping", layout2, ARRAYSIZE(layout2));
 		shaders->addInputLayoutBinary("POS2", "VS_TerrainVDisplacement", layout3, ARRAYSIZE(layout3));
 	#else
 		shaders->addInputLayout("POS3_TEX_NOR", "VS_BasicMesh", layout1, ARRAYSIZE(layout1));
-		shaders->addInputLayout("POS3_TEX", "VS_EnvMapping", layout2, ARRAYSIZE(layout2));
 		shaders->addInputLayout("POS2", "VS_TerrainVDisplacement", layout3, ARRAYSIZE(layout3));
 	#endif
 
 	shaders->addConstantBuffer("CB_LightProps", sizeof(Light_CB));
-	shaders->addConstantBuffer("CB_WVP", sizeof(WVP_CB));
 	shaders->addConstantBuffer("CB_TerrainProps", sizeof(Terrain_CB));
 	shaders->addConstantBuffer("CB_Timer", sizeof(Timer_CB));
 	shaders->addConstantBuffer("CB_Matrices", sizeof(Matrices_CB));

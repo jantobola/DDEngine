@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DDEngine.h>
+#include <RenderableSkybox.h>
 #include <Grid.h>
 #include <RenderToTexture.h>
 #include <AntTweakBar/AntTweakBar.h>
@@ -38,7 +39,7 @@ class RenderableWater : public DDEngine::IRenderable {
 
 		TwBar* waterBar;
 
-		RenderableSkybox* skybox;
+		DDEngine::RenderableSkybox* skybox;
 		RenderableTerrain* terrain;
 
 		DDEngine::Dimension size;
@@ -78,7 +79,7 @@ class RenderableWater : public DDEngine::IRenderable {
 		void setSize(int width, int height);
 		DDEngine::Dimension getSize();
 		
-		void setSkybox(RenderableSkybox* skybox) { this->skybox = skybox; }
+		void setSkybox(DDEngine::RenderableSkybox* skybox) { this->skybox = skybox; }
 		void setTerrain(RenderableTerrain* terrain) { this->terrain = terrain; }
 
 };

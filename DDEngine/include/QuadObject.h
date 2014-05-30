@@ -13,7 +13,7 @@ namespace DDEngine
 
 	private:
 
-		virtual void loadGeometry(std::vector<Vertex>* vertices, std::vector<DWORD>* indices) override;
+		virtual void loadGeometry() override;
 
 	};
 }

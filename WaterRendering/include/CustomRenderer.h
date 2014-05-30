@@ -1,10 +1,10 @@
 #pragma once
 
 #include <DDEngine.h>
+#include <RenderableSkybox.h>
 #include <AntTweakBar/AntTweakBar.h>
 #include "ConstantBuffers.h"
 
-class RenderableSkybox;
 class RenderableWater;
 class RenderableTerrain;
 
@@ -12,7 +12,7 @@ class CustomRenderer : public DDEngine::DDEComponent {
 	
 	private:
 		
-		Light_CB light;
+		::Light_CB light;
 		TwBar* tweakBar = nullptr;
 				
 		void cleanUp();
@@ -25,7 +25,7 @@ class CustomRenderer : public DDEngine::DDEComponent {
 		~CustomRenderer();
 
 		RenderableTerrain* terrain = nullptr;
-		RenderableSkybox* skybox = nullptr;
+		DDEngine::RenderableSkybox* skybox = nullptr;
 		RenderableWater* water = nullptr;
 
 		virtual void create() override;

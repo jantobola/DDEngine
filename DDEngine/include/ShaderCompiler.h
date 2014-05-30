@@ -16,6 +16,7 @@ namespace ShaderCompiler
 	};
 
 	ShaderCompilationResult compile( WCHAR* fileName, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** ppBlobOut );
+	ShaderCompilationResult compile(LPVOID dataBlob, DWORD dataSize, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** ppBlobOut);
 
 };
 }

@@ -16,6 +16,15 @@
     <Filter Include="Files">
       <UniqueIdentifier>{d6c94e32-a789-4229-b2d8-0e57830aeaa8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Shaders">
+      <UniqueIdentifier>{e17d8d48-5069-4683-9bdb-5b16c4c0df16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Icons">
+      <UniqueIdentifier>{e2cd7a47-9255-4bba-b81c-9951ed960bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\GUI">
+      <UniqueIdentifier>{0fb62cc7-84c0-4671-aac9-7629e0286a40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\targetver.h">
@@ -41,37 +50,37 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\gui\imagesets\AlfiskoSkin.imageset">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </None>
     <None Include="res\gui\looknfeel\AlfiskoSkin.looknfeel">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </None>
     <None Include="res\gui\imagesets\AlfiskoSkin.png">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </None>
     <None Include="res\gui\schemes\AlfiskoSkin.scheme">
-      <Filter>Files</Filter>
-    </None>
-    <None Include="res\gui\fonts\DejaVuSans-10-NoScale.font">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </None>
     <None Include="res\gui\fonts\DejaVuSans-10.font">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </None>
-    <None Include="res\gui\fonts\DejaVuSans-12-NoScale.font">
-      <Filter>Files</Filter>
+    <None Include="res\gui\fonts\DejaVuSans-10-NoScale.font">
+      <Filter>Files\GUI</Filter>
     </None>
     <None Include="res\gui\fonts\DejaVuSans-12.font">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </None>
-    <None Include="res\gui\fonts\DejaVuSans-14-NoScale.font">
-      <Filter>Files</Filter>
+    <None Include="res\gui\fonts\DejaVuSans-12-NoScale.font">
+      <Filter>Files\GUI</Filter>
     </None>
     <None Include="res\gui\fonts\DejaVuSans-14.font">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
+    </None>
+    <None Include="res\gui\fonts\DejaVuSans-14-NoScale.font">
+      <Filter>Files\GUI</Filter>
     </None>
     <None Include="res\fonts\text.spritefont">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -80,13 +89,21 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\icons\icon.ico">
+      <Filter>Files\Icons</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <Font Include="res\gui\fonts\DejaVuSans.ttf">
-      <Filter>Files</Filter>
+      <Filter>Files\GUI</Filter>
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\icons\icon.ico">
-      <Filter>Files</Filter>
-    </Image>
+    <FxCompile Include="res\shaders\PS_EnvMapping.hlsl">
+      <Filter>Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="res\shaders\VS_EnvMapping.hlsl">
+      <Filter>Files\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

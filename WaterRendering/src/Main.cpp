@@ -3,6 +3,9 @@
 #include <windows.h>
 #include <Window.h>
 
+#include <DDERenderPackage.h>
+#include <RenderContext.h>
+
 #if defined(DEBUG)
 	#define CONFIG_PATH "../../../data/config.cfg"
 #else
@@ -11,13 +14,24 @@
 
 using namespace DDEngine;
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int	nCmdShow) {
+ID3D11Debug* dbg;
 
+int start(HINSTANCE hInstance) {
 	CustomRenderer renderer(CONFIG_PATH);
 
 	KeyListener listener(&renderer);
 	Application app(hInstance, renderer);
 
 	app.setKeyListener(&listener);
-	return app.run();
+	int ret = app.run();
+
+	renderer.getRenderPackage().renderContext.device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&dbg));
+	return ret;
+}
+
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int	nCmdShow) {
+	int ret = start(hInstance);
+	//dbg->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
+	dbg->Release();
+	return ret;
 }

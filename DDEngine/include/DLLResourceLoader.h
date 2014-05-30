@@ -14,10 +14,10 @@ struct DataContainer
 	}
 
 	DataContainer (LPVOID dataBlob, 
-						DWORD dataSize)
-						:
-						dataBlob(dataBlob),
-						dataSize(dataSize) {
+					DWORD dataSize)
+					:
+					dataBlob(dataBlob),
+					dataSize(dataSize) {
 	
 	}
 

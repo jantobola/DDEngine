@@ -12,6 +12,10 @@ class Object3D {
 		
 	typedef std::string string;
 
+	private:
+		std::vector<Vertex> vertices;
+		std::vector<DWORD> indices;
+
 	protected:
 		ID3D11Buffer *vertexBuffer, *indexBuffer;
 
@@ -73,6 +77,8 @@ class Object3D {
 		DirectX::XMFLOAT4X4 translationMatrix;
 		DirectX::XMFLOAT4X4 scaleMatrix;
 		
-		virtual void loadGeometry(std::vector<Vertex>* vertices, std::vector<DWORD>* indices);
+		void VB(float x, float y, float z, float u, float v, float nx, float ny, float nz);
+		void IB(int index);
+		virtual void loadGeometry() = 0;
 };
 }

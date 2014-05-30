@@ -36,3 +36,32 @@ ShaderCompilationResult ShaderCompiler::compile( WCHAR* fileName, LPCSTR entryPo
 	if( pErrorBlob ) pErrorBlob->Release();
 	return result;
 }
+
+DDEngine::ShaderCompiler::ShaderCompilationResult DDEngine::ShaderCompiler::compile(LPVOID dataBlob, DWORD dataSize, LPCSTR entryPoint, LPCSTR shaderModel, ID3DBlob** ppBlobOut)
+{
+	HRESULT hr = S_OK;
+	ShaderCompilationResult result;
+	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+
+#if defined( DEBUG ) || defined( _DEBUG )
+	dwShaderFlags |= D3DCOMPILE_DEBUG;
+#else
+	dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+#endif
+
+	ID3DBlob* pErrorBlob = NULL;
+	hr = D3DCompile(dataBlob, dataSize, NULL, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel,
+		dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
+
+	result.result = hr;
+
+	if (FAILED(hr)) {
+		if (pErrorBlob != NULL) {
+			std::string s = std::string((char*)pErrorBlob->GetBufferPointer());
+			result.errorMessage = s;
+		}
+	}
+
+	if (pErrorBlob) pErrorBlob->Release();
+	return result;
+}

@@ -104,8 +104,8 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>"$(ProjectDir)script\referenceDLLs.bat" "$(ProjectDir)" "$(Configuration)"
-"$(ProjectDir)script\build.bat" "$(ProjectDir)" "$(Configuration)"</Command>
+      <Command>call "$(ProjectDir)script\referenceDLLs.bat" "$(ProjectDir)" "$(Configuration)"
+call "$(ProjectDir)script\build.bat" "$(ProjectDir)" "$(Configuration)"</Command>
     </PreBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -192,7 +192,6 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
     <ClInclude Include="include\ConstantBuffers.h" />
     <ClInclude Include="include\CustomRenderer.h" />
     <ClInclude Include="include\KeyListener.h" />
-    <ClInclude Include="include\RenderableSkybox.h" />
     <ClInclude Include="include\RenderableTerrain.h" />
     <ClInclude Include="include\RenderableWater.h" />
   </ItemGroup>
@@ -200,7 +199,6 @@ call $(ProjectDir)script\build.bat $(ProjectDir) $(Configuration)</Command>
     <ClCompile Include="src\CustomRenderer.cpp" />
     <ClCompile Include="src\KeyListener.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\RenderableSkybox.cpp" />
     <ClCompile Include="src\RenderableTerrain.cpp" />
     <ClCompile Include="src\RenderableWater.cpp" />
   </ItemGroup>

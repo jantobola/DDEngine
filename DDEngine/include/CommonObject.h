@@ -4,16 +4,16 @@
 
 namespace DDEngine
 {
-class CommonObject : public Object3D {
+class CubeObject : public Object3D {
 
 public:
-	CommonObject() : Object3D() { }
-	CommonObject(const CommonObject &copy) : Object3D(copy) { }
-	~CommonObject();
+	CubeObject() : Object3D() { }
+	CubeObject(const CubeObject &copy) : Object3D(copy) { }
+	~CubeObject();
 
 private:
 
-	virtual void loadGeometry(std::vector<Vertex>* vertices, std::vector<DWORD>* indices) override;
+	virtual void loadGeometry() override;
 
 };
 }

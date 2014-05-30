@@ -16,6 +16,7 @@ RenderableTerrain::~RenderableTerrain() {
 
 	RELEASE(samplerLinearClamp)
 	RELEASE(samplerLinearWrap)
+	RELEASE(samplerAnisotropicWrap)
 	RELEASE(terrainTexture)
 	RELEASE(grassTexture)
 	RELEASE(dustTexture)
@@ -43,7 +44,7 @@ void RenderableTerrain::create() {
 		Ctx.context->RSSetState(Ctx.RSSolidCullNone);
 		Ctx.setViewport(0, 0, proceduralTerrainTexture.getWidth(), proceduralTerrainTexture.getHeight());
 
-		proceduralTerrainTexture.setShaders("VS_QuadObject", "PS_TerrainGeneration_T", "POS3_TEX");
+		proceduralTerrainTexture.setShaders("VS_QuadObject", "PS_TerrainGeneration_T", "POS3_TEX2");
 		resources.assignResources(proceduralTerrainTexture.getQuad());
 		
 		proceduralTerrainTexture.draw();

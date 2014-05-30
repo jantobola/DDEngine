@@ -14,15 +14,15 @@ struct VertexInput
 	float2 tex : TEXCOORD;
 };
 
-struct VertexOutpus 
+struct VertexOutput
 {
     float4 pos : SV_POSITION;
 	float3 tex : TEXCOORD;
 };
 
-VertexOutpus main( VertexInput input )
+VertexOutput main( VertexInput input )
 {
-	VertexOutpus output;
+	VertexOutput output;
 	output.pos = mul(float4(input.pos, 1.0f), WVP).xyww;
 	output.tex = input.pos;
 

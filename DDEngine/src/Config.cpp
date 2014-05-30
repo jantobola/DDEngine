@@ -8,11 +8,9 @@ Config::Config() : ConfigLoader() {
 
 	path = DDE_CONFIG_PATH;
 
-	CFG_VERTEX_SHADER_ENTRY_POINT = "main";
 	CFG_VERTEX_SHADER_MODEL = "vs_4_0";
-	CFG_PIXEL_SHADER_ENTRY_POINT = "main";
 	CFG_PIXEL_SHADER_MODEL = "ps_4_0";
-	CFG_WINDOW_TITLE = L"DirectX Development Engine";
+	CFG_WINDOW_TITLE = L"DDEngine Application";
 	CFG_SCREEN_WIDTH = 1024;
 	CFG_SCREEN_HEIGHT = 768;
 }
@@ -56,18 +54,6 @@ void Config::load() {
 		LOAD("vertex_shader_model")
 		{
 			CFG_VERTEX_SHADER_MODEL = ARG(0);
-			NEXT
-		}
-
-		LOAD("pixel_shader_entry_point")
-		{
-			CFG_PIXEL_SHADER_ENTRY_POINT = ARG(0);
-			NEXT
-		}
-
-		LOAD("vertex_shader_entry_point")
-		{
-			CFG_VERTEX_SHADER_ENTRY_POINT = ARG(0);
 			NEXT
 		}
 

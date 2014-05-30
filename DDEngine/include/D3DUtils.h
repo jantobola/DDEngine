@@ -51,6 +51,24 @@ namespace DDEngine
 			_Out_	ID3D11PixelShader** pixelShader
 		);
 
+		HRESULT createVertexShaderFromMemory(
+			_In_	ID3D11Device* device,
+			_In_	LPVOID dataBlob,
+			_In_	DWORD dataSize,
+			_In_	LPCSTR entryPoint,
+			_In_	LPCSTR shaderModel,
+			_Out_	ID3D11VertexShader** vertexShader
+		);
+
+		HRESULT createPixelShaderFromMemory(
+			_In_	ID3D11Device* device,
+			_In_	LPVOID dataBlob,
+			_In_	DWORD dataSize,
+			_In_	LPCSTR entryPoint,
+			_In_	LPCSTR shaderModel,
+			_Out_	ID3D11PixelShader** pixelShader
+		);
+
 		HRESULT createVertexShaderFromBinary(
 			_In_	ID3D11Device* device,
 			_In_	WCHAR* shaderName, 
@@ -97,6 +115,17 @@ namespace DDEngine
 			_In_	LPCSTR shaderModel,
 			_Out_	ID3D11InputLayout** inputLayout, 
 			_In_	D3D11_INPUT_ELEMENT_DESC layoutDesc[], 
+			_In_	UINT numElements
+		);
+
+		HRESULT createInputLayoutFromMemory(
+			_In_	ID3D11Device* device,
+			_In_	LPVOID dataBlob,
+			_In_	DWORD dataSize,
+			_In_	LPCSTR entryPoint,
+			_In_	LPCSTR shaderModel,
+			_Out_	ID3D11InputLayout** inputLayout,
+			_In_	D3D11_INPUT_ELEMENT_DESC layoutDesc[],
 			_In_	UINT numElements
 		);
 

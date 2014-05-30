@@ -29,16 +29,16 @@ HRESULT Object3D::registerObject(ID3D11Device* device, ID3D11DeviceContext* cont
 	this->device = device;
 	this->context = context;
 
-	vector<Vertex> vertices;
-	vector<DWORD> indices;
-
-	loadGeometry(&vertices, &indices);
+	loadGeometry();
 
 	result = DXUtils::createVertexBuffer(device, &vertices, &vertexBuffer);
 	result = DXUtils::createIndexBuffer(device, &indices, &indexBuffer);
 
 	verticesSize = vertices.size();
 	indicesSize = indices.size();
+
+	vertices.clear();
+	indices.clear();
 
 	return result;
 }
@@ -70,11 +70,6 @@ void Object3D::setPrimitiveTopology( Object3D::PrimitiveTopology primitiveTopolo
 	default:
 		break;
 	}
-}
-
-void Object3D::loadGeometry(vector<Vertex>* vertices, vector<DWORD>* indices) {
-	UNREFERENCED_PARAMETER(vertices);
-	UNREFERENCED_PARAMETER(indices);
 }
 
 int Object3D::getIndexCount() {
@@ -163,4 +158,12 @@ void Object3D::hide() {
 
 void Object3D::show() {
 	isHidden = false;
+}
+
+void DDEngine::Object3D::VB(float x, float y, float z, float u, float v, float nx, float ny, float nz) {
+	vertices.push_back(Vertex(x, y, z, u, v, nx, ny, nz));
+}
+
+void DDEngine::Object3D::IB(int index) {
+	indices.push_back(index);
 }
