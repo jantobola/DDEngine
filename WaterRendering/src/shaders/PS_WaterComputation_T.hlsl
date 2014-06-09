@@ -138,10 +138,12 @@ float con(float2 aPos, float pm, float ph)
 {
 	float pah = getPrevHeight(aPos.x, aPos.y);
 	float pat = getTerrainHeight(aPos.x, aPos.y);
-	float outflow = max((ph + terrainHeight) - (pah + pat), 0);
+	//float outflow = max((ph + terrainHeight) - (pah + pat), 0);
+	float outflow = (ph + terrainHeight) - (pah + pat); 
 
 	if(aPos.x < 0 || aPos.y < 0 || aPos.x > sizeX - 1 || aPos.y > sizeY - 1) outflow = 0;
-	return viscosity * pm + outflow; // TIP: mad intrinsic function in shader model 5
+	//return viscosity * pm + outflow; // TIP: mad intrinsic function in shader model 5
+	return max(viscosity * pm + outflow, 0);
 }
 
 // RGBA - top, right, bottom, left
@@ -183,7 +185,7 @@ float4 calcHeight()
 	float sumAPM = sum(float4(pmT.z, pmR.w, pmB.x, pmL.y));
 	float ch = ph - sumPM / 4 + sumAPM / 4;
 
-	return float4(ch + invokeWaterDrop().r - ph, terrainHeight, 0, 0);
+	return float4(ch + (invokeWaterDrop().r - ph), terrainHeight, 0, 0);
 }
 
 // SHADER ENTRY POINT
