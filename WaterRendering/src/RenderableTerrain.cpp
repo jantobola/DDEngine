@@ -33,7 +33,7 @@ void RenderableTerrain::create() {
 
 	if(procedural) {
 		int width, height;
-		width = height = 248;
+		width = height = 512;
 		hmapInfo.Width = width;
 		hmapInfo.Height = height;
 

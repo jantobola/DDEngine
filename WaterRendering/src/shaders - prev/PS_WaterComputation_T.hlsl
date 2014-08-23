@@ -94,36 +94,22 @@ float getDistance(float2 coords)
 float4 invokeWaterDrop() 
 {
 	// point where to start water drop
-	float originX = normXY.x - 0.80;
+	float originX = normXY.x - 0.75;
 	float originY = normXY.y - 0.99;
 
 	// water drop in the middle of the grid
 	float distance = getDistance(float2(originX, originY));
 	float dropStrength = height;
 
-//	float4 prev = getPrevHeight(posXY.x, posXY.y);
+	float4 prev = getPrevHeight(posXY.x, posXY.y);
 
-	if (distance < 0.1/*dropStrength*/) {
-		float finalHeight = dropStrength * (0.1 - distance);//   pow(dropStrength, 1);// - pow(distance, 1);
-		return float4(finalHeight,0,0,0);
-//		return float4(prev.r + sqrt(finalHeight), prev.g, prev.b, prev.a);
-//		return float4(sqrt(finalHeight),0,0,0);
+	if (distance < dropStrength) {
+		float finalHeight = pow(dropStrength, 1) - pow(distance, 1);
+		return float4(prev.r + sqrt(finalHeight), prev.g, prev.b, prev.a);
 	}
 
 	// water drop is not affecting this pixel
-	originX = normXY.x - 0.01;
-	originY = normXY.y - 0.5;
-
-	// water drop in the middle of the grid
-	distance = getDistance(float2(originX, originY));
-	if (distance < 0.1/*dropStrength*/) {
-		float finalHeight = max(dropStrength, 0.1) * (0.1 - distance);//   pow(dropStrength, 1);// - pow(distance, 1);
-		return float4(-finalHeight,0,0,0);
-//		return float4(prev.r + sqrt(finalHeight), prev.g, prev.b, prev.a);
-//		return float4(sqrt(finalHeight),0,0,0);
-	}
-
-	return float4(0,0,0,0);;//prev;
+	return prev;
 }
 
 float4 invokeReset() 
@@ -152,13 +138,12 @@ float con(float2 aPos, float pm, float ph)
 {
 	float pah = getPrevHeight(aPos.x, aPos.y);
 	float pat = getTerrainHeight(aPos.x, aPos.y);
-//	float outflow = max((ph + terrainHeight) - (pah + pat), 0);
-	float outflow = 0.249 * ((ph + terrainHeight) - (pah + pat));
-	if (outflow < 0.0000001) outflow = 0;
+	//float outflow = max((ph + terrainHeight) - (pah + pat), 0);
+	float outflow = (ph + terrainHeight) - (pah + pat); 
 
 	if(aPos.x < 0 || aPos.y < 0 || aPos.x > sizeX - 1 || aPos.y > sizeY - 1) outflow = 0;
-//	return viscosity * pm + outflow; // TIP: mad intrinsic function in shader model 5
-	return max(viscosity * pm + outflow,0); // TIP: mad intrinsic function in shader model 5
+	//return viscosity * pm + outflow; // TIP: mad intrinsic function in shader model 5
+	return max(viscosity * pm + outflow, 0);
 }
 
 // RGBA - top, right, bottom, left
@@ -174,16 +159,14 @@ float4 calcMomentum()
 
 	float sumM = sum(float4(mT, mR, mB, mL));
 
-	if(ph < sumM && sumM > 1e-4) {
+	if(ph < sumM) {
 		mT = mdiv(ph, mT, sumM);
 		mR = mdiv(ph, mR, sumM);
 		mB = mdiv(ph, mB, sumM);
 		mL = mdiv(ph, mL, sumM);
 	}
 
-	if (sumM > 0.0001)
 	return float4(mT, mR, mB, mL);
-	else return float4(0,0,0,0);
 }
 
 // R - height
@@ -200,8 +183,9 @@ float4 calcHeight()
 	float4 pmL = getPrevMomentum(posXY.x - 1, posXY.y);
 
 	float sumAPM = sum(float4(pmT.z, pmR.w, pmB.x, pmL.y));
-	float ch = ph - sumPM /*/ 4*/ + sumAPM /*/ 4*/;
-	return float4(max(ch + invokeWaterDrop().r, 0) , terrainHeight, 0, 0);
+	float ch = ph - sumPM / 4 + sumAPM / 4;
+
+	return float4(ch + (invokeWaterDrop().r - ph), terrainHeight, 0, 0);
 }
 
 // SHADER ENTRY POINT

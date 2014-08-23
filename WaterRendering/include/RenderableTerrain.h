@@ -14,11 +14,11 @@ struct Terrain_CB {
 
 	//c0
 	DirectX::XMFLOAT2 textureSize;
-	float elevationFactor = 0.2f;
+	float elevationFactor = 0.28f;
 	float scaleFactor = 1;
 
 	//c1
-	float textureScaleFactor = 20;
+	float textureScaleFactor = 12.68;
 	DirectX::XMFLOAT3 pad2;
 };
 

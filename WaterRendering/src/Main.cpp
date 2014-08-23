@@ -25,13 +25,20 @@ int start(HINSTANCE hInstance) {
 	app.setKeyListener(&listener);
 	int ret = app.run();
 
+#if defined(DEBUG)
 	renderer.getRenderPackage().renderContext.device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&dbg));
+#endif
+	
 	return ret;
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int	nCmdShow) {
 	int ret = start(hInstance);
-	//dbg->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
+
+#if defined(DEBUG)
+	dbg->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
 	dbg->Release();
+#endif
+
 	return ret;
 }

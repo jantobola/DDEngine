@@ -13,7 +13,7 @@ struct WaterProps_CB
 	// int - 4 bytes
 
 	// c0
-	float height = 0.0012f;				// height of water drop
+	float height = 0.0029f;				// height of water drop
 	float sizeX = 0;					// grid size x
 	float sizeY = 0;					// grid size y
 	int action = 0;						// 0 - computation; 1 - copy state 
