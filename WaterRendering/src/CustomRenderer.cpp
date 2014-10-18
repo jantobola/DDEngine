@@ -126,7 +126,7 @@ void CustomRenderer::setTweakBars() {
 	TwDefine(" lightBar size='350 160' ");
 	TwSetParam(tweakBar, nullptr, "position", TW_PARAM_INT32, 2, &barPos);
 
-	light.direction = XMFLOAT3(0.62f, -1.11f, -0.61f);
+	light.direction = XMFLOAT3(config.LIGHT_DIR_X, config.LIGHT_DIR_Y, config.LIGHT_DIR_Z);
 	light.ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
 	light.diffuse = XMFLOAT4(1, 1, 1, 1.0f);
 

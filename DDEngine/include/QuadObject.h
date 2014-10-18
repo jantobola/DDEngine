@@ -13,7 +13,7 @@ namespace DDEngine
 
 	private:
 
-		virtual void loadGeometry() override;
+		virtual void loadGeometry(std::vector<Mesh>& meshes) override;
 
 	};
 }

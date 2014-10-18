@@ -45,4 +45,4 @@ namespace DDEngine
 }
 
 #define HRESULT_RETURN_CHECK(result) if(FAILED(result)) return result;
-#define RELEASE(component) if(component != NULL) component->Release();
+#define RELEASE(component) if(component != nullptr) component->Release();

@@ -223,12 +223,20 @@ XMMATRIX Camera::getViewMatrix() {
 	return XMLoadFloat4x4(&view);
 }
 
+DDEngine::Camera::XMMATRIX DDEngine::Camera::getViewMatrix_T() {
+	return XMMatrixTranspose(getViewMatrix());
+}
+
 XMMATRIX Camera::getReflectionViewMatrix() {
 	return XMLoadFloat4x4(&reflectionView);
 }
 
 XMMATRIX Camera::getProjectionMatrix() {
 	return XMLoadFloat4x4(&projection);
+}
+
+DDEngine::Camera::XMMATRIX DDEngine::Camera::getProjectionMatrix_T() {
+	return XMMatrixTranspose(getProjectionMatrix());
 }
 
 XMMATRIX Camera::getPerspectiveMatrix() {

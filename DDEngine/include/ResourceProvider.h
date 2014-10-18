@@ -26,5 +26,6 @@ class ResourceProvider {
 
 		ShaderHolder& getShaderHolder();
 		void assignResources(Object3D& object);
+		void assignResources(Object3D& object, unsigned int resIndex);
 };
 }

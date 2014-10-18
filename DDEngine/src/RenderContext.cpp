@@ -4,6 +4,25 @@ using namespace DDEngine;
 
 #define RELEASE(X) if(X != NULL) {X->Release();}
 
+D3D11_PRIMITIVE_TOPOLOGY DDEngine::translatePrimitiveTopology(PrimitiveTopology topology)
+{
+	switch (topology)
+	{
+	case TRIANGLE_LIST:
+		return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	case TRIANGLE_STRIP:
+		return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	case LINE_LIST:
+		return D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+	case LINE_STRIP:
+		return D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
+	case POINT_LIST:
+		return D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
+	default:
+		return D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;
+	}
+}
+
 RenderContext::RenderContext() {
 	setBackgroundColor(255, 255, 255, 255);
 	wireframe = false;

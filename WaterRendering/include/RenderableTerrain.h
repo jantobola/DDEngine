@@ -18,14 +18,13 @@ struct Terrain_CB {
 	float scaleFactor = 1;
 
 	//c1
-	float textureScaleFactor = 12.68;
+	float textureScaleFactor = 12.68f;
 	DirectX::XMFLOAT3 pad2;
 };
 
 class RenderableTerrain : public DDEngine::IRenderable {
 
 	public:
-	
 		DDEngine::Grid terrain;
 		Matrices_CB vsCB_0;
 		Terrain_CB vsCB_1;

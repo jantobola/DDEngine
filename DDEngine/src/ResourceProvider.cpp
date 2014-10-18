@@ -18,10 +18,18 @@ void ResourceProvider::load() {
 	shaderHolder.load();
 }
 
-void ResourceProvider::assignResources(Object3D& object) {
-	if(shaderHolder.getActiveVS() != object.getVSName()) shaderHolder.activateVS(object.getVSName());
-	if(shaderHolder.getActivePS() != object.getPSName()) shaderHolder.activatePS(object.getPSName());
-	if(shaderHolder.getActiveIL() != object.getILName()) shaderHolder.activateIL(object.getILName());
+void DDEngine::ResourceProvider::assignResources(Object3D& object, unsigned int resIndex)
+{
+	if (shaderHolder.getActiveVS() != object.getShaders()[resIndex].vsName) shaderHolder.activateVS(object.getShaders()[resIndex].vsName);
+	if (shaderHolder.getActivePS() != object.getShaders()[resIndex].psName) shaderHolder.activatePS(object.getShaders()[resIndex].psName);
+	if (shaderHolder.getActiveIL() != object.getShaders()[resIndex].ilName) shaderHolder.activateIL(object.getShaders()[resIndex].ilName);
+}
+
+void DDEngine::ResourceProvider::assignResources(Object3D& object)
+{
+	if (object.getShaders().size() > 0) {
+		assignResources(object, 0);
+	}
 }
 
 ShaderHolder& ResourceProvider::getShaderHolder() {

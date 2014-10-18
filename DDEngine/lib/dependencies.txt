@@ -3,6 +3,7 @@
 DEPENDENCIES:
 ---------------------
 
+- Assimp		(DLL)	version 3.1.1
 - AntTweakBar	(DLL)
 - CEGUI			(DLL)	version 0.8.2
 - DirectXTK		(LIB)
@@ -15,7 +16,7 @@ Remarks:
 * All libraries are compiled
   with VisualStudio 12 (v120)
 
-* AntTweakBar and CEGUI require also
+* Assimp, AntTweakBar and CEGUI require also
   .lib files for implicit dll linking
 
 * PDB files are not needed, debug libraries

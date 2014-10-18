@@ -56,7 +56,7 @@ HRESULT DDEngine::DXUtils::createDeviceAndSwapChain(_Out_ ID3D11Device** device,
 	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++) {
 		D3D_DRIVER_TYPE DRIVER_TYPE = driverTypes[driverTypeIndex];
 
-		result = D3D11CreateDeviceAndSwapChain(NULL, DRIVER_TYPE, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+		result = D3D11CreateDeviceAndSwapChain(nullptr, DRIVER_TYPE, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
 			D3D11_SDK_VERSION, &swapChainDesc, swapChain, device, &FEATURE_LEVEL, context);
 
 		if (SUCCEEDED(result)) break;

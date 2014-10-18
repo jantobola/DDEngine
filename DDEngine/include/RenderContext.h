@@ -13,6 +13,17 @@ enum RasterizerStateType {
 	WIRED_CULL_NONE,
 };
 
+enum PrimitiveTopology {
+	TRIANGLE_LIST,
+	TRIANGLE_STRIP,
+	LINE_LIST,
+	LINE_STRIP,
+	POINT_LIST,
+	UNDEFINED
+};
+
+D3D11_PRIMITIVE_TOPOLOGY translatePrimitiveTopology(PrimitiveTopology topology);
+
 class RenderContext {
 
 	private:

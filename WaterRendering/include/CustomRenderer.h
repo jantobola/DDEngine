@@ -15,6 +15,8 @@ class CustomRenderer : public DDEngine::DDEComponent {
 		::Light_CB light;
 		TwBar* tweakBar = nullptr;
 				
+		Matrices_CB mat;
+
 		void cleanUp();
 		void initShaders();
 		void setTweakBars();

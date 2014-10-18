@@ -19,7 +19,7 @@ class Skybox : public Object3D {
 		std::string ddsPath;
 
 		void initContext();
-		virtual void loadGeometry() override;
+		virtual void loadGeometry(std::vector<Mesh>& meshes) override;
 		void cleanUp();
 
 	public:

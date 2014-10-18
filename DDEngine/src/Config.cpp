@@ -63,6 +63,36 @@ void Config::load() {
 			NEXT
 		}
 
+		LOAD("AF")
+		{
+			AF = ARG_INT(0);
+			NEXT
+		}
+
+		LOAD("elevation_factor")
+		{
+			ELEVATION_FACTOR = ARG_FLOAT(0);
+			NEXT
+		}
+
+		LOAD("drop_strength")
+		{
+			DROP_STRENGTH = ARG_FLOAT(0);
+			NEXT
+		}
+
+		LOAD("viscosity")
+		{
+			VISCOSITY = ARG_FLOAT(0);
+			NEXT
+		}
+
+		LOAD("terrain_texture_scale")
+		{
+			TERRAIN_TEXTURE_SCALE = ARG_FLOAT(0);
+			NEXT
+		}
+
 		CONFIG_ARGS(2)
 
 		LOAD("screen_resolution")
@@ -71,6 +101,31 @@ void Config::load() {
 			CFG_SCREEN_HEIGHT = ARG_INT(1);
 			NEXT
 		}
+
+		LOAD("water_grid")
+		{
+			WATER_GRID_X = ARG_INT(0);
+			WATER_GRID_Y = ARG_INT(1);
+			NEXT
+		}
+
+		LOAD("terrain_grid")
+		{
+			TERRAIN_GRID_X = ARG_INT(0);
+			TERRAIN_GRID_Y = ARG_INT(1);
+			NEXT
+		}
+
+		CONFIG_ARGS(3)
+		
+		LOAD("light_dir")
+		{
+			LIGHT_DIR_X = ARG_FLOAT(0);
+			LIGHT_DIR_Y = ARG_FLOAT(1);
+			LIGHT_DIR_Z = ARG_FLOAT(2);
+			NEXT
+		}
+
 
 	}
 }

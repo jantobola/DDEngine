@@ -14,7 +14,6 @@ RenderToTexture::RenderToTexture(ID3D11Device* device, ID3D11DeviceContext* cont
 }
 
 RenderToTexture::~RenderToTexture() {
-	quad.releaseBuffers();
 	cleanUp();
 }
 
@@ -80,7 +79,7 @@ QuadObject& RenderToTexture::getQuad() {
 }
 
 void DDEngine::RenderToTexture::setShaders(std::string vs, std::string ps, std::string il) {
-	quad.setShaders(vs, ps, il);
+	quad.addShaderCombination("", vs, ps, il);
 }
 
 void DDEngine::RenderToTexture::draw() {

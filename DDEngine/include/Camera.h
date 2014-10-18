@@ -72,9 +72,11 @@ class Camera {
 		void loadCamera();
 
 		XMMATRIX getViewMatrix();
+		XMMATRIX getViewMatrix_T();
 		void setViewMatrix(XMFLOAT4X4 viewMatrix);
 		XMMATRIX getReflectionViewMatrix();
 		XMMATRIX getProjectionMatrix();
+		XMMATRIX getProjectionMatrix_T();
 		XMMATRIX getPerspectiveMatrix();
 		XMMATRIX getOrthographicMatrix();
 

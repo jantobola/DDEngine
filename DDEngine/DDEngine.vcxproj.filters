@@ -110,9 +110,6 @@
     <ClInclude Include="include\Grid.h">
       <Filter>Header Files\object</Filter>
     </ClInclude>
-    <ClInclude Include="include\Object3D.h">
-      <Filter>Header Files\object</Filter>
-    </ClInclude>
     <ClInclude Include="include\IRenderable.h">
       <Filter>Header Files\object</Filter>
     </ClInclude>
@@ -194,6 +191,12 @@
     <ClInclude Include="include\ConstantBuffers.h">
       <Filter>Header Files\object</Filter>
     </ClInclude>
+    <ClInclude Include="include\ModelObject.h">
+      <Filter>Header Files\object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object3D.h">
+      <Filter>Header Files\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AbstractCommandExecutor.cpp">
@@ -253,9 +256,6 @@
     <ClCompile Include="src\InputHandler.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\Object3D.cpp">
-      <Filter>Source Files\object</Filter>
-    </ClCompile>
     <ClCompile Include="src\ObjectManager.cpp">
       <Filter>Source Files\object</Filter>
     </ClCompile>
@@ -293,6 +293,12 @@
       <Filter>Source Files\object</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderableSkybox.cpp">
+      <Filter>Source Files\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelObject.cpp">
+      <Filter>Source Files\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object3D.cpp">
       <Filter>Source Files\object</Filter>
     </ClCompile>
   </ItemGroup>

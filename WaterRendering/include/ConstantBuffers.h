@@ -8,8 +8,6 @@ struct Matrices_CB
 	DirectX::XMFLOAT4X4 world;
 	DirectX::XMFLOAT4X4 view;
 	DirectX::XMFLOAT4X4 projection;
-	DirectX::XMFLOAT4X4 reflectionView;
-	DirectX::XMFLOAT4X4 worldInvTrans;
 };
 
 struct Light_CB

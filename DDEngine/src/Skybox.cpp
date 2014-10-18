@@ -30,9 +30,13 @@ void Skybox::setDDSTexturePath( std::string texturePath ) {
 	this->ddsPath = texturePath;
 }
 
-void Skybox::loadGeometry() {
+void Skybox::loadGeometry(std::vector<Mesh>& meshes) {
 
 	initContext();
+	Mesh mesh;
+
+#define VB(x, y, z, u, v, nx, ny, nz) mesh.VB(x, y, z, u, v, nx, ny, nz)
+#define IB(i) mesh.IB(i)
 
 	//XMStoreFloat4x4(&scaleMatrix, XMMatrixScaling(20, 20, 20));
 	//XMStoreFloat4x4(&rotationMatrix, XMMatrixRotationY(XMConvertToRadians(240)));
@@ -100,6 +104,8 @@ void Skybox::loadGeometry() {
 	// RIGHT FACE
 	IB(20); IB(21); IB(22);
 	IB(20); IB(22); IB(23);
+
+	meshes.push_back(mesh);
 }
 
 void Skybox::draw() {

@@ -6,7 +6,12 @@ CubeObject::~CubeObject() {
 
 }
 
-void CubeObject::loadGeometry() {
+void CubeObject::loadGeometry(std::vector<Mesh>& meshes) {
+
+	Mesh mesh;
+
+#define VB(x, y, z, u, v, nx, ny, nz) mesh.VB(x, y, z, u, v, nx, ny, nz)
+#define IB(i) mesh.IB(i)
 
 	// ---------- Vertex Buffer ------------
 
@@ -71,5 +76,7 @@ void CubeObject::loadGeometry() {
 	// RIGHT FACE
 	IB(20); IB(21); IB(22);
 	IB(20); IB(22); IB(23);
+
+	meshes.push_back(mesh);
 
 }

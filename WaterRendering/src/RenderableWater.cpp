@@ -10,8 +10,6 @@ using namespace std;
 using namespace DirectX;
 
 RenderableWater::~RenderableWater() {
-	waterSurface.releaseBuffers();
-
 	RELEASE(samplerPointClamp)
 	RELEASE(samplerLinearClamp)
 	RELEASE(samplerLinearWrap)
@@ -21,7 +19,7 @@ void RenderableWater::create() {
 
 	hud.loadingScreen("Loading water resources...");
 
-	setSize(1024, 1024);
+	setSize(config.WATER_GRID_X, config.WATER_GRID_Y);
 
 	DXUtils::createSamplerState(Ctx.device, &samplerPointClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_POINT, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 	DXUtils::createSamplerState(Ctx.device, &samplerLinearClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
@@ -49,15 +47,18 @@ void RenderableWater::create() {
 	computeTexture_1.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX2");
 	computeTexture_2.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX2");
 	computeTexture_3.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX2");
-	waterSurface.setShaders("VS_WaterVDisplacement", "PS_WaterOptical", "POS2");
+	waterSurface.addShaderCombination("RenderableWater", "VS_WaterVDisplacement", "PS_WaterOptical", "POS2");
+
+	vsCB_2.height = config.DROP_STRENGTH;
+	vsCB_2.viscosity = config.VISCOSITY;
 
 	setTweakBars();
 }
 
 void RenderableWater::render() {
 
-	XMMATRIX v = XMMatrixTranspose(camera.getViewMatrix());
-	XMMATRIX p = XMMatrixTranspose(camera.getProjectionMatrix());
+	XMMATRIX v = camera.getViewMatrix_T();
+	XMMATRIX p = camera.getProjectionMatrix_T();
 
 	XMStoreFloat4x4(&vsCB_0.view, v);
 	XMStoreFloat4x4(&vsCB_0.projection, p);
@@ -112,7 +113,7 @@ void RenderableWater::render() {
 	Ctx.setBackbufferRenderTarget(); // set original render target
 	resources.assignResources(waterSurface); // set current shaders
 
-	XMStoreFloat4x4(&vsCB_0.world, waterSurface.getWorldMatrix());
+	XMStoreFloat4x4(&vsCB_0.world, waterSurface.getWorldMatrix_T());
 	//XMStoreFloat4x4(&vsCB_0.worldInvTrans, XMMatrixTranspose(XMMatrixInverse(NULL, waterSurface.getWorldMatrix())));
 
 	vsCB_3.cameraPosition = camera.eye;
@@ -212,7 +213,7 @@ void RenderableWater::setTweakBars()
 	TwDefine(" waterBar visible=false ");
 	TwAddVarRW(waterBar, "Drop Strength", TW_TYPE_FLOAT, &vsCB_2.height, "min=0 max=1 step=0.0001");
 	TwAddVarRW(waterBar, "Viscosity", TW_TYPE_FLOAT, &vsCB_2.viscosity, "min=0 max=1 step=0.0001");
-	TwAddVarRW(waterBar, "Time Step", TW_TYPE_FLOAT, &vsCB_1.timeStep, "min=0 max=20000 step=1");
+	//TwAddVarRW(waterBar, "Time Step", TW_TYPE_FLOAT, &vsCB_1.timeStep, "min=0 max=20000 step=1");
 }
 
 void RenderableWater::setWaterDrop(bool isOn) {

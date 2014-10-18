@@ -1,169 +1,179 @@
 #include "Object3D.h"
-#include "D3DUtils.h"
 #include "DDEUtils.h"
+#include "D3DUtils.h"
 
-using namespace DDEngine;
-using namespace std;
 using namespace DirectX;
 
-Object3D::Object3D() {
-	isHidden = false;
-	setPrimitiveTopology(Object3D::TRIANGLE_LIST);
-	XMMATRIX identityMatrix = XMMATRIX(XMMatrixIdentity());
-	XMStoreFloat4x4(&worldMatrix, identityMatrix);
-	XMStoreFloat4x4(&translationMatrix, identityMatrix);
-	XMStoreFloat4x4(&rotationMatrix, identityMatrix);
-	XMStoreFloat4x4(&scaleMatrix, identityMatrix);
-
-	vertexBuffer = NULL;
-	indexBuffer = NULL;
+void DDEngine::Object3D::Mesh::VB(float x, float y, float z, float u, float v, float nx, float ny, float nz)
+{
+	this->vertices.push_back(Vertex(x, y, z, u, v, nx, ny, nz));
 }
 
-Object3D::~Object3D () {
-
+void DDEngine::Object3D::Mesh::IB(DWORD index)
+{
+	this->indices.push_back(index);
+	numIndices++;
 }
 
-HRESULT Object3D::registerObject(ID3D11Device* device, ID3D11DeviceContext* context) {
+DDEngine::Object3D::Object3D()
+{
+	resetTransformations();
+}
+
+DDEngine::Object3D::~Object3D()
+{
+	releaseBuffers();
+}
+
+void DDEngine::Object3D::releaseBuffers()
+{
+	for(Mesh mesh : meshes) {
+		RELEASE(mesh.vertexBuffer)
+		RELEASE(mesh.indexBuffer)
+	}
+}
+
+void DDEngine::Object3D::draw(const Mesh& mesh)
+{
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+
+	context->IASetPrimitiveTopology(translatePrimitiveTopology(mesh.topology));
+	context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
+	context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	context->DrawIndexed(mesh.numIndices, 0, 0);
+}
+
+void DDEngine::Object3D::draw()
+{
+	if (visibleFlag) {
+		for (Mesh mesh : meshes) {
+			draw(mesh);
+		}
+	}
+}
+
+void DDEngine::Object3D::setVisible(bool isVisible)
+{
+	this->visibleFlag = isVisible;
+}
+
+void DDEngine::Object3D::addShaderCombination(std::string name, std::string vsName, std::string psName, std::string ilName, bool active /*= true*/)
+{
+	shaders.push_back(Shaders(name, vsName, psName, ilName, active));
+}
+
+void DDEngine::Object3D::enableShaderCombination(std::string name)
+{
+	for (Shaders shaderCombination : shaders) {
+		if (shaderCombination.name == name)
+			shaderCombination.active = true;
+	}
+}
+
+void DDEngine::Object3D::disableShaderCombination(std::string name)
+{
+	for (Shaders shaderCombination : shaders) {
+		if (shaderCombination.name == name)
+			shaderCombination.active = false;
+	}
+}
+
+void DDEngine::Object3D::registerObject(ID3D11Device* device, ID3D11DeviceContext* context)
+{
 	HRESULT result = S_OK;
 
 	this->device = device;
 	this->context = context;
 
-	loadGeometry();
+	loadGeometry(meshes);
 
-	result = DXUtils::createVertexBuffer(device, &vertices, &vertexBuffer);
-	result = DXUtils::createIndexBuffer(device, &indices, &indexBuffer);
+	for (Mesh& mesh : meshes) {
+		result = DXUtils::createVertexBuffer(device, &mesh.vertices, &mesh.vertexBuffer);
 
-	verticesSize = vertices.size();
-	indicesSize = indices.size();
+		if (FAILED(result))
+			Win32Utils::showFailMessage(result, "Vertex Buffer Error", "Error occurred during registering an object");
 
-	vertices.clear();
-	indices.clear();
+		result = DXUtils::createIndexBuffer(device, &mesh.indices, &mesh.indexBuffer);
 
-	return result;
-}
+		if (FAILED(result))
+			Win32Utils::showFailMessage(result, "Index Buffer Error", "Error occurred during registering an object");
 
-void Object3D::draw() {
-	if(!isHidden) {
-		UINT stride = sizeof( Vertex );
-		UINT offset = 0;
-
-		context->IASetPrimitiveTopology(this->primitiveTopology);
-		context->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
-		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-		context->DrawIndexed(indicesSize, 0, 0);
+		mesh.vertices.clear();
+		mesh.vertices.shrink_to_fit();
+		mesh.indices.clear();
+		mesh.indices.shrink_to_fit();
 	}
 }
 
-void Object3D::setPrimitiveTopology( Object3D::PrimitiveTopology primitiveTopology ) {
-	switch (primitiveTopology) {
-
-	case TRIANGLE_LIST:
-		this->primitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-		break;
-
-	case TRIANGLE_STRIP:
-		this->primitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-		break;
-
-	default:
-		break;
-	}
+void DDEngine::Object3D::rotateX(float x)
+{
+	float radians = XMConvertToRadians(x);
+	XMMATRIX transform = XMLoadFloat4x4(&rotationMatrix) * XMMatrixRotationX(radians);
+	XMStoreFloat4x4(&rotationMatrix, transform);
 }
 
-int Object3D::getIndexCount() {
-	return indicesSize;
+void DDEngine::Object3D::rotateY(float y)
+{
+	float radians = XMConvertToRadians(y);
+	XMMATRIX transform = XMLoadFloat4x4(&rotationMatrix) * XMMatrixRotationY(radians);
+	XMStoreFloat4x4(&rotationMatrix, transform);
 }
 
-int Object3D::getVertexCount() {
-	return verticesSize;
+void DDEngine::Object3D::rotateZ(float z)
+{
+	float radians = XMConvertToRadians(z);
+	XMMATRIX transform = XMLoadFloat4x4(&rotationMatrix) * XMMatrixRotationZ(radians);
+	XMStoreFloat4x4(&rotationMatrix, transform);
 }
 
-XMMATRIX Object3D::getWorldMatrix() {
+void DDEngine::Object3D::rotate(float x, float y, float z)
+{
+	float radiansX = XMConvertToRadians(x);
+	float radiansY = XMConvertToRadians(y);
+	float radiansZ = XMConvertToRadians(z);
+	XMMATRIX transform = XMMatrixRotationX(radiansX) * XMMatrixRotationY(radiansY) * XMMatrixRotationZ(radiansZ);
+	transform = XMLoadFloat4x4(&rotationMatrix) * transform;
+	XMStoreFloat4x4(&rotationMatrix, transform);
+}
+
+void DDEngine::Object3D::scale(float x, float y, float z)
+{
+	XMMATRIX transform = XMLoadFloat4x4(&scaleMatrix) * XMMatrixScaling(x, y, z);
+	XMStoreFloat4x4(&scaleMatrix, transform);
+}
+
+void DDEngine::Object3D::scale(float scale)
+{
+	XMMATRIX transform = XMLoadFloat4x4(&scaleMatrix) * XMMatrixScaling(scale, scale, scale);
+	XMStoreFloat4x4(&scaleMatrix, transform);
+}
+
+void DDEngine::Object3D::translate(float x, float y, float z)
+{
+	XMMATRIX transform = XMLoadFloat4x4(&translationMatrix) * XMMatrixTranslation(x, y, z);
+	XMStoreFloat4x4(&translationMatrix, transform);
+}
+
+const DirectX::XMMATRIX DDEngine::Object3D::getWorldMatrix()
+{
 	XMMATRIX world = XMLoadFloat4x4(&worldMatrix);
 	world = XMLoadFloat4x4(&rotationMatrix) * XMLoadFloat4x4(&scaleMatrix) * XMLoadFloat4x4(&translationMatrix);
 	XMStoreFloat4x4(&worldMatrix, world);
 	return world;
 }
 
-void Object3D::releaseBuffers() {
-	RELEASE( vertexBuffer )
-	RELEASE( indexBuffer )
+const DirectX::XMMATRIX DDEngine::Object3D::getWorldMatrix_T()
+{
+	return XMMatrixTranspose(getWorldMatrix());
 }
 
-void Object3D::rotateX(float x) {
-	float radians = XMConvertToRadians(x); 
-	XMMATRIX transform = XMLoadFloat4x4(&rotationMatrix) * XMMatrixRotationX(radians);
-	XMStoreFloat4x4(&rotationMatrix, transform);
-}
-
-void Object3D::rotateY( float y ) {
-	float radians = XMConvertToRadians(y); 
-	XMMATRIX transform = XMLoadFloat4x4(&rotationMatrix) * XMMatrixRotationY(radians);
-	XMStoreFloat4x4(&rotationMatrix, transform);
-}
-
-void Object3D::rotateZ( float z ) {
-	float radians = XMConvertToRadians(z); 
-	XMMATRIX transform = XMLoadFloat4x4(&rotationMatrix) * XMMatrixRotationZ(radians);
-	XMStoreFloat4x4(&rotationMatrix, transform);
-}
-
-void Object3D::rotate( float x, float y, float z ) {
-	float radiansX = XMConvertToRadians(x);
-	float radiansY = XMConvertToRadians(y);
-	float radiansZ = XMConvertToRadians(z); 
-	XMMATRIX transform = XMMatrixRotationX(radiansX) * XMMatrixRotationY(radiansY) * XMMatrixRotationZ(radiansZ);
-	transform = XMLoadFloat4x4(&rotationMatrix) * transform;
-	XMStoreFloat4x4(&rotationMatrix, transform);
-}
-
-void Object3D::translate( float x, float y, float z ) {
-	XMMATRIX transform = XMLoadFloat4x4(&translationMatrix) * XMMatrixTranslation(x, y, z);
-	XMStoreFloat4x4(&translationMatrix, transform);
-}
-
-void Object3D::scale( float scale ) {
-	XMMATRIX transform = XMLoadFloat4x4(&scaleMatrix) * XMMatrixScaling(scale, scale, scale);
-	XMStoreFloat4x4(&scaleMatrix, transform);
-}
-
-void Object3D::scale( float x, float y, float z ) {
-	XMMATRIX transform = XMLoadFloat4x4(&scaleMatrix) * XMMatrixScaling(x, y, z);
-	XMStoreFloat4x4(&scaleMatrix, transform);
-}
-
-void Object3D::setShaders( string vs, string ps, string il) {
-	vertexShaderName = vs;
-	pixelShaderName = ps;
-	inputLayoutName = il;
-}
-
-std::string Object3D::getVSName() {
-	return this->vertexShaderName;
-}
-
-std::string Object3D::getPSName() {
-	return this->pixelShaderName;
-}
-
-std::string Object3D::getILName() {
-	return this->inputLayoutName;
-}
-
-void Object3D::hide() {
-	isHidden = true;
-}
-
-void Object3D::show() {
-	isHidden = false;
-}
-
-void DDEngine::Object3D::VB(float x, float y, float z, float u, float v, float nx, float ny, float nz) {
-	vertices.push_back(Vertex(x, y, z, u, v, nx, ny, nz));
-}
-
-void DDEngine::Object3D::IB(int index) {
-	indices.push_back(index);
+void DDEngine::Object3D::resetTransformations()
+{
+	XMMATRIX identityMatrix = XMMATRIX(XMMatrixIdentity());
+	XMStoreFloat4x4(&worldMatrix, identityMatrix);
+	XMStoreFloat4x4(&translationMatrix, identityMatrix);
+	XMStoreFloat4x4(&rotationMatrix, identityMatrix);
+	XMStoreFloat4x4(&scaleMatrix, identityMatrix);
 }
