@@ -3,9 +3,13 @@
 #include "Dimension.h"
 #include <d3d11.h>
 #include <DirectXTK/CommonStates.h>
+#include <vector>
+#include <string>
 
 namespace DDEngine
 {
+
+	class Object3D;
 
 enum RasterizerStateType {
 	SOLID_CULL_NONE,
@@ -27,6 +31,7 @@ D3D11_PRIMITIVE_TOPOLOGY translatePrimitiveTopology(PrimitiveTopology topology);
 class RenderContext {
 
 	private:
+		std::vector<Object3D*> objectContainer;
 		
 	public:
 		RenderContext();
@@ -66,6 +71,8 @@ class RenderContext {
 		void setVSResource(ID3D11ShaderResourceView* resource, int index);
 		void setPSSampler(ID3D11SamplerState* sampler, int index);
 		void setVSSampler(ID3D11SamplerState* sampler, int index);
+		std::vector<Object3D*>& getRegisteredObjects() { return objectContainer; }
+		Object3D* getRegisteredObject(const std::string& name);
 
 	protected:
 	

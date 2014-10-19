@@ -1,6 +1,5 @@
 #include "Object3D.h"
 #include "DDEUtils.h"
-#include "D3DUtils.h"
 
 using namespace DirectX;
 
@@ -27,10 +26,15 @@ DDEngine::Object3D::~Object3D()
 
 void DDEngine::Object3D::releaseBuffers()
 {
-	for(Mesh mesh : meshes) {
+	for (Mesh mesh : meshes) {
 		RELEASE(mesh.vertexBuffer)
 		RELEASE(mesh.indexBuffer)
 	}
+
+	for (ShaderResourceView* tex : textures) {
+		RELEASE(tex)
+	}
+
 }
 
 void DDEngine::Object3D::draw(const Mesh& mesh)
@@ -38,11 +42,16 @@ void DDEngine::Object3D::draw(const Mesh& mesh)
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
-	context->IASetPrimitiveTopology(translatePrimitiveTopology(mesh.topology));
-	context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
-	context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	Ctx->context->IASetPrimitiveTopology(translatePrimitiveTopology(mesh.topology));
+	Ctx->context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
+	Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	context->DrawIndexed(mesh.numIndices, 0, 0);
+	if (textures.size() > 0) {
+		Ctx->setPSSampler(Ctx->commonStates->AnisotropicWrap(), 0);
+		Ctx->setPSResource(textures[mesh.materialIndex], 0);
+	}
+
+	Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
 }
 
 void DDEngine::Object3D::draw()
@@ -52,11 +61,6 @@ void DDEngine::Object3D::draw()
 			draw(mesh);
 		}
 	}
-}
-
-void DDEngine::Object3D::setVisible(bool isVisible)
-{
-	this->visibleFlag = isVisible;
 }
 
 void DDEngine::Object3D::addShaderCombination(std::string name, std::string vsName, std::string psName, std::string ilName, bool active /*= true*/)
@@ -80,22 +84,22 @@ void DDEngine::Object3D::disableShaderCombination(std::string name)
 	}
 }
 
-void DDEngine::Object3D::registerObject(ID3D11Device* device, ID3D11DeviceContext* context)
+void DDEngine::Object3D::registerObject(const std::string& modelName, RenderContext& Ctx)
 {
 	HRESULT result = S_OK;
 
-	this->device = device;
-	this->context = context;
+	this->modelName = modelName;
+	this->Ctx = &Ctx;
 
 	loadGeometry(meshes);
 
 	for (Mesh& mesh : meshes) {
-		result = DXUtils::createVertexBuffer(device, &mesh.vertices, &mesh.vertexBuffer);
+		result = DXUtils::createVertexBuffer(Ctx.device, &mesh.vertices, &mesh.vertexBuffer);
 
 		if (FAILED(result))
 			Win32Utils::showFailMessage(result, "Vertex Buffer Error", "Error occurred during registering an object");
 
-		result = DXUtils::createIndexBuffer(device, &mesh.indices, &mesh.indexBuffer);
+		result = DXUtils::createIndexBuffer(Ctx.device, &mesh.indices, &mesh.indexBuffer);
 
 		if (FAILED(result))
 			Win32Utils::showFailMessage(result, "Index Buffer Error", "Error occurred during registering an object");
@@ -105,6 +109,14 @@ void DDEngine::Object3D::registerObject(ID3D11Device* device, ID3D11DeviceContex
 		mesh.indices.clear();
 		mesh.indices.shrink_to_fit();
 	}
+
+	Ctx.getRegisteredObjects().push_back(this);
+}
+
+void DDEngine::Object3D::addTexture(const std::string& path)
+{
+	ShaderResourceView* texture = TextureUtils::createTexture(path, *Ctx);
+	textures.push_back(texture);
 }
 
 void DDEngine::Object3D::rotateX(float x)
@@ -144,9 +156,9 @@ void DDEngine::Object3D::scale(float x, float y, float z)
 	XMStoreFloat4x4(&scaleMatrix, transform);
 }
 
-void DDEngine::Object3D::scale(float scale)
+void DDEngine::Object3D::scale(float xyz)
 {
-	XMMATRIX transform = XMLoadFloat4x4(&scaleMatrix) * XMMatrixScaling(scale, scale, scale);
+	XMMATRIX transform = XMLoadFloat4x4(&scaleMatrix) * XMMatrixScaling(xyz, xyz, xyz);
 	XMStoreFloat4x4(&scaleMatrix, transform);
 }
 
@@ -158,8 +170,7 @@ void DDEngine::Object3D::translate(float x, float y, float z)
 
 const DirectX::XMMATRIX DDEngine::Object3D::getWorldMatrix()
 {
-	XMMATRIX world = XMLoadFloat4x4(&worldMatrix);
-	world = XMLoadFloat4x4(&rotationMatrix) * XMLoadFloat4x4(&scaleMatrix) * XMLoadFloat4x4(&translationMatrix);
+	XMMATRIX world = XMLoadFloat4x4(&scaleMatrix) * XMLoadFloat4x4(&rotationMatrix) * XMLoadFloat4x4(&translationMatrix);
 	XMStoreFloat4x4(&worldMatrix, world);
 	return world;
 }

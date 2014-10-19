@@ -2,6 +2,7 @@
 
 #include "Dimension.h"
 #include "Vertex.h"
+#include "RenderContext.h"
 #include <vector>
 #include <d3d11.h>
 
@@ -165,4 +166,20 @@ namespace DDEngine
 		);
 
 	}
+
+	namespace TextureUtils {
+	
+		ShaderResourceView* createTexture(
+			_In_	const std::string& file,
+			_In_	const RenderContext& Ctx
+		);
+
+		/*
+		ImageInfo getImageInfo(
+			_In_	const std::string& file
+		);
+		*/
+	
+	}
+
 }

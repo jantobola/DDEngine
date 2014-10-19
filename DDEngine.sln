@@ -50,13 +50,11 @@ Global
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Debug|Win32.Build.0 = Debug|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Debug|x64.ActiveCfg = Debug|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Release|Any CPU.ActiveCfg = Release|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Release|Win32.ActiveCfg = Release|Win32
-		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Release|Win32.Build.0 = Release|Win32
 		{D8AA0003-3056-442E-95C3-E38A9E8CC357}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

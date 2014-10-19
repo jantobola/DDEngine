@@ -13,9 +13,9 @@ Skybox::~Skybox() {
 
 void Skybox::initContext() {
 
-	DXUtils::createCubeTextureResource(device, StringUtils::toWstring(ddsPath).c_str(), &skyboxTexture);
-	DXUtils::createSamplerState(device, &skyboxSampler, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
-	DXUtils::createRasterizerState(device, &skyboxRasterizer, D3D11_CULL_NONE, D3D11_FILL_SOLID, 0);
+	DXUtils::createCubeTextureResource(Ctx->device, StringUtils::toWstring(ddsPath).c_str(), &skyboxTexture);
+	DXUtils::createSamplerState(Ctx->device, &skyboxSampler, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
+	DXUtils::createRasterizerState(Ctx->device, &skyboxRasterizer, D3D11_CULL_NONE, D3D11_FILL_SOLID, 0);
 	
 	D3D11_DEPTH_STENCIL_DESC depthStateDesc;
 	ZeroMemory(&depthStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -23,7 +23,7 @@ void Skybox::initContext() {
 	depthStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
-	device->CreateDepthStencilState(&depthStateDesc, &skyboxDepth);
+	Ctx->device->CreateDepthStencilState(&depthStateDesc, &skyboxDepth);
 }
 
 void Skybox::setDDSTexturePath( std::string texturePath ) {
@@ -109,10 +109,10 @@ void Skybox::loadGeometry(std::vector<Mesh>& meshes) {
 }
 
 void Skybox::draw() {
-	context->PSSetShaderResources(0, 1, &skyboxTexture);
-	context->PSSetSamplers(0, 1, &skyboxSampler);
-	context->OMSetDepthStencilState(skyboxDepth, 0);
-	context->RSSetState(skyboxRasterizer);
+	Ctx->context->PSSetShaderResources(0, 1, &skyboxTexture);
+	Ctx->context->PSSetSamplers(0, 1, &skyboxSampler);
+	Ctx->context->OMSetDepthStencilState(skyboxDepth, 0);
+	Ctx->context->RSSetState(skyboxRasterizer);
 
 	Object3D::draw();
 }

@@ -190,7 +190,7 @@ void InputHandler::setConsole(Console* console) {
 	this->console = console;
 
 	if(console) {
-		controlls = console->getDDEComponent().getControlls();
+		controlls = &console->getDDEComponent().getControlls();
 	}
 }
 

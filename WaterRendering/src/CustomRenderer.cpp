@@ -17,6 +17,7 @@ CustomRenderer::~CustomRenderer() {
 }
 
 void CustomRenderer::create() {
+
 	initShaders();
 	DDERenderPackage pkg = getRenderPackage();
 
@@ -34,9 +35,9 @@ void CustomRenderer::create() {
 	skybox->setSkyboxPath("res/textures/TropicalDaySkybox.dds");
 	terrain->setProceduralGeneration(false);
 
-	objects->addObject(skybox);
-	objects->addObject(terrain);
-	objects->addObject(water);
+	scenes->addScene(skybox);
+	scenes->addScene(terrain);
+	scenes->addScene(water);
 
 	setTweakBars();
 }
@@ -46,45 +47,6 @@ void CustomRenderer::render() {
 }
 
 void CustomRenderer::initShaders() {
-	wstring	path = L"shaders/";
-
-	#ifdef DEBUG
-		path = L"../../../src/shaders/";
-	#endif
-	#ifdef PRECOMPILED_SHADERS
-		path = L"shaders/";
-	#endif
-
-	#define _shader(X) path + L#X
-
-	#ifdef PRECOMPILED_SHADERS
-		shaders->addVertexShaderBinary("VS_BasicMesh", _shader(VS_BasicMesh.cso));
-		shaders->addPixelShaderBinary("PS_BasicLightMesh", _shader(PS_BasicLightMesh.cso));
-
-		shaders->addVertexShaderBinary("VS_TerrainVDisplacement", _shader(VS_TerrainVDisplacement.cso));
-		shaders->addPixelShaderBinary("PS_TerrainGeneration_T", _shader(PS_TerrainGeneration_T.cso));
-
-		shaders->addVertexShaderBinary("VS_WaterVDisplacement", _shader(VS_WaterVDisplacement.cso));
-		shaders->addPixelShaderBinary("PS_WaterOptical", _shader(PS_WaterOptical.cso));
-
-		shaders->addVertexShaderBinary("VS_QuadObject", _shader(VS_QuadObject.cso));
-		shaders->addPixelShaderBinary("PS_WaterComputation_T", _shader(PS_WaterComputation_T.cso));
-
-	#else
-		shaders->addVertexShader("VS_BasicMesh", _shader(VS_BasicMesh.hlsl));
-		shaders->addPixelShader("PS_BasicLightMesh", _shader(PS_BasicLightMesh.hlsl));
-
-		shaders->addVertexShader("VS_TerrainVDisplacement", _shader(VS_TerrainVDisplacement.hlsl));
-		shaders->addPixelShader("PS_TerrainGeneration_T", _shader(PS_TerrainGeneration_T.hlsl));
-
-		shaders->addVertexShader("VS_WaterVDisplacement", _shader(VS_WaterVDisplacement.hlsl));
-		shaders->addVertexShader("VS_WaterBottom", _shader(VS_WaterBottom.hlsl));
-		shaders->addPixelShader("PS_WaterOptical", _shader(PS_WaterOptical.hlsl));
-
-		shaders->addVertexShader("VS_QuadObject", _shader(VS_QuadObject.hlsl));
-		shaders->addPixelShader("PS_WaterComputation_T", _shader(PS_WaterComputation_T.hlsl));
-
-	#endif
 
 	D3D11_INPUT_ELEMENT_DESC layout1[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -126,7 +88,7 @@ void CustomRenderer::setTweakBars() {
 	TwDefine(" lightBar size='350 160' ");
 	TwSetParam(tweakBar, nullptr, "position", TW_PARAM_INT32, 2, &barPos);
 
-	light.direction = XMFLOAT3(config.LIGHT_DIR_X, config.LIGHT_DIR_Y, config.LIGHT_DIR_Z);
+	light.direction = XMFLOAT3(-1.0f, -0.5f, -0.5f);
 	light.ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
 	light.diffuse = XMFLOAT4(1, 1, 1, 1.0f);
 

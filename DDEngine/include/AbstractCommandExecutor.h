@@ -2,9 +2,10 @@
 
 #include <string>
 #include <vector>
-#include <functional>
 
 #define CMD_DELIMITER '='
+#define ARG_DELIMITER ','
+
 #define CMD_HISTORY_SIZE 20
 
 namespace DDEngine
@@ -26,7 +27,6 @@ class AbstractCommandExecutor {
 		std::string nextCommand();
 
 		virtual void executeCommand(std::string command) = 0;
-		virtual void executeCommand(std::string command, std::function<void()>&& funct) = 0;
 
 		void executeBatch(std::vector<std::string> batch);
 

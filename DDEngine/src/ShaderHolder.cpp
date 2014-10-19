@@ -32,8 +32,8 @@ void ShaderHolder::load() {
 	DataContainer VS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 201);
 	DataContainer PS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 202);
 
-	addVertexShaderFromMemory("DDEngine_VS_Skybox", VS_Skybox.dataBlob, VS_Skybox.dataSize, "main");
-	addPixelShaderFromMemory("DDEngine_PS_Skybox", PS_Skybox.dataBlob, PS_Skybox.dataSize, "main");
+	addVertexShaderFromMemory("DDEngine_VS_Skybox", VS_Skybox.dataBlob, VS_Skybox.dataSize, "vs_4_0");
+	addPixelShaderFromMemory("DDEngine_PS_Skybox", PS_Skybox.dataBlob, PS_Skybox.dataSize, "ps_4_0");
 
 	D3D11_INPUT_ELEMENT_DESC POS3_TEX2[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -46,10 +46,13 @@ void ShaderHolder::load() {
 	FreeLibrary(dll);
 }
 
-void ShaderHolder::addVertexShader(string name, wstring path, string entryPoint) {
+void DDEngine::ShaderHolder::addVertexShader(string name, wstring path, string shaderModel, string entryPoint /*= "main"*/)
+{
+	string model = (shaderModel.empty()) ? config.CFG_VERTEX_SHADER_MODEL : shaderModel;
+
 	ID3D11VertexShader* vs;
-	HRESULT result = DXUtils::createAndCompileVertexShader(renderContext.device, &path[0], entryPoint.c_str(), config.CFG_VERTEX_SHADER_MODEL.c_str(), &vs);
-	
+	HRESULT result = DXUtils::createAndCompileVertexShader(renderContext.device, &path[0], entryPoint.c_str(), model.c_str(), &vs);
+
 	if (!FAILED(result)) {
 		VertexShaderEnvelope envelope;
 		envelope.name = name;
@@ -60,9 +63,12 @@ void ShaderHolder::addVertexShader(string name, wstring path, string entryPoint)
 	}
 }
 
-void ShaderHolder::addPixelShader(string name, wstring path, string entryPoint) {
+void DDEngine::ShaderHolder::addPixelShader(string name, wstring path, string shaderModel, string entryPoint /*= "main"*/)
+{
+	string model = (shaderModel.empty()) ? config.CFG_PIXEL_SHADER_MODEL : shaderModel;
+
 	ID3D11PixelShader* ps;
-	HRESULT result = DXUtils::createAndCompilePixelShader(renderContext.device, &path[0], entryPoint.c_str(), config.CFG_PIXEL_SHADER_MODEL.c_str(), &ps);
+	HRESULT result = DXUtils::createAndCompilePixelShader(renderContext.device, &path[0], entryPoint.c_str(), model.c_str(), &ps);
 
 	if (!FAILED(result)) {
 		PixelShaderEnvelope envelope;
@@ -74,10 +80,12 @@ void ShaderHolder::addPixelShader(string name, wstring path, string entryPoint) 
 	}
 }
 
-void ShaderHolder::addVertexShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string entryPoint /*= "main"*/)
+void DDEngine::ShaderHolder::addVertexShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string shaderModel, string entryPoint /*= "main"*/)
 {
+	string model = (shaderModel.empty()) ? config.CFG_VERTEX_SHADER_MODEL : shaderModel;
+
 	ID3D11VertexShader* vs;
-	HRESULT result = DXUtils::createVertexShaderFromMemory(renderContext.device, dataBlob, dataSize, entryPoint.c_str(), config.CFG_VERTEX_SHADER_MODEL.c_str(), &vs);
+	HRESULT result = DXUtils::createVertexShaderFromMemory(renderContext.device, dataBlob, dataSize, entryPoint.c_str(), model.c_str(), &vs);
 
 	if (!FAILED(result)) {
 		VertexShaderEnvelope envelope;
@@ -90,10 +98,12 @@ void ShaderHolder::addVertexShaderFromMemory(string name, LPVOID dataBlob, DWORD
 	}
 }
 
-void ShaderHolder::addPixelShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string entryPoint /*= "main"*/)
+void DDEngine::ShaderHolder::addPixelShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string shaderModel, string entryPoint /*= "main"*/)
 {
+	string model = (shaderModel.empty()) ? config.CFG_PIXEL_SHADER_MODEL : shaderModel;
+
 	ID3D11PixelShader* ps;
-	HRESULT result = DXUtils::createPixelShaderFromMemory(renderContext.device, dataBlob, dataSize, entryPoint.c_str(), config.CFG_PIXEL_SHADER_MODEL.c_str(), &ps);
+	HRESULT result = DXUtils::createPixelShaderFromMemory(renderContext.device, dataBlob, dataSize, entryPoint.c_str(), model.c_str(), &ps);
 
 	if (!FAILED(result)) {
 		PixelShaderEnvelope envelope;

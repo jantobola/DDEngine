@@ -20,7 +20,7 @@ AbstractCommandExecutor::~AbstractCommandExecutor() {
 
 void AbstractCommandExecutor::parseCommand(std::string cmd, std::vector<std::string>& tokens) {
 	std::string toParse = cmd.c_str();
-	CommandParser::parse(&tokens, CMD_DELIMITER, toParse);
+	CommandParser::parse(&tokens, CMD_DELIMITER, ARG_DELIMITER, toParse);
 }
 
 void AbstractCommandExecutor::manageHistory(std::string cmd) {

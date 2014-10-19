@@ -161,9 +161,6 @@
     <ClInclude Include="include\DDERenderPackage.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
-    <ClInclude Include="include\ObjectManager.h">
-      <Filter>Header Files\object</Filter>
-    </ClInclude>
     <ClInclude Include="include\Timer.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
@@ -195,6 +192,9 @@
       <Filter>Header Files\object</Filter>
     </ClInclude>
     <ClInclude Include="include\Object3D.h">
+      <Filter>Header Files\object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScenesManager.h">
       <Filter>Header Files\object</Filter>
     </ClInclude>
   </ItemGroup>
@@ -256,9 +256,6 @@
     <ClCompile Include="src\InputHandler.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\ObjectManager.cpp">
-      <Filter>Source Files\object</Filter>
-    </ClCompile>
     <ClCompile Include="src\RenderContext.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
@@ -299,6 +296,9 @@
       <Filter>Source Files\object</Filter>
     </ClCompile>
     <ClCompile Include="src\Object3D.cpp">
+      <Filter>Source Files\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScenesManager.cpp">
       <Filter>Source Files\object</Filter>
     </ClCompile>
   </ItemGroup>

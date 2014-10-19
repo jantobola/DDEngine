@@ -12,8 +12,7 @@ typedef ID3D11ShaderResourceView ShaderResourceView;
 class RenderToTexture {
 
 	private:
-		ID3D11Device* device = nullptr;
-		ID3D11DeviceContext* context = nullptr;
+		RenderContext* Ctx;
 
 		ID3D11Texture2D* texture2D = nullptr;
 		ID3D11RenderTargetView* renderTargetView = nullptr;
@@ -32,7 +31,7 @@ class RenderToTexture {
 
 	public:
 		RenderToTexture();
-		RenderToTexture(ID3D11Device* device, ID3D11DeviceContext* context);
+		RenderToTexture(RenderContext& Ctx);
 		~RenderToTexture();
 	
 		HRESULT create(int width, int height, DXGI_FORMAT format = DXGI_FORMAT_R32G32B32A32_FLOAT);

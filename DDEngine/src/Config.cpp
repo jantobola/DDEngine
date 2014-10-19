@@ -1,5 +1,7 @@
 #include "Config.h"
 #include "DDEUtils.h"
+#include <sstream>
+#include <algorithm>
 
 using namespace DDEngine;
 using namespace std;
@@ -32,10 +34,14 @@ vector<string> Config::getRenderConfig() {
 #define CONFIG_ARGS(X) if(cmd.size() < (X + 1)) continue;
 #define NEXT continue;
 
-void Config::load() {
-	parseConfig(path);
+void Config::load(CFG_SECTION section) {
+	parseConfig(path, section);
 	for(size_t i = 0; i < startupCmds.size(); i++) {
 		vector<string> cmd = startupCmds.at(i);
+
+		if (_delegate) {
+			_delegate(cmd);
+		}
 
 		CONFIG_ARGS(1)
 
@@ -63,36 +69,6 @@ void Config::load() {
 			NEXT
 		}
 
-		LOAD("AF")
-		{
-			AF = ARG_INT(0);
-			NEXT
-		}
-
-		LOAD("elevation_factor")
-		{
-			ELEVATION_FACTOR = ARG_FLOAT(0);
-			NEXT
-		}
-
-		LOAD("drop_strength")
-		{
-			DROP_STRENGTH = ARG_FLOAT(0);
-			NEXT
-		}
-
-		LOAD("viscosity")
-		{
-			VISCOSITY = ARG_FLOAT(0);
-			NEXT
-		}
-
-		LOAD("terrain_texture_scale")
-		{
-			TERRAIN_TEXTURE_SCALE = ARG_FLOAT(0);
-			NEXT
-		}
-
 		CONFIG_ARGS(2)
 
 		LOAD("screen_resolution")
@@ -102,30 +78,32 @@ void Config::load() {
 			NEXT
 		}
 
-		LOAD("water_grid")
-		{
-			WATER_GRID_X = ARG_INT(0);
-			WATER_GRID_Y = ARG_INT(1);
-			NEXT
-		}
-
-		LOAD("terrain_grid")
-		{
-			TERRAIN_GRID_X = ARG_INT(0);
-			TERRAIN_GRID_Y = ARG_INT(1);
-			NEXT
-		}
-
 		CONFIG_ARGS(3)
-		
-		LOAD("light_dir")
+
+		LOAD("[shaders]")
 		{
-			LIGHT_DIR_X = ARG_FLOAT(0);
-			LIGHT_DIR_Y = ARG_FLOAT(1);
-			LIGHT_DIR_Z = ARG_FLOAT(2);
+			ShaderConfig shader;
+			shader.file = ARG(0);
+			shader.entry = ARG(1);
+			shader.model = ARG(2);
+
+			stringstream ssLine(shader.file);
+			getline(ssLine, shader.name, '.');
+
+			std::size_t found = shader.model.find("vs");
+			if (found != std::string::npos) {
+				shader.type = ShaderType::VS;
+			}
+
+			found = shader.model.find("ps");
+			if (found != std::string::npos) {
+				shader.type = ShaderType::PS;
+			}
+
+			shaders.push_back(shader);
+
 			NEXT
 		}
-
 
 	}
 }
@@ -136,4 +114,9 @@ Config::string Config::getConfigPath() {
 
 void Config::setConfigPath( string path ) {
 	this->path = path;
+}
+
+void DDEngine::Config::delegate(std::function<void(const std::vector<std::string>&)> func) {
+	this->_delegate = func;
+	load(CFG_SECTION::STARTUP);
 }

@@ -2,7 +2,7 @@
 #include "DDEUtils.h"
 #include "Controlls.h"
 #include "ResourceProvider.h"
-#include "ObjectManager.h"
+#include "ScenesManager.h"
 #include "HUDRenderer.h"
 #include "GUIRenderer.h"
 #include <AntTweakBar/AntTweakBar.h>
@@ -23,7 +23,7 @@ DDEComponent::~DDEComponent() {
 	delete resources;
 	delete gui;
 	delete hud;
-	delete objects;
+	delete scenes;
 	delete controlls;
 }
 
@@ -38,10 +38,39 @@ void DDEngine::DDEComponent::initDevice(HWND hWnd) {
 	hud = new HUDRenderer(config, Ctx, timer);
 }
 
+void DDEngine::DDEComponent::compileShaders()
+{
+	// Default relative path from executable
+	wstring	path = L"shaders/";
+
+	// If debug configuration is active, use working shaders directory.
+	// You can recompile these shaders at runtime.
+	#ifdef DEBUG
+		path = L"../../../src/shaders/";
+	#endif
+
+	for (ShaderConfig shader : config.shaders) {
+		switch (shader.type)
+		{
+		case VS:
+			shaders->addVertexShader(shader.name, path + StringUtils::toWstring(shader.file), shader.model, shader.entry);
+			break;
+
+		case PS:
+			shaders->addPixelShader(shader.name, path + StringUtils::toWstring(shader.file), shader.model, shader.entry);
+			break;
+
+		default:
+			Win32Utils::showMessage("Shader Compilation Error", "Unknown type of shader.");
+			break;
+		}
+	}
+}
+
 void DDEComponent::compose() {
 	
 	controlls	= new Controls(camera, timer);
-	objects		= new ObjectManager(config, Ctx);
+	scenes		= new ScenesManager(config, Ctx);
 	gui			= new GUIRenderer(config, Ctx);
 	resources	= new ResourceProvider(config, Ctx);
 	shaders		= &resources->getShaderHolder();
@@ -53,10 +82,15 @@ void DDEComponent::compose() {
 	TwWindowSize(screenDimension.WIDTH, screenDimension.HEIGHT);
 	TwDefine(" TW_HELP visible=false ");
 	
-	create();
+}
 
-	hud->loadingScreen("Loading objects...");
-	objects->create();
+void DDEComponent::buildAll() {
+	hud->loadingScreen("Compiling shaders...");
+	compileShaders();
+
+	hud->loadingScreen("Loading scene...");
+	create();
+	scenes->create();
 }
 
 void DDEComponent::onRender() {
@@ -64,7 +98,7 @@ void DDEComponent::onRender() {
 	updateHUD();
 	
 	render();
-	objects->render();
+	scenes->render();
 	
 	hud->render();
 	gui->render();
@@ -93,30 +127,6 @@ bool DDEComponent::isRunning() {
 void DDEComponent::quit() {
 	running = false;
 	PostQuitMessage(0);
-}
-
-Config& DDEComponent::getConfig() {
-	return config;
-}
-
-ObjectManager* DDEComponent::getObjectManager() {
-	return objects;
-}
-
-GUIRenderer* DDEComponent::getGUI() {
-	return gui;
-}
-
-HUDRenderer* DDEComponent::getHUD() {
-	return hud;
-}
-
-Controls* DDEComponent::getControlls() {
-	return controlls;
-}
-
-ResourceProvider* DDEComponent::getResources() {
-	return resources;
 }
 
 void DDEComponent::cleanUp() {

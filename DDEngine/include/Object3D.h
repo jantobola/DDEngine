@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Vertex.h"
-#include "RenderContext.h"
 #include <vector>
 #include <windows.h>
 #include <DirectXMath.h>
 #include <d3d11.h>
+#include "D3DUtils.h"
 #include <unordered_map>
 
 namespace DDEngine
@@ -89,10 +89,7 @@ namespace DDEngine
 
 		protected:
 
-			// Pointers to Direct3D device and context.
-			// These are obtained after registerModel call.
-			ID3D11Device* device = nullptr;
-			ID3D11DeviceContext* context = nullptr;
+			RenderContext* Ctx;
 
 			// Public name of a model to handle console command calls for this model.
 			std::string modelName;
@@ -103,6 +100,8 @@ namespace DDEngine
 			// Model will be rendered as many times as a size of this container.
 			// In most cases container will contain only one shader combination.
 			std::vector<Shaders> shaders;
+
+			std::vector<ShaderResourceView*> textures;
 
 			// Load your geometry and other things in child classes from whatever you want.
 			virtual void loadGeometry(std::vector<Mesh>& meshes) = 0;
@@ -124,8 +123,7 @@ namespace DDEngine
 			virtual ~Object3D();
 
 			// It will stop or start rendering of a model.
-			void setVisible(bool isVisible);
-
+			void setVisible(bool isVisible) { this->visibleFlag = isVisible; }
 			// Returns a flag mesh is visible or hidden.
 			bool isVisible() { return visibleFlag; }
 
@@ -135,11 +133,14 @@ namespace DDEngine
 			void enableShaderCombination(std::string name);
 			void disableShaderCombination(std::string name);
 
+			void addTexture(const std::string& path);
+
 			std::vector<Shaders>& getShaders() { return shaders; }
+			const std::string getName() { return modelName; }
 
 			// Converts an engine structure into a Direct3D structure. This method should be
 			// called in a pre-render stage.
-			virtual void registerObject(ID3D11Device* device, ID3D11DeviceContext* context);
+			virtual void registerObject(const std::string& modelName, RenderContext& Ctx);
 			
 			// Finally draw a complete model.
 			virtual void draw();
@@ -154,7 +155,7 @@ namespace DDEngine
 
 			// Applies a scale transformation on a model.
 			void scale(float x, float y, float z);
-			void scale(float scale);
+			void scale(float xyz);
 
 			// Applies a translation transformation on a model.
 			void translate(float x, float y, float z);

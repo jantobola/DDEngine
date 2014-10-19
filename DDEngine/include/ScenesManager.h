@@ -10,23 +10,23 @@ class IRenderable;
 class RenderContext;
 class Config;
 
-class ObjectManager {
+class ScenesManager {
 	
 	private:
 
 		Config& config;
 		RenderContext& renderContext;
-		std::vector<IRenderable*> renderableObjects;
+		std::vector<IRenderable*> renderableScenes;
 		std::tr1::unordered_set<std::string> hiddenObjects;
 
 	public:
 
-		ObjectManager(Config& config, RenderContext& renderContext);
-		~ObjectManager();
+		ScenesManager(Config& config, RenderContext& renderContext);
+		~ScenesManager();
 
-		void addObject(IRenderable* renderableObject);
-		void hide(std::string name);
-		void show(std::string name);
+		void addScene(IRenderable* renderableScene);
+		void hide(const std::string& name);
+		void show(const std::string& name);
 		
 		void create();
 		void render();

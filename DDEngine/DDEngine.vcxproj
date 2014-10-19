@@ -177,7 +177,7 @@
     <ClInclude Include="include\IRenderable.h" />
     <ClInclude Include="include\Object3D.h" />
     <ClInclude Include="include\ModelObject.h" />
-    <ClInclude Include="include\ObjectManager.h" />
+    <ClInclude Include="include\ScenesManager.h" />
     <ClInclude Include="include\PixelShaderEnvelope.h" />
     <ClInclude Include="include\QuadObject.h" />
     <ClInclude Include="include\RenderableSkybox.h" />
@@ -216,7 +216,7 @@
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="src\Object3D.cpp" />
     <ClCompile Include="src\ModelObject.cpp" />
-    <ClCompile Include="src\ObjectManager.cpp" />
+    <ClCompile Include="src\ScenesManager.cpp" />
     <ClCompile Include="src\QuadObject.cpp" />
     <ClCompile Include="src\RenderableSkybox.cpp" />
     <ClCompile Include="src\RenderContext.cpp" />

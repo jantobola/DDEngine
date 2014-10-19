@@ -6,11 +6,12 @@
 #include "Config.h"
 #include "D3DRenderer.h"
 #include "DDERenderPackage.h"
+#include "CommandExecutor.h"
 
 namespace DDEngine
 {
 
-class ObjectManager;
+class ScenesManager;
 class GUIRenderer;
 class Controls;
 class HUDRenderer;
@@ -23,6 +24,9 @@ class DDEComponent : public D3DRenderer {
 		bool running = true;
 		bool renderStep = false;
 
+		CommandExecutor* commandExecutor;
+
+		void compileShaders();
 		void updateHUD();
 		void cleanUp();
 		
@@ -31,18 +35,21 @@ class DDEComponent : public D3DRenderer {
 		DDEComponent(std::string configPath = DDE_CONFIG_PATH);
 		virtual ~DDEComponent();
 	
-		Config& getConfig();
-		// should return reference instead of pointers!
-		ObjectManager* getObjectManager();
-		GUIRenderer* getGUI();
-		HUDRenderer* getHUD();
-		Controls* getControlls();
-		ResourceProvider* getResources();
+		Config& getConfig() { return config; }
+		ScenesManager& getScenesManager() { return *scenes; }
+		GUIRenderer& getGUI() { return *gui; }
+		HUDRenderer& getHUD() { return *hud; }
+		Controls& getControlls() { return *controlls; }
+		ResourceProvider& getResources() { return *resources; }
 
 		DDERenderPackage getRenderPackage();
 
+		void setCommandExecutor(CommandExecutor& executor) { this->commandExecutor = &executor; }
+		CommandExecutor& getCommandExecutor() { return *commandExecutor; }
+
 		void initDevice(HWND hWnd);
 		void compose();
+		void buildAll();
 
 		void setHInstance(HINSTANCE hInstance);
 		HINSTANCE getHInstance();
@@ -54,19 +61,19 @@ class DDEComponent : public D3DRenderer {
 
 		Config config;
 		
-		ObjectManager* objects = nullptr;
+		ScenesManager* scenes = nullptr;
 		GUIRenderer* gui = nullptr;
 		HUDRenderer* hud = nullptr;
 		Controls* controlls = nullptr;
 		ResourceProvider* resources = nullptr;
 
 		// do not delete
-		ShaderHolder*		shaders;
+		ShaderHolder* shaders;
 		
 		virtual void onRender() override;
 
 		virtual void render() = 0;
 		virtual void create() = 0;
-		
+
 };
 }

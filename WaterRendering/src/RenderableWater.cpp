@@ -19,25 +19,25 @@ void RenderableWater::create() {
 
 	hud.loadingScreen("Loading water resources...");
 
-	setSize(config.WATER_GRID_X, config.WATER_GRID_Y);
+	setSize(1024, 1024);
 
 	DXUtils::createSamplerState(Ctx.device, &samplerPointClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_POINT, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 	DXUtils::createSamplerState(Ctx.device, &samplerLinearClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 	DXUtils::createSamplerState(Ctx.device, &samplerLinearWrap, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_WRAP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 
 	waterSurface = Grid(size.WIDTH, size.HEIGHT);
-	waterSurface.registerObject(Ctx.device, Ctx.context);
+	waterSurface.registerObject("waterSurface", Ctx);
 
-	computeTexture_0 = RenderToTexture(Ctx.device, Ctx.context);
+	computeTexture_0 = RenderToTexture(Ctx);
 	computeTexture_0.create(size.WIDTH, size.HEIGHT);
 
-	computeTexture_1 = RenderToTexture(Ctx.device, Ctx.context);
+	computeTexture_1 = RenderToTexture(Ctx);
 	computeTexture_1.create(size.WIDTH, size.HEIGHT);
 
-	computeTexture_2 = RenderToTexture(Ctx.device, Ctx.context);
+	computeTexture_2 = RenderToTexture(Ctx);
 	computeTexture_2.create(size.WIDTH, size.HEIGHT);
 
-	computeTexture_3 = RenderToTexture(Ctx.device, Ctx.context);
+	computeTexture_3 = RenderToTexture(Ctx);
 	computeTexture_3.create(size.WIDTH, size.HEIGHT);
 
 	vsCB_2.sizeX = (float) size.WIDTH;
@@ -48,9 +48,6 @@ void RenderableWater::create() {
 	computeTexture_2.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX2");
 	computeTexture_3.setShaders("VS_QuadObject", "PS_WaterComputation_T", "POS3_TEX2");
 	waterSurface.addShaderCombination("RenderableWater", "VS_WaterVDisplacement", "PS_WaterOptical", "POS2");
-
-	vsCB_2.height = config.DROP_STRENGTH;
-	vsCB_2.viscosity = config.VISCOSITY;
 
 	setTweakBars();
 }

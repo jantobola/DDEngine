@@ -53,6 +53,8 @@ void DDEngine::ModelObject::loadGeometry(std::vector<Mesh>& meshes)
 				nor->x, nor->y, nor->z
 			);
 
+			ddeMesh.materialIndex = mesh->mMaterialIndex;
+
 		}
 
 		for (size_t j = 0; j < mesh->mNumFaces; j++) {
@@ -74,4 +76,26 @@ void DDEngine::ModelObject::loadGeometry(std::vector<Mesh>& meshes)
 
 		meshes.push_back(ddeMesh);
 	}
+
+	for (size_t i = 0; i < scene->mNumMaterials; i++) {
+		const aiMaterial* material = scene->mMaterials[i];
+		ShaderResourceView* texture = nullptr;
+
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+			aiString Path;
+
+			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+				std::string path = Path.data;
+				texture = TextureUtils::createTexture("res/models/" + path, *Ctx);
+			}
+		
+		}
+
+		if(texture) {
+			textures.push_back(texture);
+		} else {
+			textures.push_back(TextureUtils::createTexture("res/textures/transparent.png", *Ctx));
+		}
+	}
+
 }

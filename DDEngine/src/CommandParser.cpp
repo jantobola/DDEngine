@@ -5,12 +5,18 @@
 using namespace DDEngine;
 using namespace std;
 
-void CommandParser::parse(vector<string>* store, char delimiter, string line) {
+void CommandParser::parse(vector<string>* store, char delimiter, char argDelimiter, string line) {
 
 	stringstream ssLine(line);
 	string item;
 
-	while (getline(ssLine, item, delimiter)) {
+	getline(ssLine, item, delimiter);
+	store->push_back(item);
+
+	getline(ssLine, item, delimiter);
+	ssLine = stringstream(item);
+	
+	while (getline(ssLine, item, argDelimiter)) {
 		store->push_back(item);
 	}
 

@@ -13,7 +13,7 @@ ConfigLoader::~ConfigLoader() {
 
 }
 
-void ConfigLoader::parseConfig(string filename) {
+void ConfigLoader::parseConfig(std::string filename, CFG_SECTION loadSection /*= ALL*/) {
 	ifstream input(filename);
 	if(!input.is_open()) return;
 
@@ -35,12 +35,16 @@ void ConfigLoader::parseConfig(string filename) {
 		switch (section) {
 
 			case STARTUP:
-				CommandParser::parse(&cmdParsed, CONFIG_CMD_DELIMITER, line);
-				startupCmds.push_back(cmdParsed);
+				if (loadSection == ALL || loadSection == STARTUP) {
+					CommandParser::parse(&cmdParsed, CONFIG_CMD_DELIMITER, CONFIG_ARG_DELIMITER, line);
+					startupCmds.push_back(cmdParsed);
+				}
 				break;
 
 			case RENDER:
-				renderCmds.push_back(line);
+				if (loadSection == ALL || loadSection == RENDER) {
+					renderCmds.push_back(line);
+				}
 				break;
 		}
 	}

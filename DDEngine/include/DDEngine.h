@@ -16,7 +16,7 @@
 #include "Camera.h"					   //
 #include "Timer.h"					   //
 #include "RenderContext.h"			   //
-#include "ObjectManager.h"			   //
+#include "ScenesManager.h"			   //
 #include "IRenderable.h"			   //
 #include "InputHandler.h"			   //
 #include "DDEComponent.h"			   //

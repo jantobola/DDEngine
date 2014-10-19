@@ -8,9 +8,8 @@ RenderToTexture::RenderToTexture() {
 
 }
 
-RenderToTexture::RenderToTexture(ID3D11Device* device, ID3D11DeviceContext* context) {
-	this->device = device;
-	this->context = context;
+RenderToTexture::RenderToTexture(RenderContext& Ctx) {
+	this->Ctx = &Ctx;
 }
 
 RenderToTexture::~RenderToTexture() {
@@ -40,14 +39,14 @@ HRESULT RenderToTexture::create(int width, int height, DXGI_FORMAT format) {
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = 0;
 
-	result = device->CreateTexture2D(&textureDesc, NULL, &texture2D);
+	result = Ctx->device->CreateTexture2D(&textureDesc, NULL, &texture2D);
 	HRESULT_RETURN_CHECK(result)
 
 	renderTargetViewDesc.Format = textureDesc.Format;
 	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
-	result = device->CreateRenderTargetView(texture2D, &renderTargetViewDesc, &renderTargetView);
+	result = Ctx->device->CreateRenderTargetView(texture2D, &renderTargetViewDesc, &renderTargetView);
 	HRESULT_RETURN_CHECK(result);
 
 	shaderResourceViewDesc.Format = textureDesc.Format;
@@ -55,15 +54,15 @@ HRESULT RenderToTexture::create(int width, int height, DXGI_FORMAT format) {
 	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-	result = device->CreateShaderResourceView(texture2D, &shaderResourceViewDesc, &shaderResourceView);
+	result = Ctx->device->CreateShaderResourceView(texture2D, &shaderResourceViewDesc, &shaderResourceView);
 	
-	quad.registerObject(device, context);
+	quad.registerObject("", *Ctx);
 
 	return result;
 }
 
 HRESULT DDEngine::RenderToTexture::createDepth() {
-	return DXUtils::createDepthStencilBuffer(device, context, DDEngine::Dimension(width, height), &depthStencilView, &depthStencilBuffer, 1);
+	return DXUtils::createDepthStencilBuffer(Ctx->device, Ctx->context, DDEngine::Dimension(width, height), &depthStencilView, &depthStencilBuffer, 1);
 }
 
 ShaderResourceView* RenderToTexture::getShaderResourceView() {

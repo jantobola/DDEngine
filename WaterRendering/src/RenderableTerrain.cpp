@@ -36,7 +36,7 @@ void RenderableTerrain::create() {
 		hmapInfo.Width = width;
 		hmapInfo.Height = height;
 
-		proceduralTerrainTexture = RenderToTexture(Ctx.device, Ctx.context);
+		proceduralTerrainTexture = RenderToTexture(Ctx);
 		proceduralTerrainTexture.create(width, height);
 
 		Ctx.setRenderTarget(proceduralTerrainTexture.getRenderTargetView(), nullptr);
@@ -61,21 +61,19 @@ void RenderableTerrain::create() {
 	D3DX11CreateShaderResourceViewFromFile(Ctx.device, L"res/textures/greengrasstex.jpg", nullptr, nullptr, &dustTexture, nullptr);
 	DXUtils::createSamplerState(Ctx.device, &samplerLinearClamp, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_CLAMP, ComparisonFunction::D3D11_COMPARISON_NEVER);
 	DXUtils::createSamplerState(Ctx.device, &samplerLinearWrap, FilterType::D3D11_FILTER_MIN_MAG_MIP_LINEAR, TextureAddressMode::D3D11_TEXTURE_ADDRESS_WRAP, ComparisonFunction::D3D11_COMPARISON_NEVER);
-	DXUtils::createSamplerState(Ctx.device, &samplerAnisotropicWrap, FilterType::D3D11_FILTER_ANISOTROPIC, TextureAddressMode::D3D11_TEXTURE_ADDRESS_WRAP, ComparisonFunction::D3D11_COMPARISON_NEVER, config.AF);
+	DXUtils::createSamplerState(Ctx.device, &samplerAnisotropicWrap, FilterType::D3D11_FILTER_ANISOTROPIC, TextureAddressMode::D3D11_TEXTURE_ADDRESS_WRAP, ComparisonFunction::D3D11_COMPARISON_NEVER, 16);
 
-	terrain = Grid(config.TERRAIN_GRID_X, config.TERRAIN_GRID_Y);
+	terrain = Grid(512, 512);
 	
 	vsCB_1.textureSize = XMFLOAT2((float) hmapInfo.Width, (float) hmapInfo.Height);
 
 	terrain.addShaderCombination("RenderableTerrain", TERRAIN_SHADERS);
-	terrain.registerObject(Ctx.device, Ctx.context);
+	terrain.registerObject("terrainGrid", Ctx);
 
-	perspectiveView = RenderToTexture(Ctx.device, Ctx.context);
+	perspectiveView = RenderToTexture(Ctx);
 	perspectiveView.create(Ctx.screenDimension.WIDTH, Ctx.screenDimension.HEIGHT, DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM);
 	perspectiveView.createDepth();
 
-	vsCB_1.elevationFactor = config.ELEVATION_FACTOR;
-	vsCB_1.textureScaleFactor = config.TERRAIN_TEXTURE_SCALE;
 	setTweakBars();
 }
 

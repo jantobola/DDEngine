@@ -1,4 +1,5 @@
 #include "RenderContext.h"
+#include <Object3D.h>
 
 using namespace DDEngine;
 
@@ -95,6 +96,16 @@ void RenderContext::clearRenderTarget( ID3D11RenderTargetView* renderTarget, ID3
 void DDEngine::RenderContext::clearRenderTarget(float bgColor[], ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView) {
 	context->ClearRenderTargetView(renderTarget, bgColor);
 	if(depthStencilView) context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+Object3D* DDEngine::RenderContext::getRegisteredObject(const std::string& name) {
+	for (Object3D* object : objectContainer) {
+		if (object->getName() == name) {
+			return object;
+		}
+	}
+
+	return nullptr;
 }
 
 void RenderContext::setViewport( int x, int y, int width, int height ) {

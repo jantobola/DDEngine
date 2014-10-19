@@ -1,11 +1,23 @@
 #pragma once
 
 #include "ConfigLoader.h"
+#include "ShaderHolder.h"
+#include <functional>
 
 #define DDE_CONFIG_PATH "config.cfg"
 
 namespace DDEngine
 {
+
+	struct ShaderConfig
+	{
+		std::string name;
+		std::string file;
+		std::string model;
+		std::string entry;
+		ShaderType type;
+	};
+
 class Config : public ConfigLoader {
 	
 	typedef std::string string;
@@ -13,6 +25,7 @@ class Config : public ConfigLoader {
 
 	private:
 		string path;
+		std::function<void(const std::vector<std::string>&)> _delegate;
 
 	public:
 		Config();
@@ -21,7 +34,9 @@ class Config : public ConfigLoader {
 		string getConfigPath();
 		void setConfigPath(string path);
 
-		void load();
+		void load(CFG_SECTION section = CFG_SECTION::ALL);
+		virtual void delegate(std::function<void(const std::vector<std::string>&)> func);
+
 		std::vector<string> getRenderConfig();
 
 		string CFG_VERTEX_SHADER_MODEL;
@@ -32,22 +47,7 @@ class Config : public ConfigLoader {
 		int MSAA = 1;
 		int AF = 16;
 
-
-		// NOT ENGINE RELATED THINGS
-		int WATER_GRID_X = 256;
-		int WATER_GRID_Y = 256;
-
-		int TERRAIN_GRID_X = 256;
-		int TERRAIN_GRID_Y = 256;
-		float TERRAIN_TEXTURE_SCALE = 1;
-
-		float ELEVATION_FACTOR = 0.28f;
-		float DROP_STRENGTH = 0.0029f;
-		float VISCOSITY = 0.9975f;
-
-		float LIGHT_DIR_X = 1;
-		float LIGHT_DIR_Y = 1;
-		float LIGHT_DIR_Z = 1;
+		std::vector<ShaderConfig> shaders;
 
 };
 }

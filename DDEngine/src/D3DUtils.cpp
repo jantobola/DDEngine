@@ -4,6 +4,7 @@
 #include <DirectXTK/DDSTextureLoader.h>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
+#include <D3DX11.h>
 
 using namespace DDEngine;
 
@@ -464,3 +465,25 @@ HRESULT DDEngine::DXUtils::createCubeTextureResource(_In_ ID3D11Device* device, 
 
 	return result;
 }
+
+ShaderResourceView* DDEngine::TextureUtils::createTexture(_In_ const std::string& file, _In_ const RenderContext& Ctx)
+{
+	ShaderResourceView* texture;
+	D3DX11CreateShaderResourceViewFromFile(Ctx.device, StringUtils::toWstring(file).c_str(), nullptr, nullptr, &texture, nullptr);
+	return texture;
+}
+
+/*
+DDEngine::ImageInfo DDEngine::TextureUtils::getImageInfo(_In_ const std::string& file)
+{
+	HRESULT result;
+	ImageInfo info;
+	D3DX11GetImageInfoFromFile(StringUtils::toWstring(file).c_str(), nullptr, &info, &result);
+
+	if (FAILED(result)) {
+		Win32Utils::showFailMessage(result, "Image Info Error", "Error occured during obtaining image info.");
+	}
+
+	return info;
+}
+*/

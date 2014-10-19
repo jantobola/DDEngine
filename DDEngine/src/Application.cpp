@@ -39,7 +39,7 @@ int Application::run() {
 	component.initDevice(window->getHwnd());
 	window->show();
 
-	component.getHUD()->loadingScreen("Initializing...");
+	component.getHUD().loadingScreen("Initializing...");
 	component.compose();
 
 	// create console for a given DDEComponent
@@ -50,8 +50,11 @@ int Application::run() {
 		window->setHandler(input);
 	}
 
+	component.setCommandExecutor(console.getExecutor());
+	component.buildAll();
+
 	console.getExecutor().executeBatch(cfg.getRenderConfig());
-	component.getHUD()->clearNotifications();
+	component.getHUD().clearNotifications();
 	component.getTimer().init();
 
 	while ((msg.message != WM_QUIT) && component.isRunning()) {

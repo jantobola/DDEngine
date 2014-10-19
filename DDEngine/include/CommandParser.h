@@ -13,7 +13,7 @@ class CommandParser {
 
 	public:
 		static void parse(std::vector<std::string>* store, 
-						  char delimiter, std::string line);
+						  char delimiter, char argDelimiter, std::string line);
 
 };
 }
