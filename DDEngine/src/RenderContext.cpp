@@ -25,7 +25,9 @@ D3D11_PRIMITIVE_TOPOLOGY DDEngine::translatePrimitiveTopology(PrimitiveTopology 
 }
 
 RenderContext::RenderContext() {
+
 	setBackgroundColor(255, 255, 255, 255);
+	
 	wireframe = false;
 	multiSampling = 1;
 
@@ -106,6 +108,16 @@ Object3D* DDEngine::RenderContext::getRegisteredObject(const std::string& name) 
 	}
 
 	return nullptr;
+}
+
+const int DDEngine::RenderContext::getRegisteredObjectIndex(const std::string& name)
+{
+	for (size_t i = 0; i < objectContainer.size(); i++) {
+		if (objectContainer[i]->getName() == name)
+			return i;
+	}
+
+	return -1;
 }
 
 void RenderContext::setViewport( int x, int y, int width, int height ) {

@@ -30,6 +30,7 @@ class D3DRenderer {
 		
 		Timer& getTimer();
 		Camera& getCamera();
+		RenderContext& getRenderContext() { return Ctx; }
 
 	protected:
 

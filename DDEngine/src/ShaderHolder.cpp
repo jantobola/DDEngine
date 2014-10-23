@@ -31,9 +31,11 @@ void ShaderHolder::load() {
 
 	DataContainer VS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 201);
 	DataContainer PS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 202);
+	DataContainer PS_White = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 203);
 
 	addVertexShaderFromMemory("DDEngine_VS_Skybox", VS_Skybox.dataBlob, VS_Skybox.dataSize, "vs_4_0");
 	addPixelShaderFromMemory("DDEngine_PS_Skybox", PS_Skybox.dataBlob, PS_Skybox.dataSize, "ps_4_0");
+	addPixelShaderFromMemory("DDEngine_PS_White", PS_White.dataBlob, PS_White.dataSize, "ps_4_0");
 
 	D3D11_INPUT_ELEMENT_DESC POS3_TEX2[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },

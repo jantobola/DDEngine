@@ -23,33 +23,39 @@ void DDEngine::InputHandler::onKeyTypedInternal(WPARAM wParam) {
 
 	// F1 - solid
 	KEY(VK_F1, wParam) {
-		cmd.executeCommand("render_wireframe = false");
+		cmd.executeCommand("renderer.wireframe = false");
 	}
 
 	//F2 - wireframe
 	KEY(VK_F2, wParam) {
-		cmd.executeCommand("render_wireframe = true");
+		cmd.executeCommand("renderer.wireframe = true");
 	}
 
 	//F5 - listen all shaders to changes
 	KEY(VK_F5, wParam) {
-		cmd.executeCommand("shaders_listen_all");
+		cmd.executeCommand("shaders.listenAll");
 	}
 
 	//F6 - stop listening to changes
 	KEY(VK_F6, wParam) {
-		cmd.executeCommand("shaders_stop");
+		cmd.executeCommand("shaders.stop");
 	}
 
 	//F8 - reset camera
 	KEY(VK_F8, wParam) {
-		cmd.executeCommand("cam_reset");
+		cmd.executeCommand("camera.reset");
 	}
 
 	//F9 - save camera
 	KEY(VK_F9, wParam) {
-		cmd.executeCommand("cam_save");
+		cmd.executeCommand("camera.save");
 	}
+
+	//F9 - save camera
+	KEY(VK_F10, wParam) {
+		cmd.executeCommand("camera.load");
+	}
+
 }
 
 void InputHandler::handleAsyncInput() {

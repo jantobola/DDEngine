@@ -42,6 +42,11 @@ namespace DDEngine
 		Dimension getDimensionFromHandle(HWND hwnd);
 	}
 
+	namespace AntUtils
+	{
+		void setAppearance(const std::string& barName);
+	}
+
 }
 
 #define HRESULT_RETURN_CHECK(result) if(FAILED(result)) return result;

@@ -61,20 +61,20 @@ int Application::run() {
        
 		component.getTimer().start();
 		component.getCamera().update();
-
+	
 		if( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) ) {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
-        } else {
+        } 
 
-			if (input) {
-				if (console.isHidden() && input->hasFocus()) {
-					input->handleAsyncInput();
-				}
+		if (input) {
+			if (console.isHidden() && input->hasFocus()) {
+				input->handleAsyncInput();
 			}
+		}
 
-            component.renderFrame();
-       }
+		component.renderFrame();
+       
     }
 
 	return (int) msg.wParam;

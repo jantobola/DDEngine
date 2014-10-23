@@ -1,5 +1,6 @@
 #include "Object3D.h"
 #include "DDEUtils.h"
+#include "ShaderHolder.h"
 
 using namespace DirectX;
 
@@ -52,6 +53,17 @@ void DDEngine::Object3D::draw(const Mesh& mesh)
 	}
 
 	Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
+
+	// Draw some visual effect when object is selected
+	if (selected) {
+		Ctx->context->RSSetState(Ctx->RSWiredCullBack);
+
+		Ctx->getShaderHolder()->activatePS("DDEngine_PS_White");
+		Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
+
+		Ctx->setRasterizerState(Ctx->currentRasterizerState);
+	}
+
 }
 
 void DDEngine::Object3D::draw()

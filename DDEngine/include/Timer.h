@@ -9,15 +9,17 @@ namespace DDEngine
 class Timer {
 
 	private:
-		long current;
-		long previous;
+		long long current;
+		long long previous;
 
 		int counter;
-		long tickTime;
+		long long tickTime;
 		int FPS;
 
+		long long time();
+
 	public:
-		long delta;
+		long long delta;
 
 		Timer();
 		~Timer();

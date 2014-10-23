@@ -74,14 +74,17 @@ void DDEComponent::compose() {
 	gui			= new GUIRenderer(config, Ctx);
 	resources	= new ResourceProvider(config, Ctx);
 	shaders		= &resources->getShaderHolder();
-
+	
 	resources->load();
+	Ctx.setShaderHolder(shaders);
 	hud->addText("fps", "", 10, 10);
 
 	TwInit(TW_DIRECT3D11, Ctx.device);
 	TwWindowSize(screenDimension.WIDTH, screenDimension.HEIGHT);
 	TwDefine(" TW_HELP visible=false ");
-	
+	TwDefine(" GLOBAL fontstyle=fixed ");
+	TwDefine(" GLOBAL fontresizable=false ");
+
 }
 
 void DDEComponent::buildAll() {
@@ -98,7 +101,7 @@ void DDEComponent::onRender() {
 	updateHUD();
 	
 	render();
-	scenes->render();
+	scenes->render(getRenderPackage());
 	
 	hud->render();
 	gui->render();

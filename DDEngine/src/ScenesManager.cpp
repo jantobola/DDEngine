@@ -19,13 +19,19 @@ void ScenesManager::addScene(IRenderable* renderableScene) {
 }
 
 void ScenesManager::create() {
+
+	transformator.setObjects(renderContext.getRegisteredObjects());
+	transformator.initBar(config.CFG_SCREEN_WIDTH, config.CFG_SCREEN_HEIGHT);
+	transformator.setEnabledTransformations(false);
+
 	for (size_t i = 0; i < renderableScenes.size(); i++) {
 		IRenderable* object = renderableScenes.at(i);
 		if(object) object->create();
 	}
 }
 
-void ScenesManager::render() {
+void ScenesManager::render(const DDERenderPackage pkg) {
+
 	for (size_t i = 0; i < renderableScenes.size(); i++) {
 		IRenderable* object = renderableScenes.at(i);
 		
@@ -36,6 +42,8 @@ void ScenesManager::render() {
 			}
 		}
 	}
+
+	transformator.transform(pkg);
 }
 
 void ScenesManager::hide(const std::string& name) {

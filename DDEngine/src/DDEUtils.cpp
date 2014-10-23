@@ -3,6 +3,8 @@
 #include <cctype>
 #include <iomanip>
 #include <algorithm>
+#include <vector>
+#include <AntTweakBar/AntTweakBar.h>
 
 using namespace DDEngine;
 
@@ -91,4 +93,19 @@ void DDEngine::Win32Utils::showMessage(std::string title, std::string message)
 	std::wstring tit = StringUtils::toWstring(title);
 	std::wstring msg = StringUtils::toWstring(message);
 	MessageBox(NULL, msg.c_str(), tit.c_str(), MB_OK);
+}
+
+void DDEngine::AntUtils::setAppearance(const std::string& barName)
+{
+	std::vector<const std::string> commands;
+
+	commands.push_back(" " + barName + " alpha=230 ");
+	commands.push_back(" " + barName + " color='255 255 255' ");
+	commands.push_back(" " + barName + " iconifiable=true ");
+	commands.push_back(" " + barName + " text=dark ");
+
+	for (const std::string& cmd : commands) {
+		TwDefine(cmd.c_str());
+	}
+
 }

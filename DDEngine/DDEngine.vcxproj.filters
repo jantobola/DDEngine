@@ -195,7 +195,10 @@
       <Filter>Header Files\object</Filter>
     </ClInclude>
     <ClInclude Include="include\ScenesManager.h">
-      <Filter>Header Files\object</Filter>
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneTransformator.h">
+      <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -299,7 +302,10 @@
       <Filter>Source Files\object</Filter>
     </ClCompile>
     <ClCompile Include="src\ScenesManager.cpp">
-      <Filter>Source Files\object</Filter>
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneTransformator.cpp">
+      <Filter>Source Files\scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

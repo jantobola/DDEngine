@@ -20,23 +20,31 @@ void DDEngine::Timer::init() {
 	tickTime = previous;
 }
 
-void DDEngine::Timer::pause()
-{
-	delta = 0;
-}
-
 void Timer::start() {
-	current = timeGetTime();
+	current = time();
 	delta = current - previous;
 	previous = current;
 
-	if (timeGetTime() - tickTime >= FPS_REFRESH_INTERVAL) {
+	if (current - tickTime >= FPS_REFRESH_INTERVAL) {
 		FPS = counter * (1000 / FPS_REFRESH_INTERVAL);
 		counter = 0;
-		tickTime = timeGetTime();
+		tickTime = current;
 	}
 
 	counter++;
+}
+
+long long DDEngine::Timer::time() {
+	static LARGE_INTEGER s_frequency;
+	static BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
+	if (s_use_qpc) {
+		LARGE_INTEGER now;
+		QueryPerformanceCounter(&now);
+		return (1000LL * now.QuadPart) / s_frequency.QuadPart;
+	}
+	else {
+		return GetTickCount();
+	}
 }
 
 int Timer::getFPS() {

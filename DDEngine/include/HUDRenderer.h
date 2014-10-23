@@ -50,7 +50,7 @@ class HUDRenderer {
 		bool isRendered;
 
 		long notificationTime = 2500;
-		long timeCycle = 0;
+		long long timeCycle = 0;
 
 		HMODULE resourcesHmodule;
 

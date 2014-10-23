@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vertex.h"
+#include "RenderContext.h"
 #include <vector>
 #include <windows.h>
 #include <DirectXMath.h>
@@ -122,6 +123,8 @@ namespace DDEngine
 			Object3D();
 			virtual ~Object3D();
 
+			bool selected = false;
+
 			// It will stop or start rendering of a model.
 			void setVisible(bool isVisible) { this->visibleFlag = isVisible; }
 			// Returns a flag mesh is visible or hidden.
@@ -165,5 +168,8 @@ namespace DDEngine
 			// Get transpose world space matrix
 			const DirectX::XMMATRIX getWorldMatrix_T();
 
+			void setRotationMatrix(const DirectX::XMFLOAT4X4 rotationMatrix) { this->rotationMatrix = rotationMatrix; }
+			void setScaleMatrix(const DirectX::XMFLOAT4X4 scaleMatrix) { this->scaleMatrix = scaleMatrix; }
+			void setTranslationMatrix(const DirectX::XMFLOAT4X4 translationMatrix) { this->translationMatrix = translationMatrix; }
 	};
 }

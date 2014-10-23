@@ -9,7 +9,8 @@
 namespace DDEngine
 {
 
-	class Object3D;
+class Object3D;
+class ShaderHolder;
 
 enum RasterizerStateType {
 	SOLID_CULL_NONE,
@@ -32,6 +33,7 @@ class RenderContext {
 
 	private:
 		std::vector<Object3D*> objectContainer;
+		ShaderHolder* shaderHolder;
 		
 	public:
 		RenderContext();
@@ -44,6 +46,7 @@ class RenderContext {
 		ID3D11DeviceContext* context;
 		IDXGISwapChain*	swapChain;
 		ID3D11RasterizerState* RSWiredCullNone;
+		ID3D11RasterizerState* RSWiredCullBack;
 		ID3D11RasterizerState* RSSolidCullBack;
 		ID3D11RasterizerState* RSSolidCullNone;
 		ID3D11BlendState* blendState;
@@ -71,8 +74,13 @@ class RenderContext {
 		void setVSResource(ID3D11ShaderResourceView* resource, int index);
 		void setPSSampler(ID3D11SamplerState* sampler, int index);
 		void setVSSampler(ID3D11SamplerState* sampler, int index);
+
+		ShaderHolder* getShaderHolder() { return shaderHolder; }
+		void setShaderHolder(ShaderHolder* shaderHolder) { this->shaderHolder = shaderHolder; }
+
 		std::vector<Object3D*>& getRegisteredObjects() { return objectContainer; }
 		Object3D* getRegisteredObject(const std::string& name);
+		const int getRegisteredObjectIndex(const std::string& name);
 
 	protected:
 	

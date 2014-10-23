@@ -7,6 +7,7 @@
 #include "ShaderHolder.h"
 #include "DDEUtils.h"
 #include "Object3D.h"
+#include "SceneTransformator.h"
 
 using namespace DDEngine;
 
@@ -42,43 +43,43 @@ void CommandExecutor::executeCommand(std::string command) {
 		END
 	}
 
-	EXECUTE("cam_reset") {
+	EXECUTE("camera.reset") {
 		component.getCamera().resetCamera();
 		INFO("Camera position reset", 2500)
 		END
 	}
 
-	EXECUTE("cam_ortho") {
+	EXECUTE("camera.ortho") {
 		component.getCamera().toOrthographicProjection();
 		INFO("Orthographic projection activated", 2500)
 		END
 	}
 
-	EXECUTE("cam_persp") {
+	EXECUTE("camera.persp") {
 		component.getCamera().toPerspectiveProjection();
 		INFO("Perspective projection activated", 2500)
 		END
 	}
 
-	EXECUTE("cam_save") {
+	EXECUTE("camera.save") {
 		component.getCamera().saveCamera();
 		INFO("Camera position saved", 2500)
 		END
 	}
 
-	EXECUTE("cam_load") {
+	EXECUTE("camera.load") {
 		component.getCamera().loadCamera();
 		INFO("Camera position loaded", 2500)
 		END
 	}
 
-	EXECUTE("shaders_listen_all") {
+	EXECUTE("shaders.listenAll") {
 		component.getResources().getShaderHolder().runRealTimeCompilerAll();
 		component.getHUD().addText("shaders", "Shaders are listening to all changes.", 100.0f, 10.0f, DirectX::Colors::White, true);
 		END
 	}
 
-	EXECUTE("shaders_stop") {
+	EXECUTE("shaders.stop") {
 		component.getResources().getShaderHolder().stopRealTimeCompiler();
 		component.getHUD().removeText("shaders");
 		INFO("Shader compiler deactivated", 2500)
@@ -89,71 +90,81 @@ void CommandExecutor::executeCommand(std::string command) {
 	CMD_ARGS(1) // Commands with one argument #################
 // ############################################################
 
-	EXECUTE("show_fps") {
+	EXECUTE("transform.enable") {
+		component.getScenesManager().getTransformator().setEnabledTransformations(ARG_BOOL(0));
+		END
+	}
+
+	EXECUTE("transform.select") {
+		component.getScenesManager().getTransformator().selectObject(component.getRenderContext().getRegisteredObjectIndex(ARG(0)));
+		END
+	}
+
+	EXECUTE("hud.fps") {
 		component.getHUD().setRender("fps", ARG_BOOL(0));
 		END
 	}
 
-	EXECUTE("render_wireframe") {
+	EXECUTE("renderer.wireframe") {
 		component.setRenderWireframe(ARG_BOOL(0));
 		END
 	}
 
-	EXECUTE("mouse_sensitivity") {
+	EXECUTE("input.sensitivity") {
 		component.getControlls().setSensitivity(ARG_FLOAT(0));
 		INFO("Mouse sensitivity changed", 2500)
 		END
 	}
 
-	EXECUTE("move_speed") {
+	EXECUTE("input.speed") {
 		component.getControlls().setSpeed(ARG_FLOAT(0));
 		INFO("Move speed changed", 2500)
 		END
 	}
 
-	EXECUTE("mouse_inverted") {
+	EXECUTE("input.inverted") {
 		component.getControlls().setMouseInverted(ARG_BOOL(0));
 		if(ARG_BOOL(0)) INFO("Mouse movement is now inverted", 2500)
 		else INFO("Mouse movement is now normal", 2500)
 		END
 	}
 
-	EXECUTE("hud_enable") {
+	EXECUTE("hud.enable") {
 		component.getHUD().setHUDRendered(ARG_BOOL(0));
 		END
 	}
 
-	EXECUTE("shaders_recompileVS") {
+	EXECUTE("shaders.recompileVS") {
 		component.getResources().getShaderHolder().recompileVertexShader(ARG(0));
 		INFO("Recompiling vertex shader: " + ARG(0), 2500);
 		END
 	}
 
-	EXECUTE("shaders_recompilePS") {
+	EXECUTE("shaders.recompilePS") {
 		component.getResources().getShaderHolder().recompilePixelShader(ARG(0));
 		INFO("Recompiling pixel shader: " + ARG(0), 2500);
 		END
 	}
 
-	EXECUTE("scene_hide") {
+	EXECUTE("scenes.hide") {
 		component.getScenesManager().hide(ARG(0));
 		INFO(ARG(0) + " scene hidden", 2500);
 		END
 	}
 
-	EXECUTE("scene_show") {
+	EXECUTE("scenes.show") {
 		component.getScenesManager().show(ARG(0));
 		INFO(ARG(0) + " scene shown", 2500);
 		END
 	}
 
-	EXECUTE("object_hide") {
+	EXECUTE("objects.hide") {
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setVisible(false);
 		INFO(ARG(0) + " object hidden", 2500);
 		END
 	}
 
-	EXECUTE("object_show") {
+	EXECUTE("objects_show") {
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setVisible(true);
 		INFO(ARG(0) + " object shown", 2500);
 		END
@@ -163,84 +174,84 @@ void CommandExecutor::executeCommand(std::string command) {
 	CMD_ARGS(2) // Commands with two arguments ################
 // ############################################################
 
-	EXECUTE("cam_znear_zfar") {
+	EXECUTE("camera.znear_zfar") {
 		component.getCamera().changeNearFar(ARG_FLOAT(0), ARG_FLOAT(1));
 		INFO("Camera ZNEAR, ZFAR changed", 2500);
 		END
 	}
 
-	EXECUTE("hud_draw") {
+	EXECUTE("hud.draw") {
 		component.getHUD().setRender(ARG(0), ARG_BOOL(1));
 		END
 	}
 
-	EXECUTE("rotateX") {
+	EXECUTE("objects.rotateX") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->rotateX(ARG_FLOAT(1));
-		INFO("Object rotated...", 2500);
+		INFO("Object rotated", 2500);
 		END
 	}
 
-	EXECUTE("rotateY") {
+	EXECUTE("objects.rotateY") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->rotateY(ARG_FLOAT(1));
-		INFO("Object rotated...", 2500);
+		INFO("Object rotated", 2500);
 		END
 	}
 
-	EXECUTE("rotateZ") {
+	EXECUTE("objects.rotateZ") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->rotateZ(ARG_FLOAT(1));
-		INFO("Object rotated...", 2500);
+		INFO("Object rotated", 2500);
 		END
 	}
 
-	EXECUTE("translateX") {
+	EXECUTE("objects.translateX") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->translate(ARG_FLOAT(1), 0, 0);
-		INFO("Object translated...", 2500);
+		INFO("Object translated", 2500);
 		END
 	}
 
-	EXECUTE("translateY") {
+	EXECUTE("objects.translateY") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->translate(0, ARG_FLOAT(1), 0);
-		INFO("Object translated...", 2500);
+		INFO("Object translated", 2500);
 		END
 	}
 
-	EXECUTE("translateZ") {
+	EXECUTE("objects.translateZ") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->translate(0, 0, ARG_FLOAT(1));
-		INFO("Object translated...", 2500);
+		INFO("Object translated", 2500);
 		END
 	}
 
-	EXECUTE("scale") {
+	EXECUTE("objects.scale") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(ARG_FLOAT(1));
-		INFO("Object scaled...", 2500);
+		INFO("Object scaled", 2500);
 		END
 	}
 
-	EXECUTE("scaleX") {
+	EXECUTE("objects.scaleX") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(ARG_FLOAT(1), 0, 0);
-		INFO("Object scaled...", 2500);
+		INFO("Object scaled", 2500);
 		END
 	}
 
-	EXECUTE("scaleY") {
+	EXECUTE("objects.scaleY") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(0, ARG_FLOAT(1), 0);
-		INFO("Object scaled...", 2500);
+		INFO("Object scaled", 2500);
 		END
 	}
 
-	EXECUTE("scaleZ") {
+	EXECUTE("objects.scaleZ") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(0, 0, ARG_FLOAT(1));
-		INFO("Object scaled...", 2500);
+		INFO("Object scaled", 2500);
 		END
 	}
 
@@ -248,7 +259,7 @@ void CommandExecutor::executeCommand(std::string command) {
 	CMD_ARGS(3) // Commands with three arguments ##############
 // ############################################################
 
-	EXECUTE("render_bgcolor") {
+	EXECUTE("renderer.bgcolor") {
 		component.setBackgroundColor(ARG_INT(0), ARG_INT(1), ARG_INT(2), 255);
 		INFO("Background window color changed", 2500);
 		END
@@ -258,24 +269,24 @@ void CommandExecutor::executeCommand(std::string command) {
 	CMD_ARGS(4) // Commands with four arguments ###############
 // ############################################################
 
-	EXECUTE("rotate") {
+	EXECUTE("objects.rotate") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->rotate(ARG_FLOAT(1), ARG_FLOAT(2), ARG_FLOAT(3));
-		INFO("Object rotated...", 2500);
+		INFO("Object rotated", 2500);
 		END
 	}
 
-	EXECUTE("translate") {
+	EXECUTE("objects.translate") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->translate(ARG_FLOAT(1), ARG_FLOAT(2), ARG_FLOAT(3));
-		INFO("Object translated...", 2500);
+		INFO("Object translated", 2500);
 		END
 	}
 
-	EXECUTE("scale") {
+	EXECUTE("objects.scale") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(ARG_FLOAT(1), ARG_FLOAT(2), ARG_FLOAT(3));
-		INFO("Object scaled...", 2500);
+		INFO("Object scaled", 2500);
 		END
 	}
 

@@ -184,6 +184,7 @@
     <ClInclude Include="include\RenderContext.h" />
     <ClInclude Include="include\RenderToTexture.h" />
     <ClInclude Include="include\ResourceProvider.h" />
+    <ClInclude Include="include\SceneTransformator.h" />
     <ClInclude Include="include\ShaderCompiler.h" />
     <ClInclude Include="include\ShaderHolder.h" />
     <ClInclude Include="include\Skybox.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="src\RenderContext.cpp" />
     <ClCompile Include="src\RenderToTexture.cpp" />
     <ClCompile Include="src\ResourceProvider.cpp" />
+    <ClCompile Include="src\SceneTransformator.cpp" />
     <ClCompile Include="src\ShaderCompiler.cpp" />
     <ClCompile Include="src\ShaderHolder.cpp" />
     <ClCompile Include="src\Skybox.cpp" />

@@ -31,6 +31,8 @@ HRESULT D3DRenderer::initialize(HWND hwnd) {
 	Win32Utils::showFailMessage(result, "Initialization error", "Cannot create Direct3D rasterizer state.");
 	result = DXUtils::createRasterizerState(Ctx.device, &Ctx.RSWiredCullNone, D3D11_CULL_NONE, D3D11_FILL_WIREFRAME, 0);
 	Win32Utils::showFailMessage(result, "Initialization error", "Cannot create Direct3D rasterizer state.");
+	result = DXUtils::createRasterizerState(Ctx.device, &Ctx.RSWiredCullBack, D3D11_CULL_BACK, D3D11_FILL_WIREFRAME, 0);
+	Win32Utils::showFailMessage(result, "Initialization error", "Cannot create Direct3D rasterizer state.");
 	result = DXUtils::createRasterizerState(Ctx.device, &Ctx.RSSolidCullNone, D3D11_CULL_NONE, D3D11_FILL_SOLID, 0);
 	Win32Utils::showFailMessage(result, "Initialization error", "Cannot create Direct3D rasterizer state.");
 

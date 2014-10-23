@@ -45,25 +45,25 @@ void Config::load(CFG_SECTION section) {
 
 		CONFIG_ARGS(1)
 
-		LOAD("window_title")
+		LOAD("app.windowTitle")
 		{
 			CFG_WINDOW_TITLE.assign(ARG(0).begin(), ARG(0).end());			
 			NEXT
 		}
 
-		LOAD("pixel_shader_model")
+		LOAD("shaders.defaultPSModel")
 		{
 			CFG_PIXEL_SHADER_MODEL = ARG(0);
 			NEXT
 		}
 
-		LOAD("vertex_shader_model")
+		LOAD("shaders.defaultVSModel")
 		{
 			CFG_VERTEX_SHADER_MODEL = ARG(0);
 			NEXT
 		}
 
-		LOAD("MSAA")
+		LOAD("renderer.MSAA")
 		{
 			MSAA = ARG_INT(0);
 			NEXT
@@ -71,7 +71,7 @@ void Config::load(CFG_SECTION section) {
 
 		CONFIG_ARGS(2)
 
-		LOAD("screen_resolution")
+		LOAD("app.screenSize")
 		{
 			CFG_SCREEN_WIDTH = ARG_INT(0);
 			CFG_SCREEN_HEIGHT = ARG_INT(1);
