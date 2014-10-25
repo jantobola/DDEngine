@@ -48,22 +48,12 @@ void DDEngine::Object3D::draw(const Mesh& mesh)
 	Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	if (textures.size() > 0) {
+		//TODO config flag if anisotropic enable
 		Ctx->setPSSampler(Ctx->commonStates->AnisotropicWrap(), 0);
 		Ctx->setPSResource(textures[mesh.materialIndex], 0);
 	}
 
 	Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
-
-	// Draw some visual effect when object is selected
-	if (selected) {
-		Ctx->context->RSSetState(Ctx->RSWiredCullBack);
-
-		Ctx->getShaderHolder()->activatePS("DDEngine_PS_White");
-		Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
-
-		Ctx->setRasterizerState(Ctx->currentRasterizerState);
-	}
-
 }
 
 void DDEngine::Object3D::draw()
@@ -72,6 +62,26 @@ void DDEngine::Object3D::draw()
 		for (Mesh mesh : meshes) {
 			draw(mesh);
 		}
+
+		// Draw some visual effect when object is selected
+		if (selected) {
+			for (Mesh mesh : meshes) {
+				UINT stride = sizeof(Vertex);
+				UINT offset = 0;
+
+				Ctx->context->IASetPrimitiveTopology(translatePrimitiveTopology(mesh.topology));
+				Ctx->context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
+				Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+				Ctx->context->RSSetState(Ctx->RSWiredCullBack);
+
+				Ctx->getShaderHolder()->activatePS("DDEngine_PS_White");
+				Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
+
+				Ctx->setRasterizerState(Ctx->currentRasterizerState);
+			}
+		}
+
 	}
 }
 

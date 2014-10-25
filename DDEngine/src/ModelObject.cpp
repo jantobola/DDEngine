@@ -4,9 +4,11 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <DirectXTex/DirectXTex.h>
 
 using namespace DDEngine;
 using namespace Assimp;
+using namespace DirectX;
 
 DDEngine::ModelObject::ModelObject(const std::string& modelPath) : Object3D()
 {
@@ -86,7 +88,21 @@ void DDEngine::ModelObject::loadGeometry(std::vector<Mesh>& meshes)
 
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
 				std::string path = Path.data;
-				texture = TextureUtils::createTexture("res/models/" + path, *Ctx);
+				std::size_t ext = path.find(".tga");
+				ScratchImage image;
+				HRESULT hr = -1;
+
+				if (ext != std::string::npos) {
+					hr = LoadFromTGAFile(StringUtils::toWstring("res/models/" + path).c_str(), nullptr, image);
+				}
+				else {
+					texture = TextureUtils::createTexture("res/models/" + path, *Ctx);
+				}
+
+				if (SUCCEEDED(hr)) {
+					hr = CreateShaderResourceView(Ctx->device, image.GetImages(), image.GetImageCount(), image.GetMetadata(), &texture);
+				}
+
 			}
 		
 		}

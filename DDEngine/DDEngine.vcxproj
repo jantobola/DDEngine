@@ -43,9 +43,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(IncludePath);$(ProjectDir)sdk\directx\include;$(ProjectDir)include;$(ProjectDir)include\include</IncludePath>
-    <LibraryPath>$(LibraryPath);$(ProjectDir)sdk\directx\lib\x86;$(ProjectDir)lib\DirectXTK\lib\$(Configuration);$(ProjectDir)lib\CEGUI\lib;$(ProjectDir)lib\Effects11\lib\$(Configuration);$(ProjectDir)lib\AntTweakBar\lib\$(Configuration);$(ProjectDir)lib\Assimp\lib</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(ProjectDir)sdk\directx\lib\x86;$(ProjectDir)lib\DirectXTex\lib\$(Configuration);$(ProjectDir)lib\DirectXTK\lib\$(Configuration);$(ProjectDir)lib\CEGUI\lib;$(ProjectDir)lib\Effects11\lib\$(Configuration);$(ProjectDir)lib\AntTweakBar\lib\$(Configuration);$(ProjectDir)lib\Assimp\lib</LibraryPath>
     <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib</ReferencePath>
-    <SourcePath>$(ProjectDir)lib\DirectXTK\src;$(ProjectDir)lib\Assimp\src;$(ProjectDir)lib\CEGUI\src;$(ProjectDir)lib\Effects11\src;$(ProjectDir)lib\AntTweakBar\src;$(ProjectDir)src;$(SourcePath)</SourcePath>
+    <SourcePath>$(ProjectDir)lib\DirectXTK\src;$(ProjectDir)lib\Assimp\src;$(ProjectDir)lib\CEGUI\src;$(ProjectDir)lib\Effects11\src;$(ProjectDir)lib\DirectXTexr\src;$(ProjectDir)lib\AntTweakBar\src;$(ProjectDir)src;$(SourcePath)</SourcePath>
     <OutDir>$(ProjectDir)bin\$(Configuration)\bin\</OutDir>
     <IntDir>$(ProjectDir)build\$(Configuration)\</IntDir>
     <TargetName>ddengine_d</TargetName>
@@ -55,7 +55,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(IncludePath);$(ProjectDir)include;$(ProjectDir)include\include;$(ProjectDir)sdk\directx\include</IncludePath>
-    <LibraryPath>$(LibraryPath);$(ProjectDir)sdk\directx\lib\x86;$(ProjectDir)lib\DirectXTK\lib\$(Configuration);$(ProjectDir)lib\CEGUI\lib;$(ProjectDir)lib\Effects11\lib\$(Configuration);$(ProjectDir)lib\AntTweakBar\lib\$(Configuration);$(ProjectDir)lib\Assimp\lib</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(ProjectDir)sdk\directx\lib\x86;$(ProjectDir)lib\DirectXTex\lib\$(Configuration);$(ProjectDir)lib\DirectXTK\lib\$(Configuration);$(ProjectDir)lib\CEGUI\lib;$(ProjectDir)lib\Effects11\lib\$(Configuration);$(ProjectDir)lib\AntTweakBar\lib\$(Configuration);$(ProjectDir)lib\Assimp\lib</LibraryPath>
     <TargetName>ddengine</TargetName>
     <OutDir>$(ProjectDir)bin\$(Configuration)\bin\</OutDir>
     <IntDir>$(ProjectDir)build\$(Configuration)\</IntDir>
@@ -99,7 +99,7 @@
     </ProjectReference>
     <Lib>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0_d.lib;CEGUIDirect3D11Renderer-0_d.lib;CEGUICommonDialogs-0_d.lib;CEGUICoreWindowRendererSet_d.lib;CEGUIExpatParser_d.lib;CEGUISILLYImageCodec_d.lib;CEGUISTBImageCodec_d.lib;CEGUITGAImageCodec_d.lib;assimpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;DirectXTex.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0_d.lib;CEGUIDirect3D11Renderer-0_d.lib;CEGUICommonDialogs-0_d.lib;CEGUICoreWindowRendererSet_d.lib;CEGUIExpatParser_d.lib;CEGUISILLYImageCodec_d.lib;CEGUISTBImageCodec_d.lib;CEGUITGAImageCodec_d.lib;assimpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
       <IgnoreSpecificDefaultLibraries>
@@ -142,7 +142,7 @@
       <Command>"$(ProjectDir)script\composeDLLs.bat" "$(ProjectDir)" "$(Configuration)"</Command>
     </PreBuildEvent>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0.lib;CEGUIDirect3D11Renderer-0.lib;CEGUICommonDialogs-0.lib;CEGUICoreWindowRendererSet.lib;CEGUIExpatParser.lib;CEGUISILLYImageCodec.lib;CEGUISTBImageCodec.lib;CEGUITGAImageCodec.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;DirectXTK.lib;DirectXTex.lib;AntTweakBar.lib;dxguid.lib;winmm.lib;comctl32.lib;d3dx11.lib;d3dx10.lib;CEGUIBase-0.lib;CEGUIDirect3D11Renderer-0.lib;CEGUICommonDialogs-0.lib;CEGUICoreWindowRendererSet.lib;CEGUIExpatParser.lib;CEGUISILLYImageCodec.lib;CEGUISTBImageCodec.lib;CEGUITGAImageCodec.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>

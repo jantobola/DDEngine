@@ -164,7 +164,7 @@ void CommandExecutor::executeCommand(std::string command) {
 		END
 	}
 
-	EXECUTE("objects_show") {
+	EXECUTE("objects.show") {
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setVisible(true);
 		INFO(ARG(0) + " object shown", 2500);
 		END

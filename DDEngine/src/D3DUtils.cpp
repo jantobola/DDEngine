@@ -267,7 +267,7 @@ HRESULT DDEngine::DXUtils::createDepthStencilBuffer(_In_ ID3D11Device* device, _
 	depthStencilDesc.Height = screenDimension.HEIGHT;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
-	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	depthStencilDesc.SampleDesc.Count = multiSampling;
 	depthStencilDesc.SampleDesc.Quality = D3D11_STANDARD_MULTISAMPLE_QUALITY_LEVELS::D3D11_STANDARD_MULTISAMPLE_PATTERN;
 	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -280,7 +280,7 @@ HRESULT DDEngine::DXUtils::createDepthStencilBuffer(_In_ ID3D11Device* device, _
 
 		D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
-	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	
 	if(multiSampling > 1) {
 		depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
@@ -469,8 +469,8 @@ HRESULT DDEngine::DXUtils::createCubeTextureResource(_In_ ID3D11Device* device, 
 ShaderResourceView* DDEngine::TextureUtils::createTexture(_In_ const std::string& file, _In_ const RenderContext& Ctx)
 {
 	ShaderResourceView* texture;
-	D3DX11CreateShaderResourceViewFromFile(Ctx.device, StringUtils::toWstring(file).c_str(), nullptr, nullptr, &texture, nullptr);
-	return texture;
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(Ctx.device, StringUtils::toWstring(file).c_str(), nullptr, nullptr, &texture, nullptr);
+	return (SUCCEEDED(hr)) ? texture : nullptr;
 }
 
 /*

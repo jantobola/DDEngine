@@ -17,6 +17,8 @@ xcopy "%project_dir%\lib\AntTweakBar\include" "%project_dir%\include\include\" /
 xcopy "%project_dir%\lib\CEGUI\include" "%project_dir%\include\include\" /s
 xcopy "%project_dir%\lib\DirectXTK\include" "%project_dir%\include\include\" /s
 xcopy "%project_dir%\lib\Effects11\include" "%project_dir%\include\include\" /s
+xcopy "%project_dir%\lib\Assimp\include" "%project_dir%\include\include\" /s
+xcopy "%project_dir%\lib\DirectXTex\include" "%project_dir%\include\include\" /s
 
 call:blank
 call:highlight "Include composer script end"
