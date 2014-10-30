@@ -236,8 +236,7 @@ HRESULT DDEngine::DXUtils::createIndexBuffer(_In_ ID3D11Device* device, _In_ std
 	return result;
 }
 
-// not good to have a hardcoded vertex type...
-HRESULT DDEngine::DXUtils::createVertexBuffer(_In_ ID3D11Device* device, _In_ std::vector<Vertex>* vertices, _Out_ ID3D11Buffer** vertexBuffer)
+HRESULT DDEngine::DXUtils::createVertexBuffer(_In_ ID3D11Device* device, _In_ const void* pSysMem, _In_ UINT structureSize, _Out_ ID3D11Buffer** vertexBuffer)
 {
 	HRESULT result = S_OK;
 
@@ -245,14 +244,14 @@ HRESULT DDEngine::DXUtils::createVertexBuffer(_In_ ID3D11Device* device, _In_ st
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex)* vertices->size();
+	vertexBufferDesc.ByteWidth = structureSize;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA vertexBufferData;
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = &(*vertices)[0];
+	vertexBufferData.pSysMem = pSysMem;
 
 	result = device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, vertexBuffer);
 	return result;
@@ -311,7 +310,7 @@ HRESULT DDEngine::DXUtils::createConstatnBuffer(_In_ ID3D11Device* device, _In_ 
 	return result;
 }
 
-HRESULT DDEngine::DXUtils::createInputLayout(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11InputLayout** inputLayout, _In_ D3D11_INPUT_ELEMENT_DESC layoutDesc[], _In_ UINT numElements)
+HRESULT DDEngine::DXUtils::createInputLayout(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11InputLayout** inputLayout, _In_ const D3D11_INPUT_ELEMENT_DESC* layoutDesc, _In_ UINT numElements)
 {
 	HRESULT result = S_OK;
 	ID3DBlob* blob = nullptr;
@@ -337,7 +336,7 @@ HRESULT DDEngine::DXUtils::createInputLayout(_In_ ID3D11Device* device, _In_ WCH
 	return result;
 }
 
-HRESULT DDEngine::DXUtils::createInputLayoutFromMemory(_In_ ID3D11Device* device, _In_ LPVOID dataBlob, _In_ DWORD dataSize, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11InputLayout** inputLayout, _In_ D3D11_INPUT_ELEMENT_DESC layoutDesc[], _In_ UINT numElements)
+HRESULT DDEngine::DXUtils::createInputLayoutFromMemory(_In_ ID3D11Device* device, _In_ LPVOID dataBlob, _In_ DWORD dataSize, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11InputLayout** inputLayout, _In_ const D3D11_INPUT_ELEMENT_DESC* layoutDesc, _In_ UINT numElements)
 {
 	HRESULT result = S_OK;
 	ID3DBlob* blob = nullptr;
@@ -363,7 +362,7 @@ HRESULT DDEngine::DXUtils::createInputLayoutFromMemory(_In_ ID3D11Device* device
 	return result;
 }
 
-HRESULT DDEngine::DXUtils::createInputLayoutFromBinary(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _Out_ ID3D11InputLayout** inputLayout, _In_ D3D11_INPUT_ELEMENT_DESC* layoutDesc, _In_ UINT numElements)
+HRESULT DDEngine::DXUtils::createInputLayoutFromBinary(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _Out_ ID3D11InputLayout** inputLayout, _In_ const D3D11_INPUT_ELEMENT_DESC* layoutDesc, _In_ UINT numElements)
 {
 	HRESULT result = S_OK;
 	ID3DBlob* blob = NULL;

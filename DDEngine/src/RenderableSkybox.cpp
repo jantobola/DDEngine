@@ -8,7 +8,7 @@ RenderableSkybox::~RenderableSkybox() {
 
 void RenderableSkybox::create() {
 	skybox.setDDSTexturePath(path);
-	skybox.addShaderCombination("DDEngine_Skybox", "DDEngine_VS_Skybox", "DDEngine_PS_Skybox", "POS3_TEX2");
+	skybox.addShaderCombination("DDEngine_Skybox", "DDEngine_VS_Skybox", "DDEngine_PS_Skybox", "POS_TEX");
 	skybox.registerObject("skybox", Ctx);
 }
 

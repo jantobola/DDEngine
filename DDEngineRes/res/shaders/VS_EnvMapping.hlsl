@@ -10,13 +10,13 @@ cbuffer Matrices : register ( b0 )
 
 struct VertexInput 
 {
-	float3 pos : POSITION;
+	float3 pos : SV_Position;
 	float2 tex : TEXCOORD;
 };
 
 struct VertexOutput
 {
-    float4 pos : SV_POSITION;
+	float4 pos : SV_Position;
 	float3 tex : TEXCOORD;
 };
 

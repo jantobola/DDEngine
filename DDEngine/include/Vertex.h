@@ -2,15 +2,20 @@
 
 #include <directxmath.h>
 
+/*
+	Deprecated, use DirectXTK/VertexTypes.h instead.	
+*/
+
+
 namespace DDEngine
 {
-struct Vertex
+struct VertexPosTexNor
 {
-	Vertex() {
+	VertexPosTexNor() {
 
 	}
 
-	Vertex(
+	VertexPosTexNor(
 		float x,	float y,	float z,
 		float u,	float v,
 		float nx,	float ny,	float nz
@@ -23,6 +28,6 @@ struct Vertex
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 texCoord;
 	DirectX::XMFLOAT3 normal;
-
 };
+
 }

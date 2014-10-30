@@ -4,7 +4,7 @@
 
 namespace DDEngine
 {
-	class QuadObject : public Object3D {
+	class QuadObject : public Object3D<DirectX::VertexPositionTexture> {
 
 	public:
 		QuadObject() : Object3D() { }

@@ -49,7 +49,9 @@ void DDEngine::ModelObject::loadGeometry(std::vector<Mesh>& meshes)
 			const aiVector3D* nor = mesh->HasNormals() ? &(mesh->mNormals[j]) : &nullVec;
 			const aiVector3D* tex = mesh->HasTextureCoords(0) ? &(mesh->mTextureCoords[0][j]) : &nullVec;
 
-			ddeMesh.VB(
+			#define VB(x, y, z, u, v, nx, ny, nz) ddeMesh.VB(VertexPositionNormalTexture(XMFLOAT3(x, y, z), XMFLOAT3(nx, ny, nz), XMFLOAT2(u, v)))
+
+			VB(
 				pos->x, pos->y, pos->z,
 				tex->x, tex->y,
 				nor->x, nor->y, nor->z

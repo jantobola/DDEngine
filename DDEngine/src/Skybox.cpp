@@ -35,7 +35,7 @@ void Skybox::loadGeometry(std::vector<Mesh>& meshes) {
 	initContext();
 	Mesh mesh;
 
-#define VB(x, y, z, u, v, nx, ny, nz) mesh.VB(x, y, z, u, v, nx, ny, nz)
+#define VB(x, y, z, u, v) mesh.VB(VertexPositionTexture(XMFLOAT3(x, y, z), XMFLOAT2(u, v)))
 #define IB(i) mesh.IB(i)
 
 	//XMStoreFloat4x4(&scaleMatrix, XMMatrixScaling(20, 20, 20));
@@ -44,40 +44,40 @@ void Skybox::loadGeometry(std::vector<Mesh>& meshes) {
 	// ---------- Vertex Buffer ------------
 
 	// FRONT FACE
-	VB( /* POS */ -1, -1, -1, /* TEX */ 0, 1, /* NOR */ -1, -1, -1);
-	VB( /* POS */ -1, +1, -1, /* TEX */ 0, 0, /* NOR */ -1, +1, -1);
-	VB( /* POS */ +1, +1, -1, /* TEX */ 1, 0, /* NOR */ +1, +1, -1);
-	VB( /* POS */ +1, -1, -1, /* TEX */ 1, 1, /* NOR */ +1, -1, -1);
+	VB( /* POS */ -1, -1, -1, /* TEX */ 0, 1);
+	VB( /* POS */ -1, +1, -1, /* TEX */ 0, 0);
+	VB( /* POS */ +1, +1, -1, /* TEX */ 1, 0);
+	VB( /* POS */ +1, -1, -1, /* TEX */ 1, 1);
 
 	// BACK FACE
-	VB( /* POS */ -1, -1, 1, /* TEX */ 1, 1, /* NOR */ -1, -1, 1);
-	VB( /* POS */  1, -1, 1, /* TEX */ 0, 1, /* NOR */  1, -1, 1);
-	VB( /* POS */  1, 1, 1, /* TEX */ 0, 0, /* NOR */  1, 1, 1);
-	VB( /* POS */ -1, 1, 1, /* TEX */ 1, 0, /* NOR */ -1, 1, 1);
+	VB( /* POS */ -1, -1, 1, /* TEX */ 1, 1);
+	VB( /* POS */  1, -1, 1, /* TEX */ 0, 1);
+	VB( /* POS */  1, 1, 1, /* TEX */ 0, 0);
+	VB( /* POS */ -1, 1, 1, /* TEX */ 1, 0);
 
 	// TOP FACE
-	VB( /* POS */ -1, 1, -1, /* TEX */ 0, 1, /* NOR */ -1, 1, -1);
-	VB( /* POS */ -1, 1, 1, /* TEX */ 0, 0, /* NOR */ -1, 1, 1);
-	VB( /* POS */  1, 1, 1, /* TEX */ 1, 0, /* NOR */  1, 1, 1);
-	VB( /* POS */  1, 1, -1, /* TEX */ 1, 1, /* NOR */  1, 1, -1);
+	VB( /* POS */ -1, 1, -1, /* TEX */ 0, 1);
+	VB( /* POS */ -1, 1, 1, /* TEX */ 0, 0);
+	VB( /* POS */  1, 1, 1, /* TEX */ 1, 0);
+	VB( /* POS */  1, 1, -1, /* TEX */ 1, 1);
 
 	// BOTTOM FACE
-	VB( /* POS */ -1, -1, -1, /* TEX */ 1, 1, /* NOR */ -1, -1, -1);
-	VB( /* POS */  1, -1, -1, /* TEX */ 0, 1, /* NOR */  1, -1, -1);
-	VB( /* POS */  1, -1, 1, /* TEX */ 0, 0, /* NOR */  1, -1, 1);
-	VB( /* POS */ -1, -1, 1, /* TEX */ 1, 0, /* NOR */ -1, -1, 1);
+	VB( /* POS */ -1, -1, -1, /* TEX */ 1, 1);
+	VB( /* POS */  1, -1, -1, /* TEX */ 0, 1);
+	VB( /* POS */  1, -1, 1, /* TEX */ 0, 0);
+	VB( /* POS */ -1, -1, 1, /* TEX */ 1, 0);
 
 	// LEFT FACE
-	VB( /* POS */ -1, -1, 1, /* TEX */ 0, 1, /* NOR */ -1, -1, 1);
-	VB( /* POS */ -1, 1, 1, /* TEX */ 0, 0, /* NOR */ -1, 1, 1);
-	VB( /* POS */ -1, 1, -1, /* TEX */ 1, 0, /* NOR */ -1, 1, -1);
-	VB( /* POS */ -1, -1, -1, /* TEX */ 1, 1, /* NOR */ -1, -1, -1);
+	VB( /* POS */ -1, -1, 1, /* TEX */ 0, 1);
+	VB( /* POS */ -1, 1, 1, /* TEX */ 0, 0);
+	VB( /* POS */ -1, 1, -1, /* TEX */ 1, 0);
+	VB( /* POS */ -1, -1, -1, /* TEX */ 1, 1);
 
 	// RIGHT FACE
-	VB( /* POS */  1, -1, -1, /* TEX */ 0, 1, /* NOR */  1, -1, -1);
-	VB( /* POS */  1, 1, -1, /* TEX */ 0, 0, /* NOR */  1, 1, -1);
-	VB( /* POS */  1, 1, 1, /* TEX */ 1, 0, /* NOR */  1, 1, 1);
-	VB( /* POS */  1, -1, 1, /* TEX */ 1, 1, /* NOR */  1, -1, 1);
+	VB( /* POS */  1, -1, -1, /* TEX */ 0, 1);
+	VB( /* POS */  1, 1, -1, /* TEX */ 0, 0);
+	VB( /* POS */  1, 1, 1, /* TEX */ 1, 0);
+	VB( /* POS */  1, -1, 1, /* TEX */ 1, 1);
 
 	// ------------ Index Buffer ---------------
 

@@ -89,10 +89,20 @@ namespace DDEngine
 		);
 
 		HRESULT createVertexBuffer(
-			_In_	ID3D11Device* device,
-			_In_	std::vector<Vertex>* vertices, 
-			_Out_	ID3D11Buffer** vertexBuffer
+			_In_ ID3D11Device* device, 
+			_In_ const void* pSysMem, 
+			_In_ UINT structureSize, 
+			_Out_ ID3D11Buffer** vertexBuffer
 		);
+
+		template <typename T>
+		HRESULT createVertexBuffer(
+			_In_ ID3D11Device* device,
+			_In_ std::vector<T>* vertices,
+			_Out_ ID3D11Buffer** vertexBuffer
+		) {
+			return createVertexBuffer(device, &(*vertices)[0], sizeof(T) * vertices->size(), vertexBuffer);
+		}
 
 		HRESULT createDepthStencilBuffer(
 			_In_	ID3D11Device* device,
@@ -115,7 +125,7 @@ namespace DDEngine
 			_In_	LPCSTR entryPoint,
 			_In_	LPCSTR shaderModel,
 			_Out_	ID3D11InputLayout** inputLayout, 
-			_In_	D3D11_INPUT_ELEMENT_DESC layoutDesc[], 
+			_In_	const D3D11_INPUT_ELEMENT_DESC* layoutDesc,
 			_In_	UINT numElements
 		);
 
@@ -126,7 +136,7 @@ namespace DDEngine
 			_In_	LPCSTR entryPoint,
 			_In_	LPCSTR shaderModel,
 			_Out_	ID3D11InputLayout** inputLayout,
-			_In_	D3D11_INPUT_ELEMENT_DESC layoutDesc[],
+			_In_	const D3D11_INPUT_ELEMENT_DESC* layoutDesc,
 			_In_	UINT numElements
 		);
 
@@ -134,7 +144,7 @@ namespace DDEngine
 			_In_	ID3D11Device* device,
 			_In_	WCHAR* shaderName, 
 			_Out_	ID3D11InputLayout** inputLayout, 
-			_In_	D3D11_INPUT_ELEMENT_DESC* layoutDesc, 
+			_In_	const D3D11_INPUT_ELEMENT_DESC* layoutDesc,
 			_In_	UINT numElements
 		);
 

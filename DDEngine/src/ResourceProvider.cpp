@@ -1,5 +1,5 @@
 #include "ResourceProvider.h"
-#include "Object3D.h"
+#include "AbstractObject.h"
 
 using namespace DDEngine;
 
@@ -18,14 +18,14 @@ void ResourceProvider::load() {
 	shaderHolder.load();
 }
 
-void DDEngine::ResourceProvider::assignResources(Object3D& object, unsigned int resIndex)
+void DDEngine::ResourceProvider::assignResources(AbstractObject& object, unsigned int resIndex)
 {
 	if (shaderHolder.getActiveVS() != object.getShaders()[resIndex].vsName) shaderHolder.activateVS(object.getShaders()[resIndex].vsName);
 	if (shaderHolder.getActivePS() != object.getShaders()[resIndex].psName) shaderHolder.activatePS(object.getShaders()[resIndex].psName);
 	if (shaderHolder.getActiveIL() != object.getShaders()[resIndex].ilName) shaderHolder.activateIL(object.getShaders()[resIndex].ilName);
 }
 
-void DDEngine::ResourceProvider::assignResources(Object3D& object)
+void DDEngine::ResourceProvider::assignResources(AbstractObject& object)
 {
 	if (object.getShaders().size() > 0) {
 		assignResources(object, 0);

@@ -4,7 +4,7 @@
 
 namespace DDEngine
 {
-class CubeObject : public Object3D {
+	class CubeObject : public Object3D<DirectX::VertexPositionNormalTexture> {
 
 public:
 	CubeObject() : Object3D() { }

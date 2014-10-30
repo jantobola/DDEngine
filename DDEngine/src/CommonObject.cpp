@@ -1,6 +1,7 @@
 #include "CommonObject.h"
 
 using namespace DDEngine;
+using namespace DirectX;
 
 CubeObject::~CubeObject() {
 
@@ -10,7 +11,7 @@ void CubeObject::loadGeometry(std::vector<Mesh>& meshes) {
 
 	Mesh mesh;
 
-#define VB(x, y, z, u, v, nx, ny, nz) mesh.VB(x, y, z, u, v, nx, ny, nz)
+#define VB(x, y, z, u, v, nx, ny, nz) mesh.VB(VertexPositionNormalTexture(XMFLOAT3(x, y, z), XMFLOAT3(nx, ny, nz), XMFLOAT2(u, v)))
 #define IB(i) mesh.IB(i)
 
 	// ---------- Vertex Buffer ------------

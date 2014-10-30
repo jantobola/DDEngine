@@ -108,5 +108,8 @@
     <FxCompile Include="res\shaders\PS_White.hlsl">
       <Filter>Files\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="res\shaders\VS_IL.hlsl">
+      <Filter>Files\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

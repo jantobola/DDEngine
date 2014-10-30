@@ -59,8 +59,8 @@ class ShaderHolder {
 		void addVertexShaderBinary(string name, wstring path);
 		void addPixelShaderBinary(string name, wstring path);
 		void addConstantBuffer(string name, UINT byteWidth);
-		void addInputLayout(string name, string shaderName, D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements, string entryPoint = "main");
-		void addInputLayoutBinary(string name, string shaderName, D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements);
+		void addInputLayout(string name, string shaderName, const D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements, string entryPoint = "main");
+		void addInputLayoutBinary(string name, string shaderName, const D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements);
 
 		void recompileVertexShader(string name);
 		void recompilePixelShader(string name);

@@ -9,7 +9,7 @@ struct GridInfo {
 	int rows;
 };
 
-class Grid : public Object3D {
+class Grid : public Object3D<DirectX::VertexPositionNormal> {
 
 	public:
 		Grid();

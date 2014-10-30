@@ -4,7 +4,7 @@
 
 namespace DDEngine
 {
-	class ModelObject : public Object3D {
+	class ModelObject : public Object3D<DirectX::VertexPositionNormalTexture> {
 
 	private:
 

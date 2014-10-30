@@ -9,7 +9,7 @@
 namespace DDEngine
 {
 
-class Object3D;
+class AbstractObject;
 class ShaderHolder;
 
 enum RasterizerStateType {
@@ -32,7 +32,7 @@ D3D11_PRIMITIVE_TOPOLOGY translatePrimitiveTopology(PrimitiveTopology topology);
 class RenderContext {
 
 	private:
-		std::vector<Object3D*> objectContainer;
+		std::vector<AbstractObject*> objectContainer;
 		ShaderHolder* shaderHolder;
 		
 	public:
@@ -78,8 +78,8 @@ class RenderContext {
 		ShaderHolder* getShaderHolder() { return shaderHolder; }
 		void setShaderHolder(ShaderHolder* shaderHolder) { this->shaderHolder = shaderHolder; }
 
-		std::vector<Object3D*>& getRegisteredObjects() { return objectContainer; }
-		Object3D* getRegisteredObject(const std::string& name);
+		std::vector<AbstractObject*>& getRegisteredObjects() { return objectContainer; }
+		AbstractObject* getRegisteredObject(const std::string& name);
 		const int getRegisteredObjectIndex(const std::string& name);
 
 	protected:

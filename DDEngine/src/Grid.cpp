@@ -1,6 +1,7 @@
 #include "Grid.h"
 
 using namespace DDEngine;
+using namespace DirectX;
 using namespace std;
 
 Grid::Grid() {
@@ -23,7 +24,10 @@ void Grid::loadGeometry(std::vector<Mesh>& meshes) {
 
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < columns; c++) {
-			mesh.VB(float(c) / (columns - 1), float(r) / (rows - 1), 0, 0, 0, 0, 0, 0);
+			mesh.VB(VertexPositionNormal(
+				XMFLOAT3(float(c) / (columns - 1), float(r) / (rows - 1), 0),
+				XMFLOAT3(0, 0, 0)
+			));
 		}
 	}
 

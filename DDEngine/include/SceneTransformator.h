@@ -8,14 +8,14 @@
 
 namespace DDEngine {
 
-	class Object3D;
+	class AbstractObject;
 
 	namespace SceneTransformatorStatic {
 
 		struct Picker
 		{
 			int index;
-			Object3D* object;
+			AbstractObject* object;
 			std::string name;
 			bool picked = false;
 		};
@@ -30,7 +30,7 @@ namespace DDEngine {
 		static DirectX::XMFLOAT4 scaleVector = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.0f);
 		
 		static std::vector<Picker> selections;
-		static std::vector<Object3D*> objects;
+		static std::vector<AbstractObject*> objects;
 
 		static void updateSelection(const int index);
 		static void selectObject(const int index);
@@ -55,7 +55,7 @@ namespace DDEngine {
 			bool isEnabledTransformations() { return enableTransformFlag; }
 
 			void selectObject(const int index);
-			void setObjects(const std::vector<Object3D*> objects);
+			void setObjects(const std::vector<AbstractObject*> objects);
 
 			void initBar(const int width, const int height);
 			void transform(const DDERenderPackage pkg);

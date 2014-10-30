@@ -5,8 +5,10 @@
 #include "DDEUtils.h"
 #include "DLLResourceLoader.h"
 #include "ConstantBuffers.h"
+#include <DirectXTK/VertexTypes.h>
 
 using namespace DDEngine;
+using namespace DirectX;
 
 ShaderHolder::ShaderHolder(Config& config, RenderContext& renderContext) : config(config), renderContext(renderContext) {
 	this->config = config;
@@ -32,17 +34,24 @@ void ShaderHolder::load() {
 	DataContainer VS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 201);
 	DataContainer PS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 202);
 	DataContainer PS_White = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 203);
+	DataContainer VS_IL = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 204);
 
 	addVertexShaderFromMemory("DDEngine_VS_Skybox", VS_Skybox.dataBlob, VS_Skybox.dataSize, "vs_4_0");
 	addPixelShaderFromMemory("DDEngine_PS_Skybox", PS_Skybox.dataBlob, PS_Skybox.dataSize, "ps_4_0");
 	addPixelShaderFromMemory("DDEngine_PS_White", PS_White.dataBlob, PS_White.dataSize, "ps_4_0");
+	addVertexShaderFromMemory("DDEngine_VS_IL", VS_IL.dataBlob, VS_IL.dataSize, "vs_4_0");
 
-	D3D11_INPUT_ELEMENT_DESC POS3_TEX2[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
+	addInputLayout("POS_TEX", "DDEngine_VS_IL", VertexPositionTexture::InputElements, VertexPositionTexture::InputElementCount, "POS_TEX");
+	addInputLayout("POS_NOR", "DDEngine_VS_IL", VertexPositionNormal::InputElements, VertexPositionNormal::InputElementCount, "POS_NOR");
+	addInputLayout("POS_COL", "DDEngine_VS_IL", VertexPositionColor::InputElements, VertexPositionColor::InputElementCount, "POS_COL");
 
-	addInputLayout("POS3_TEX2", "DDEngine_VS_Skybox", POS3_TEX2, ARRAYSIZE(POS3_TEX2), "main");
+	addInputLayout("POS_NOR_TEX", "DDEngine_VS_IL", VertexPositionNormalTexture::InputElements, VertexPositionNormalTexture::InputElementCount, "POS_NOR_TEX");
+	addInputLayout("POS_COL_TEX", "DDEngine_VS_IL", VertexPositionColorTexture::InputElements, VertexPositionColorTexture::InputElementCount, "POS_COL_TEX");
+	addInputLayout("POS_NOR_COL", "DDEngine_VS_IL", VertexPositionNormalColor::InputElements, VertexPositionNormalColor::InputElementCount, "POS_NOR_COL");
+
+	addInputLayout("POS_NOR_COL_TEX", "DDEngine_VS_IL", VertexPositionNormalColorTexture::InputElements, VertexPositionNormalColorTexture::InputElementCount, "POS_NOR_COL_TEX");
+	addInputLayout("POS_NOR_TAN_COL_TEX", "DDEngine_VS_IL", VertexPositionNormalTangentColorTexture::InputElements, VertexPositionNormalTangentColorTexture::InputElementCount, "POS_NOR_TAN_COL_TEX");
+
 	addConstantBuffer("DDEngine_CB_WVP", sizeof(CB::WVP_CB));
 
 	FreeLibrary(dll);
@@ -142,7 +151,7 @@ void ShaderHolder::addPixelShaderBinary( string name, wstring path ) {
 	}
 }
 
-void ShaderHolder::addInputLayout(string name, string shaderName, D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements, string entryPoint) {
+void ShaderHolder::addInputLayout(string name, string shaderName, const D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements, string entryPoint) {
 	ID3D11InputLayout* inputLayout;
 	wstring path;
 	HRESULT result = S_OK;
@@ -164,7 +173,7 @@ void ShaderHolder::addInputLayout(string name, string shaderName, D3D11_INPUT_EL
 	}
 }
 
-void ShaderHolder::addInputLayoutBinary( string name, string shaderName, D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements ) {
+void ShaderHolder::addInputLayoutBinary(string name, string shaderName, const D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements) {
 	ID3D11InputLayout* inputLayout;
 	wstring path;
 

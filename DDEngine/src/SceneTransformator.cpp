@@ -3,7 +3,7 @@
 #include "RenderContext.h"
 #include "ResourceProvider.h"
 #include "DDEUtils.h"
-#include <Object3D.h>
+#include "AbstractObject.h"
 #include <d3d11.h>
 
 using namespace DirectX;
@@ -23,7 +23,7 @@ void DDEngine::SceneTransformator::transform(const DDERenderPackage pkg)
 {
 	if (selectedObject > -1 && enableTransformFlag) {
 
-		Object3D* o = objects.at(selectedObject);
+		AbstractObject* o = objects.at(selectedObject);
 
 		XMMATRIX rot = XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&rotationQuaternions));
 		XMMATRIX scale = XMMatrixScalingFromVector(DirectX::XMLoadFloat4(&scaleVector));
@@ -52,7 +52,7 @@ void DDEngine::SceneTransformatorStatic::updateSelection(const int index)
 {
 	for (size_t i = 0; i < selections.size(); i++) {
 		Picker* p = &selections[i];
-		Object3D* o = objects[i];
+		AbstractObject* o = objects[i];
 		if (index == i) { 
 			p->picked = true;
 			o->selected = true;
@@ -67,7 +67,7 @@ void DDEngine::SceneTransformatorStatic::selectObject(const int index)
 {
 	SceneTransformatorStatic::selectedObject = index;
 	updateSelection(index);
-	Object3D* o = objects.at(index);
+	AbstractObject* o = objects.at(index);
 
 	XMVECTOR rotationQuat;
 	XMVECTOR scaleVec;
@@ -114,12 +114,12 @@ void TW_CALL DDEngine::SceneTransformator::SetScaleCallback(const void *value, v
 
 }
 
-void DDEngine::SceneTransformator::setObjects(const std::vector<Object3D*> objects)
+void DDEngine::SceneTransformator::setObjects(const std::vector<AbstractObject*> objects)
 {
 	SceneTransformatorStatic::objects = objects;
 
 	for (size_t i = 0; i < objects.size(); i++) {
-		Object3D* o = objects[i];
+		AbstractObject* o = objects[i];
 		Picker item;
 		item.index = i;
 		item.name = o->getName();

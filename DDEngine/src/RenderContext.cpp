@@ -1,5 +1,5 @@
 #include "RenderContext.h"
-#include <Object3D.h>
+#include "AbstractObject.h"
 
 using namespace DDEngine;
 
@@ -100,8 +100,8 @@ void DDEngine::RenderContext::clearRenderTarget(float bgColor[], ID3D11RenderTar
 	if(depthStencilView) context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-Object3D* DDEngine::RenderContext::getRegisteredObject(const std::string& name) {
-	for (Object3D* object : objectContainer) {
+AbstractObject* DDEngine::RenderContext::getRegisteredObject(const std::string& name) {
+	for (AbstractObject* object : objectContainer) {
 		if (object->getName() == name) {
 			return object;
 		}

@@ -7,7 +7,7 @@ namespace DDEngine
 
 class Camera;
 
-class Skybox : public Object3D {
+class Skybox : public Object3D<DirectX::VertexPositionTexture> {
 
 	private:
 		
@@ -35,7 +35,7 @@ class Skybox : public Object3D {
 		~Skybox();
 
 		void setDDSTexturePath(std::string texturePath);
-		void draw();
+		void draw() override;
 		DirectX::XMMATRIX getSkyboxWVP(Camera& camera);
 		ID3D11ShaderResourceView* getSkyboxTexture();
 

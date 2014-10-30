@@ -200,6 +200,9 @@
     <ClInclude Include="include\SceneTransformator.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
+    <ClInclude Include="include\AbstractObject.h">
+      <Filter>Header Files\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AbstractCommandExecutor.cpp">
@@ -306,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="src\SceneTransformator.cpp">
       <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AbstractObject.cpp">
+      <Filter>Source Files\object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

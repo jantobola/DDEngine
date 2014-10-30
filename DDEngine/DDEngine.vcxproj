@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\AbstractCommandExecutor.h" />
+    <ClInclude Include="include\AbstractObject.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CommandExecutor.h" />
     <ClInclude Include="include\CommandParser.h" />
@@ -196,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AbstractCommandExecutor.cpp" />
+    <ClCompile Include="src\AbstractObject.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CommandExecutor.cpp" />
     <ClCompile Include="src\CommandParser.cpp" />

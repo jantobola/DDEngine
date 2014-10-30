@@ -7,7 +7,7 @@ namespace DDEngine
 
 class RenderContext;
 class Config;
-class Object3D;
+class AbstractObject;
 
 class ResourceProvider {
 
@@ -25,7 +25,7 @@ class ResourceProvider {
 		void load();
 
 		ShaderHolder& getShaderHolder();
-		void assignResources(Object3D& object);
-		void assignResources(Object3D& object, unsigned int resIndex);
+		void assignResources(AbstractObject& object);
+		void assignResources(AbstractObject& object, unsigned int resIndex);
 };
 }

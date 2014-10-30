@@ -1,20 +1,18 @@
 #pragma once
 
 #include "Vertex.h"
-#include "RenderContext.h"
-#include <vector>
-#include <windows.h>
-#include <DirectXMath.h>
-#include <d3d11.h>
-#include "D3DUtils.h"
-#include <unordered_map>
+#include "AbstractObject.h"
+#include "DDEUtils.h"
+#include "ShaderHolder.h"
+#include <DirectXTK/VertexTypes.h>
 
 namespace DDEngine
 {
 	/*
 		This abstract class represents a drawable model.
 	*/
-	class Object3D {
+	template <class T>
+	class Object3D : public AbstractObject {
 
 		protected:
 
@@ -27,7 +25,7 @@ namespace DDEngine
 				// Pointers to vertices and indices engine structure.
 				// These pointers should be deleted after Direct3D vertex and index buffer creation.
 				// We don't want to hold a whole geometry of a mesh in a memory when this Direct3D does.
-				std::vector<Vertex> vertices;
+				std::vector<T> vertices;
 				std::vector<DWORD> indices;
 
 				// Number of indices and index of a material.
@@ -40,136 +38,130 @@ namespace DDEngine
 				ID3D11Buffer *vertexBuffer, *indexBuffer = nullptr;
 
 				// Helper methods for creating vertex and index structure.
-				void VB(float x, float y, float z, float u, float v, float nx, float ny, float nz);
-				void IB(DWORD index);
+				void VB(T vertex)
+				{
+					vertices.push_back(vertex);
+				}
+				
+				void IB(DWORD index)
+				{
+					indices.push_back(index);
+					numIndices++;
+				}
 			};
 
-			/*
-				An envelope of shader combination.
-			*/
-			struct Shaders
-			{
-
-				Shaders(
-					std::string name,
-					std::string vsName,
-					std::string psName,
-					std::string ilName,
-					bool active
-				) :
-					name(name),
-					vsName(vsName),
-					psName(psName),
-					ilName(ilName),
-					active(active)
-				{ }
-
-				~Shaders() { }
-
-				// Indicates if engine should render a model using this shader combination.
-				bool active = true;
-				std::string name;
-
-				// String reference to a engine Shader Holder.
-				std::string vsName;
-				std::string psName;
-				std::string ilName;
-			};
-
+			
 		private:
-
-			// Flag indicates mesh is hidden or not.
-			bool visibleFlag = true;
 
 			// Internal cleaning function that releases all Direct3D
 			// allcated buffers for a model.
-			void releaseBuffers();
+			void releaseBuffers() override
+			{
+				for (Mesh mesh : meshes) {
+					RELEASE(mesh.vertexBuffer)
+					RELEASE(mesh.indexBuffer)
+				}
 
-			// Reset all transofrmation matrices to identity matrices.
-			void resetTransformations();
+				for (ShaderResourceView* tex : textures) {
+					RELEASE(tex)
+				}
+			}
 
 		protected:
 
-			RenderContext* Ctx;
-
-			// Public name of a model to handle console command calls for this model.
-			std::string modelName;
-
 			// Internal mesh structure for a model.
 			std::vector<Mesh> meshes;
-
-			// Model will be rendered as many times as a size of this container.
-			// In most cases container will contain only one shader combination.
-			std::vector<Shaders> shaders;
-
-			std::vector<ShaderResourceView*> textures;
 
 			// Load your geometry and other things in child classes from whatever you want.
 			virtual void loadGeometry(std::vector<Mesh>& meshes) = 0;
 
 			// Internal draw operation for a single mesh.
-			virtual void draw(const Mesh& mesh);
+			virtual void draw(const Mesh& mesh)
+			{
+				UINT stride = sizeof(T);
+				UINT offset = 0;
 
-			// MATRICES
+				Ctx->context->IASetPrimitiveTopology(translatePrimitiveTopology(mesh.topology));
+				Ctx->context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
+				Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-			DirectX::XMFLOAT4X4 worldMatrix;
-			DirectX::XMFLOAT4X4 rotationMatrix;
-			DirectX::XMFLOAT4X4 scaleMatrix;
-			DirectX::XMFLOAT4X4 translationMatrix;
+				if (textures.size() > 0) {
+					//TODO config flag if anisotropic enable
+					Ctx->setPSSampler(Ctx->commonStates->AnisotropicWrap(), 0);
+					Ctx->setPSResource(textures[mesh.materialIndex], 0);
+				}
+
+				Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
+			}
 
 		public:
 
 			// Constructors & Destructor
-			Object3D();
-			virtual ~Object3D();
+			Object3D() { }
 
-			bool selected = false;
+			virtual ~Object3D()
+			{
+				releaseBuffers();
+			}
 
-			// It will stop or start rendering of a model.
-			void setVisible(bool isVisible) { this->visibleFlag = isVisible; }
-			// Returns a flag mesh is visible or hidden.
-			bool isVisible() { return visibleFlag; }
+			virtual void registerObject(const std::string& modelName, RenderContext& Ctx) override
+			{
+				HRESULT result = S_OK;
 
-			// Add (append) a shader combination.
-			void addShaderCombination(std::string name, std::string vsName, std::string psName, std::string ilName, bool active = true);
-			// Enables or disables rendering using a given shader combination.
-			void enableShaderCombination(std::string name);
-			void disableShaderCombination(std::string name);
+				this->modelName = modelName;
+				this->Ctx = &Ctx;
 
-			void addTexture(const std::string& path);
+				loadGeometry(meshes);
 
-			std::vector<Shaders>& getShaders() { return shaders; }
-			const std::string getName() { return modelName; }
+				for (Mesh& mesh : meshes) {
+					result = DXUtils::createVertexBuffer<T>(Ctx.device, &mesh.vertices, &mesh.vertexBuffer);
 
-			// Converts an engine structure into a Direct3D structure. This method should be
-			// called in a pre-render stage.
-			virtual void registerObject(const std::string& modelName, RenderContext& Ctx);
+					if (FAILED(result))
+						Win32Utils::showFailMessage(result, "Vertex Buffer Error", "Error occurred during registering an object");
+
+					result = DXUtils::createIndexBuffer(Ctx.device, &mesh.indices, &mesh.indexBuffer);
+
+					if (FAILED(result))
+						Win32Utils::showFailMessage(result, "Index Buffer Error", "Error occurred during registering an object");
+
+					mesh.vertices.clear();
+					mesh.vertices.shrink_to_fit();
+					mesh.indices.clear();
+					mesh.indices.shrink_to_fit();
+				}
+
+				Ctx.getRegisteredObjects().push_back(this);
+			}
 			
-			// Finally draw a complete model.
-			virtual void draw();
+			
+			virtual void draw() override
+			{
+				if (visibleFlag) {
+					for (Mesh mesh : meshes) {
+						draw(mesh);
+					}
 
-			// TRANSFORMATIONS
+					// Draw some visual effect when object is selected
+					if (selected) {
+						for (Mesh mesh : meshes) {
+							UINT stride = sizeof(T);
+							UINT offset = 0;
 
-			// Applies a rotation transformation on a model.
-			void rotateX(float x);
-			void rotateY(float y);
-			void rotateZ(float z);
-			void rotate(float x, float y, float z);
+							Ctx->context->IASetPrimitiveTopology(translatePrimitiveTopology(mesh.topology));
+							Ctx->context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
+							Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-			// Applies a scale transformation on a model.
-			void scale(float x, float y, float z);
-			void scale(float xyz);
+							Ctx->context->RSSetState(Ctx->RSWiredCullBack);
 
-			// Applies a translation transformation on a model.
-			void translate(float x, float y, float z);
+							Ctx->getShaderHolder()->activatePS("DDEngine_PS_White");
+							Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
 
-			// Get model in world space.
-			const DirectX::XMMATRIX getWorldMatrix();
-			// Get transpose world space matrix
-			const DirectX::XMMATRIX getWorldMatrix_T();
+							Ctx->setRasterizerState(Ctx->currentRasterizerState);
+						}
+					}
+				}
+			}
 
-			void setRotationMatrix(const DirectX::XMFLOAT4X4 rotationMatrix) { this->rotationMatrix = rotationMatrix; }
-			void setScaleMatrix(const DirectX::XMFLOAT4X4 scaleMatrix) { this->scaleMatrix = scaleMatrix; }
-			void setTranslationMatrix(const DirectX::XMFLOAT4X4 translationMatrix) { this->translationMatrix = translationMatrix; }
+			
 	};
 }
