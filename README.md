@@ -33,9 +33,8 @@ WaterRendering
 
 -----------------
 
-![Wireframe](http://puu.sh/82gEN/3625c118e7.jpg)
 ![Skybox, texturing](http://fii.cz/vbhhaepq)
-![Water simulation](http://puu.sh/7J1XQ/53a0da53e6.jpg)
+![Sphere](http://puu.sh/cAxqS/1ffe115e88.jpg)
 ![Water simulation 2](https://scontent-a.xx.fbcdn.net/hphotos-prn2/t31.0-8/10286810_10202082145115757_252098159032020820_o.jpg)
 ![Water simulation 3](https://scontent-a.xx.fbcdn.net/hphotos-prn2/l/t31.0-8/10275344_10202088807242306_7099633422965902923_o.jpg)
 
