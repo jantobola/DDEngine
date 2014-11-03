@@ -10,8 +10,9 @@ FEATURES
 - Shader management
 - Object management
 - Real-time shader compiling
-- Console
 - Model loading
+- Console
+- External config
 - Easy to use
 
 MODULES
