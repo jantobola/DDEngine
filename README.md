@@ -3,7 +3,7 @@ DDEngine
 
 DDEngine is a lightweight graphics engine written in C++ and Direct3D 11. It uses 3rd party libraries such as DirectXTK, DirectxTEX, AntTweakBar, Assimp, CEGUI.
 
-This engine is not a game engine. The main purpose of this engine is to test CG algorithms quickly and easily.
+Main focus of the engine is to support easy development and testing of graphic algorithms and shaders.
 
 FEATURES
 --------
