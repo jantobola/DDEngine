@@ -27,7 +27,7 @@ DDEngineRes
 - DDEngine module depends on this module.
 
 WaterRendering
-- It is a demo project. It demonstrates how DDEngine can be used.
+- Sample project
 
 
 
