@@ -139,6 +139,26 @@ HRESULT DDEngine::DXUtils::createAndCompilePixelShader(_In_ ID3D11Device* device
 	return result;
 }
 
+HRESULT DDEngine::DXUtils::createAndCompileGeometryShader(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11GeometryShader** geometryShader, _In_	const D3D11_SO_DECLARATION_ENTRY* layoutDesc, _In_	UINT numElements)
+{
+	HRESULT result = S_OK;
+
+	ID3DBlob* geometryShaderBlob = nullptr;
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(shaderName, entryPoint, shaderModel, &geometryShaderBlob);
+	result = r.result;
+
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Geometry Shader Error", msg);
+		return result;
+	}
+
+	result = device->CreateGeometryShaderWithStreamOutput(geometryShaderBlob->GetBufferPointer(), geometryShaderBlob->GetBufferSize(), layoutDesc, numElements, NULL, 0, 0, NULL, geometryShader);
+	
+	if (geometryShaderBlob) geometryShaderBlob->Release();
+	return result;
+}
+
 HRESULT DDEngine::DXUtils::createVertexShaderFromMemory(_In_ ID3D11Device* device, _In_ LPVOID dataBlob, _In_ DWORD dataSize, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11VertexShader** vertexShader)
 {
 	HRESULT result = S_OK;
@@ -179,6 +199,26 @@ HRESULT DDEngine::DXUtils::createPixelShaderFromMemory(_In_ ID3D11Device* device
 	return result;
 }
 
+HRESULT DDEngine::DXUtils::createGeometryShaderFromMemory(_In_ ID3D11Device* device, _In_ LPVOID dataBlob, _In_ DWORD dataSize, _In_ LPCSTR entryPoint, _In_ LPCSTR shaderModel, _Out_ ID3D11GeometryShader** geometryShader, _In_ const D3D11_SO_DECLARATION_ENTRY* layoutDesc, _In_ UINT numElements)
+{
+	HRESULT result = S_OK;
+
+	ID3DBlob* geometryShaderBlob = nullptr;
+	ShaderCompiler::ShaderCompilationResult r = ShaderCompiler::compile(dataBlob, dataSize, entryPoint, shaderModel, &geometryShaderBlob);
+	result = r.result;
+
+	if (FAILED(result)) {
+		std::string msg = "Some errors occured during the shader compilation.\n\nCompiler message:\n" + r.errorMessage;
+		Win32Utils::showFailMessage(result, "Geometry Shader Error", msg);
+		return result;
+	}
+
+	result = device->CreateGeometryShaderWithStreamOutput(geometryShaderBlob->GetBufferPointer(), geometryShaderBlob->GetBufferSize(), layoutDesc, numElements, NULL, 0, 0, NULL, geometryShader);
+
+	if (geometryShaderBlob) geometryShaderBlob->Release();
+	return result;
+}
+
 HRESULT DDEngine::DXUtils::createVertexShaderFromBinary(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _Out_ ID3D11VertexShader** vertexShader)
 {
 	HRESULT result = S_OK;
@@ -213,6 +253,11 @@ HRESULT DDEngine::DXUtils::createPixelShaderFromBinary(_In_ ID3D11Device* device
 
 	if(pixelShaderBlob) pixelShaderBlob->Release();
 	return result;
+}
+
+HRESULT DDEngine::DXUtils::createGeometryShaderFromBinary(_In_ ID3D11Device* device, _In_ WCHAR* shaderName, _Out_ ID3D11GeometryShader** geometryShader)
+{
+	return NULL;
 }
 
 HRESULT DDEngine::DXUtils::createIndexBuffer(_In_ ID3D11Device* device, _In_ std::vector<DWORD>* indices, _Out_ ID3D11Buffer** indexBuffer)

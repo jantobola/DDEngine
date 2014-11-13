@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Dimension.h"
+#include "Camera.h"
 #include <d3d11.h>
 #include <DirectXTK/CommonStates.h>
 #include <vector>
@@ -55,6 +56,7 @@ class RenderContext {
 		ID3D11Texture2D* depthStencilBuffer;
 
 		DirectX::CommonStates* commonStates;
+		Camera* camera;
 
 		Dimension screenDimension;
 		float bgColor[4];

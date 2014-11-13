@@ -10,8 +10,6 @@ Config::Config() : ConfigLoader() {
 
 	path = DDE_CONFIG_PATH;
 
-	CFG_VERTEX_SHADER_MODEL = "vs_4_0";
-	CFG_PIXEL_SHADER_MODEL = "ps_4_0";
 	CFG_WINDOW_TITLE = L"DDEngine Application";
 	CFG_SCREEN_WIDTH = 1024;
 	CFG_SCREEN_HEIGHT = 768;
@@ -60,6 +58,12 @@ void Config::load(CFG_SECTION section) {
 		LOAD("shaders.defaultVSModel")
 		{
 			CFG_VERTEX_SHADER_MODEL = ARG(0);
+			NEXT
+		}
+
+		LOAD("shaders.defaultGSModel")
+		{
+			CFG_GEOMETRY_SHADER_MODEL = ARG(0);
 			NEXT
 		}
 

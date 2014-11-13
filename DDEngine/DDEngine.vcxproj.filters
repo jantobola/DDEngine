@@ -119,12 +119,6 @@
     <ClInclude Include="include\WndHandler.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="include\PixelShaderEnvelope.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="include\VertexShaderEnvelope.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="include\ShaderHolder.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
@@ -202,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="include\AbstractObject.h">
       <Filter>Header Files\object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CFG_CMD_Macros.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderStructs.h">
+      <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -301,9 +301,6 @@
     <ClCompile Include="src\ModelObject.cpp">
       <Filter>Source Files\object</Filter>
     </ClCompile>
-    <ClCompile Include="src\Object3D.cpp">
-      <Filter>Source Files\object</Filter>
-    </ClCompile>
     <ClCompile Include="src\ScenesManager.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
@@ -313,5 +310,8 @@
     <ClCompile Include="src\AbstractObject.cpp">
       <Filter>Source Files\object</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

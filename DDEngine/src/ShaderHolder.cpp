@@ -4,10 +4,10 @@
 #include "D3DUtils.h"
 #include "DDEUtils.h"
 #include "DLLResourceLoader.h"
-#include "ConstantBuffers.h"
 #include <DirectXTK/VertexTypes.h>
 
 using namespace DDEngine;
+using namespace Shaders;
 using namespace DirectX;
 
 ShaderHolder::ShaderHolder(Config& config, RenderContext& renderContext) : config(config), renderContext(renderContext) {
@@ -34,11 +34,14 @@ void ShaderHolder::load() {
 	DataContainer VS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 201);
 	DataContainer PS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 202);
 	DataContainer PS_White = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 203);
-	DataContainer VS_IL = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 204);
+	DataContainer PS_Green = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 204);
+	DataContainer VS_IL = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 205);
+	DataContainer GS_NormalVisualizer = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 206);
 
 	addVertexShaderFromMemory("DDEngine_VS_Skybox", VS_Skybox.dataBlob, VS_Skybox.dataSize, "vs_4_0");
 	addPixelShaderFromMemory("DDEngine_PS_Skybox", PS_Skybox.dataBlob, PS_Skybox.dataSize, "ps_4_0");
 	addPixelShaderFromMemory("DDEngine_PS_White", PS_White.dataBlob, PS_White.dataSize, "ps_4_0");
+	addPixelShaderFromMemory("DDEngine_PS_Green", PS_Green.dataBlob, PS_Green.dataSize, "ps_4_0");
 	addVertexShaderFromMemory("DDEngine_VS_IL", VS_IL.dataBlob, VS_IL.dataSize, "vs_4_0");
 
 	addInputLayout("POS_TEX", "DDEngine_VS_IL", VertexPositionTexture::InputElements, VertexPositionTexture::InputElementCount, "POS_TEX");
@@ -52,7 +55,15 @@ void ShaderHolder::load() {
 	addInputLayout("POS_NOR_COL_TEX", "DDEngine_VS_IL", VertexPositionNormalColorTexture::InputElements, VertexPositionNormalColorTexture::InputElementCount, "POS_NOR_COL_TEX");
 	addInputLayout("POS_NOR_TAN_COL_TEX", "DDEngine_VS_IL", VertexPositionNormalTangentColorTexture::InputElements, VertexPositionNormalTangentColorTexture::InputElementCount, "POS_NOR_TAN_COL_TEX");
 
-	addConstantBuffer("DDEngine_CB_WVP", sizeof(CB::WVP_CB));
+	addConstantBuffer("DDEngine_WVP", sizeof(CB::WVP));
+	addConstantBuffer("DDEngine_Matrices", sizeof(CB::GSMatrices));
+
+	D3D11_SO_DECLARATION_ENTRY gsLayout[] =
+	{
+		{ 0, "SV_POSITION", 0, 0, 4, 0 }
+	};
+
+	addGeometryShaderFromMemory("DDEngine_GS_NormalVisualizer", GS_NormalVisualizer.dataBlob, GS_NormalVisualizer.dataSize, "", gsLayout, ARRAYSIZE(gsLayout));
 
 	FreeLibrary(dll);
 }
@@ -91,6 +102,23 @@ void DDEngine::ShaderHolder::addPixelShader(string name, wstring path, string sh
 	}
 }
 
+void DDEngine::ShaderHolder::addGeometryShader(string name, wstring path, string shaderModel, const D3D11_SO_DECLARATION_ENTRY* layoutDesc, UINT numElements, string entryPoint /*= "main"*/)
+{
+	string model = (shaderModel.empty()) ? config.CFG_GEOMETRY_SHADER_MODEL : shaderModel;
+
+	ID3D11GeometryShader* gs;
+	HRESULT result = DXUtils::createAndCompileGeometryShader(renderContext.device, &path[0], entryPoint.c_str(), model.c_str(), &gs, layoutDesc, numElements);
+
+	if (!FAILED(result)) {
+		GeometryShaderEnvelope envelope;
+		envelope.name = name;
+		envelope.entryPoint = entryPoint;
+		envelope.path = path;
+		envelope.geometryShader = gs;
+		geometryShaders.insert(GeometryShaders::value_type(name, envelope));
+	}
+}
+
 void DDEngine::ShaderHolder::addVertexShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string shaderModel, string entryPoint /*= "main"*/)
 {
 	string model = (shaderModel.empty()) ? config.CFG_VERTEX_SHADER_MODEL : shaderModel;
@@ -124,6 +152,24 @@ void DDEngine::ShaderHolder::addPixelShaderFromMemory(string name, LPVOID dataBl
 		pixelShaders.insert(PixelShaders::value_type(name, envelope));
 	}
 }
+
+
+void DDEngine::ShaderHolder::addGeometryShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string shaderModel, const D3D11_SO_DECLARATION_ENTRY* layoutDesc, UINT numElements, string entryPoint /*= "main"*/) {
+	string model = (shaderModel.empty()) ? config.CFG_GEOMETRY_SHADER_MODEL : shaderModel;
+
+	ID3D11GeometryShader* gs;
+	HRESULT result = DXUtils::createGeometryShaderFromMemory(renderContext.device, dataBlob, dataSize, entryPoint.c_str(), model.c_str(), &gs, layoutDesc, numElements);
+
+	if (!FAILED(result)) {
+		GeometryShaderEnvelope envelope;
+		envelope.name = name;
+		envelope.entryPoint = entryPoint;
+		envelope.path = L"";
+		envelope.geometryShader = gs;
+		geometryShaders.insert(GeometryShaders::value_type(name, envelope));
+	}
+}
+
 
 void ShaderHolder::addVertexShaderBinary(string name, wstring path) {
 	ID3D11VertexShader* vs;
@@ -210,6 +256,10 @@ void ShaderHolder::cleanUp() {
 		it->second.pixelShader->Release();
 	}
 
+	for (GeometryShaders::iterator it = geometryShaders.begin(); it != geometryShaders.end(); ++it) {
+		it->second.geometryShader->Release();
+	}
+
 	for (InputLayouts::iterator it = inputLayouts.begin(); it != inputLayouts.end(); ++it) {
 		it->second->Release();
 	}
@@ -237,6 +287,16 @@ ID3D11PixelShader* ShaderHolder::getPixelShader( string name ) {
 	return NULL;
 }
 
+ID3D11GeometryShader* DDEngine::ShaderHolder::getGeometryShader(string name)
+{
+	GeometryShaders::iterator it = geometryShaders.find(name);
+	if (it != geometryShaders.end()) {
+		return it->second.geometryShader;
+	}
+
+	return NULL;
+}
+
 ID3D11Buffer* ShaderHolder::getConstatnBuffer( string name )
 {
 	ConstantBuffers::iterator it = constantBuffers.find(name);
@@ -258,13 +318,19 @@ ID3D11InputLayout* ShaderHolder::getInputLayout( string name )
 }
 
 void ShaderHolder::activateVS( string name ) {
-		renderContext.context->VSSetShader(getVertexShader(name), NULL, 0);
-		activeVS = name;
+	renderContext.context->VSSetShader(getVertexShader(name), NULL, 0);
+	activeVS = name;
 }
 
 void ShaderHolder::activatePS( string name ) {
-		renderContext.context->PSSetShader(getPixelShader(name), NULL, 0);
-		activePS = name;
+	renderContext.context->PSSetShader(getPixelShader(name), NULL, 0);
+	activePS = name;
+}
+
+void DDEngine::ShaderHolder::activateGS(string name)
+{
+	renderContext.context->GSSetShader(getGeometryShader(name), NULL, 0);
+	activeGS = name;
 }
 
 void ShaderHolder::activateIL( string name ) {
@@ -282,6 +348,12 @@ void ShaderHolder::updateConstantBufferPS( string name, const void* bufferData, 
 	ID3D11Buffer* constantBuffer = getConstatnBuffer(name);
 	renderContext.context->UpdateSubresource(constantBuffer, 0, NULL, bufferData, 0, 0);
 	renderContext.context->PSSetConstantBuffers( startSlot, 1, &constantBuffer );
+}
+
+void ShaderHolder::updateConstantBufferGS( string name, const void* bufferData, UINT startSlot ) {
+	ID3D11Buffer* constantBuffer = getConstatnBuffer(name);
+	renderContext.context->UpdateSubresource(constantBuffer, 0, NULL, bufferData, 0, 0);
+	renderContext.context->GSSetConstantBuffers(startSlot, 1, &constantBuffer);
 }
 
 std::string ShaderHolder::getActiveVS() {

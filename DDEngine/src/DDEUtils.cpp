@@ -68,10 +68,10 @@ FILETIME FileUtils::getLastWriteTime( std::wstring path ) {
 	return writeTime;
 }
 
-std::string DDEngine::FileUtils::splitFilename(const std::string path)
+std::string DDEngine::FileUtils::getPath(const std::string& fullPath)
 {
-		unsigned found = path.find_last_of("/\\");
-		return (found != std::string::npos) ? path.substr(0, found) : "";
+	unsigned found = fullPath.find_last_of("/\\");
+	return (found != std::string::npos) ? fullPath.substr(0, found) : "";
 }
 
 #include <comdef.h>

@@ -7,6 +7,7 @@
 #include "D3DRenderer.h"
 #include "DDERenderPackage.h"
 #include "CommandExecutor.h"
+#include "ConstantBuffers.h"
 
 namespace DDEngine
 {
@@ -15,6 +16,7 @@ class ScenesManager;
 class GUIRenderer;
 class Controls;
 class HUDRenderer;
+class AbstractObject;
 
 class DDEComponent : public D3DRenderer {
 

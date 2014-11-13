@@ -1,7 +1,7 @@
 #pragma once
 
-#include "VertexShaderEnvelope.h"
-#include "PixelShaderEnvelope.h"
+#include "ShaderStructs.h"
+#include "ConstantBuffers.h"
 #include <d3d11.h>
 #include <unordered_map>
 
@@ -22,13 +22,15 @@ class ShaderHolder {
 	typedef std::wstring wstring;
 
 	private:
-		typedef std::unordered_map<std::string, VertexShaderEnvelope> VertexShaders;
-		typedef std::unordered_map<std::string, PixelShaderEnvelope> PixelShaders;
+		typedef std::unordered_map<std::string, Shaders::VertexShaderEnvelope> VertexShaders;
+		typedef std::unordered_map<std::string, Shaders::PixelShaderEnvelope> PixelShaders;
+		typedef std::unordered_map<std::string, Shaders::GeometryShaderEnvelope> GeometryShaders;
 		typedef std::unordered_map<std::string, ID3D11Buffer*> ConstantBuffers;
 		typedef std::unordered_map<std::string, ID3D11InputLayout*> InputLayouts;
 
 		VertexShaders vertexShaders;
 		PixelShaders pixelShaders;
+		GeometryShaders geometryShaders;
 		ConstantBuffers constantBuffers;
 		InputLayouts inputLayouts;
 
@@ -37,6 +39,7 @@ class ShaderHolder {
 
 		string activeVS;
 		string activePS;
+		string activeGS;
 		string activeIL;
 
 		FILETIME lastFileTime;
@@ -54,8 +57,10 @@ class ShaderHolder {
 
 		void addVertexShader(string name, wstring path, string shaderModel, string entryPoint = "main");
 		void addPixelShader(string name, wstring path, string shaderModel, string entryPoint = "main");
+		void addGeometryShader(string name, wstring path, string shaderModel, const D3D11_SO_DECLARATION_ENTRY* layoutDesc, UINT numElements, string entryPoint = "main");
 		void addVertexShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string shaderModel, string entryPoint = "main");
 		void addPixelShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string shaderModel, string entryPoint = "main");
+		void addGeometryShaderFromMemory(string name, LPVOID dataBlob, DWORD dataSize, string shaderModel, const D3D11_SO_DECLARATION_ENTRY* layoutDesc, UINT numElements, string entryPoint = "main");
 		void addVertexShaderBinary(string name, wstring path);
 		void addPixelShaderBinary(string name, wstring path);
 		void addConstantBuffer(string name, UINT byteWidth);
@@ -77,15 +82,18 @@ class ShaderHolder {
 
 		ID3D11VertexShader* getVertexShader(string name);
 		ID3D11PixelShader* getPixelShader(string name);
+		ID3D11GeometryShader* getGeometryShader(string name);
 		ID3D11Buffer* getConstatnBuffer(string name);
 		ID3D11InputLayout* getInputLayout(string name);
 
 		void activateVS(string name);
 		void activatePS(string name);
+		void activateGS(string name);
 		void activateIL(string name);
 
 		void updateConstantBufferVS( string name, const void* bufferData, UINT startSlot );
 		void updateConstantBufferPS( string name, const void* bufferData, UINT startSlot );
+		void updateConstantBufferGS( string name, const void* bufferData, UINT startSlot );
 
 		void refreshShaders();
 		void cleanUp();

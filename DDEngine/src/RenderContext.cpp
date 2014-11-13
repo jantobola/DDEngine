@@ -54,6 +54,7 @@ RenderContext::~RenderContext() {
 	RELEASE( RSSolidCullBack )
 	RELEASE( RSWiredCullNone )
 	RELEASE( RSSolidCullNone )
+	RELEASE( RSWiredCullBack )
 
 	if( context ) context->ClearState();
 	RELEASE( context )

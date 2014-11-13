@@ -8,13 +8,13 @@ Grid::Grid() {
 	Grid(0, 0);
 }
 
-Grid::Grid(int columns, int rows) {
+Grid::Grid(int columns, int rows) : Object3D() {
 	this->columns = columns;
 	this->rows = rows;
 }
 
 Grid::~Grid() {
-
+	
 }
 
 void Grid::loadGeometry(std::vector<Mesh>& meshes) {
@@ -26,7 +26,7 @@ void Grid::loadGeometry(std::vector<Mesh>& meshes) {
 		for (int c = 0; c < columns; c++) {
 			mesh.VB(VertexPositionNormal(
 				XMFLOAT3(float(c) / (columns - 1), float(r) / (rows - 1), 0),
-				XMFLOAT3(0, 0, 0)
+				XMFLOAT3(0, 0, -1)
 			));
 		}
 	}

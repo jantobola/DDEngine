@@ -92,10 +92,16 @@
     <Image Include="res\icons\icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="res\shaders\GS_NormalVisualizer.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="res\shaders\PS_EnvMapping.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="res\shaders\PS_White.hlsl">
+    <FxCompile Include="res\shaders\PS_NormalColor.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="res\shaders\PS_SelectionColor.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="res\shaders\VS_EnvMapping.hlsl">

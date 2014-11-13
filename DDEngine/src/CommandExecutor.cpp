@@ -170,6 +170,14 @@ void CommandExecutor::executeCommand(std::string command) {
 		END
 	}
 
+	EXECUTE("renderer.normals") {
+		for (AbstractObject* o : component.getRenderPackage().renderContext.getRegisteredObjects()) {
+			o->setShowNormals(ARG_BOOL(0));
+		}
+		if (ARG_BOOL(0)) INFO("All normals are visualized", 2500);
+		END
+	}
+
 // ############################################################
 	CMD_ARGS(2) // Commands with two arguments ################
 // ############################################################
@@ -236,22 +244,28 @@ void CommandExecutor::executeCommand(std::string command) {
 
 	EXECUTE("objects.scaleX") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
-		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(ARG_FLOAT(1), 0, 0);
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(ARG_FLOAT(1), 1, 1);
 		INFO("Object scaled", 2500);
 		END
 	}
 
 	EXECUTE("objects.scaleY") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
-		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(0, ARG_FLOAT(1), 0);
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(1, ARG_FLOAT(1), 1);
 		INFO("Object scaled", 2500);
 		END
 	}
 
 	EXECUTE("objects.scaleZ") {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
-		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(0, 0, ARG_FLOAT(1));
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(1, 1, ARG_FLOAT(1));
 		INFO("Object scaled", 2500);
+		END
+	}
+
+	EXECUTE("objects.normals") {
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setShowNormals(ARG_BOOL(1));
+		if(ARG_BOOL(1)) INFO(ARG(0) + " normals are visualized", 2500);
 		END
 	}
 

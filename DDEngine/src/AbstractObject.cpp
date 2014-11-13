@@ -1,4 +1,6 @@
 #include "AbstractObject.h"
+#include "DDEUtils.h"
+#include "ConstantBuffers.h"
 
 using namespace DirectX;
 
@@ -9,7 +11,7 @@ DDEngine::AbstractObject::AbstractObject()
 
 DDEngine::AbstractObject::~AbstractObject()
 {
-
+	
 }
 
 void DDEngine::AbstractObject::resetTransformations()
@@ -107,4 +109,11 @@ const DirectX::XMMATRIX DDEngine::AbstractObject::getWorldMatrix()
 const DirectX::XMMATRIX DDEngine::AbstractObject::getWorldMatrix_T()
 {
 	return XMMatrixTranspose(getWorldMatrix());
+}
+
+void DDEngine::AbstractObject::setCB(CB::WorldViewProjection& cb)
+{
+	XMStoreFloat4x4(&cb.world, getWorldMatrix_T());
+	XMStoreFloat4x4(&cb.view, Ctx->camera->getViewMatrix_T());
+	XMStoreFloat4x4(&cb.projection, Ctx->camera->getProjectionMatrix_T());
 }

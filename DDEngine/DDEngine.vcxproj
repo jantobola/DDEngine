@@ -153,6 +153,7 @@
     <ClInclude Include="include\AbstractCommandExecutor.h" />
     <ClInclude Include="include\AbstractObject.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\CFG_CMD_Macros.h" />
     <ClInclude Include="include\CommandExecutor.h" />
     <ClInclude Include="include\CommandParser.h" />
     <ClInclude Include="include\CommonObject.h" />
@@ -179,7 +180,6 @@
     <ClInclude Include="include\Object3D.h" />
     <ClInclude Include="include\ModelObject.h" />
     <ClInclude Include="include\ScenesManager.h" />
-    <ClInclude Include="include\PixelShaderEnvelope.h" />
     <ClInclude Include="include\QuadObject.h" />
     <ClInclude Include="include\RenderableSkybox.h" />
     <ClInclude Include="include\RenderContext.h" />
@@ -191,7 +191,7 @@
     <ClInclude Include="include\Skybox.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Vertex.h" />
-    <ClInclude Include="include\VertexShaderEnvelope.h" />
+    <ClInclude Include="include\ShaderStructs.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\WndHandler.h" />
   </ItemGroup>
@@ -217,7 +217,6 @@
     <ClCompile Include="src\GUIRenderer.cpp" />
     <ClCompile Include="src\HUDRenderer.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
-    <ClCompile Include="src\Object3D.cpp" />
     <ClCompile Include="src\ModelObject.cpp" />
     <ClCompile Include="src\ScenesManager.cpp" />
     <ClCompile Include="src\QuadObject.cpp" />
@@ -242,6 +241,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

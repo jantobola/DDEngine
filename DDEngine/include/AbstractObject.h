@@ -2,6 +2,7 @@
 
 #include "RenderContext.h"
 #include "D3DUtils.h"
+#include "ConstantBuffers.h"
 #include <vector>
 #include <windows.h>
 #include <DirectXMath.h>
@@ -21,17 +22,17 @@ namespace DDEngine {
 			{
 
 				Shaders(
-				std::string name,
-				std::string vsName,
-				std::string psName,
-				std::string ilName,
-				bool active
+					std::string name,
+					std::string vsName,
+					std::string psName,
+					std::string ilName,
+					bool active
 				) :
-				name(name),
-				vsName(vsName),
-				psName(psName),
-				ilName(ilName),
-				active(active)
+					name(name),
+					vsName(vsName),
+					psName(psName),
+					ilName(ilName),
+					active(active)
 				{ }
 
 				~Shaders() { }
@@ -54,6 +55,7 @@ namespace DDEngine {
 
 			// Flag indicates mesh is hidden or not.
 			bool visibleFlag = true;
+			bool showNormals = false;
 
 			// Model will be rendered as many times as a size of this container.
 			// In most cases container will contain only one shader combination.
@@ -71,12 +73,6 @@ namespace DDEngine {
 			// Reset all transofrmation matrices to identity matrices.
 			void resetTransformations();
 
-		private:
-
-			// Internal cleaning function that releases all Direct3D
-			// allcated buffers for a model.
-			virtual void releaseBuffers() = 0;
-
 		public:
 
 			// Constructors & Destructor
@@ -90,6 +86,9 @@ namespace DDEngine {
 			// Returns a flag mesh is visible or hidden.
 			bool isVisible() { return visibleFlag; }
 
+			void setShowNormals(bool showNormals) { this->showNormals = showNormals; }
+			bool isShowNormals() { return showNormals; }
+
 			// Add (append) a shader combination.
 			void addShaderCombination(std::string name, std::string vsName, std::string psName, std::string ilName, bool active = true);
 			// Enables or disables rendering using a given shader combination.
@@ -100,6 +99,8 @@ namespace DDEngine {
 
 			std::vector<Shaders>& getShaders() { return shaders; }
 			const std::string getName() { return modelName; }
+
+			void setCB(CB::WorldViewProjection& cb);
 
 			// Converts an engine structure into a Direct3D structure. This method should be
 			// called in a pre-render stage.
@@ -131,6 +132,10 @@ namespace DDEngine {
 			void setRotationMatrix(const DirectX::XMFLOAT4X4 rotationMatrix) { this->rotationMatrix = rotationMatrix; }
 			void setScaleMatrix(const DirectX::XMFLOAT4X4 scaleMatrix) { this->scaleMatrix = scaleMatrix; }
 			void setTranslationMatrix(const DirectX::XMFLOAT4X4 translationMatrix) { this->translationMatrix = translationMatrix; }
+
+			DirectX::XMFLOAT4X4 getRotationMatrix() { return rotationMatrix; }
+			DirectX::XMFLOAT4X4 getScaleMatrix() { return scaleMatrix; }
+			DirectX::XMFLOAT4X4 getTranslationMatrix() { return translationMatrix; }
 
 	};
 

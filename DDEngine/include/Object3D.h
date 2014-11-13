@@ -4,6 +4,7 @@
 #include "AbstractObject.h"
 #include "DDEUtils.h"
 #include "ShaderHolder.h"
+#include "ConstantBuffers.h"
 #include <DirectXTK/VertexTypes.h>
 
 namespace DDEngine
@@ -50,25 +51,6 @@ namespace DDEngine
 				}
 			};
 
-			
-		private:
-
-			// Internal cleaning function that releases all Direct3D
-			// allcated buffers for a model.
-			void releaseBuffers() override
-			{
-				for (Mesh mesh : meshes) {
-					RELEASE(mesh.vertexBuffer)
-					RELEASE(mesh.indexBuffer)
-				}
-
-				for (ShaderResourceView* tex : textures) {
-					RELEASE(tex)
-				}
-			}
-
-		protected:
-
 			// Internal mesh structure for a model.
 			std::vector<Mesh> meshes;
 
@@ -86,7 +68,7 @@ namespace DDEngine
 				Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 				if (textures.size() > 0) {
-					//TODO config flag if anisotropic enable
+					//TODO config flag if anisotropic is enabled
 					Ctx->setPSSampler(Ctx->commonStates->AnisotropicWrap(), 0);
 					Ctx->setPSResource(textures[mesh.materialIndex], 0);
 				}
@@ -94,16 +76,19 @@ namespace DDEngine
 				Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
 			}
 
+		private:
+
+			CB::GSMatrices cb_matrices;
+
 		public:
 
 			// Constructors & Destructor
 			Object3D() { }
-
 			virtual ~Object3D()
 			{
 				releaseBuffers();
 			}
-
+			
 			virtual void registerObject(const std::string& modelName, RenderContext& Ctx) override
 			{
 				HRESULT result = S_OK;
@@ -137,6 +122,7 @@ namespace DDEngine
 			virtual void draw() override
 			{
 				if (visibleFlag) {
+
 					for (Mesh mesh : meshes) {
 						draw(mesh);
 					}
@@ -155,13 +141,54 @@ namespace DDEngine
 
 							Ctx->getShaderHolder()->activatePS("DDEngine_PS_White");
 							Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
-
-							Ctx->setRasterizerState(Ctx->currentRasterizerState);
 						}
+
+						Ctx->setRasterizerState(Ctx->currentRasterizerState);
+					}
+
+					if (showNormals) {
+						for (Mesh mesh : meshes) {
+							UINT stride = sizeof(T);
+							UINT offset = 0;
+
+							Ctx->context->IASetPrimitiveTopology(translatePrimitiveTopology(mesh.topology));
+							Ctx->context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
+							Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+							Ctx->context->RSSetState(Ctx->RSWiredCullNone);
+
+							Ctx->getShaderHolder()->activateGS("DDEngine_GS_NormalVisualizer");
+							Ctx->getShaderHolder()->activatePS("DDEngine_PS_Green");
+
+							setCB(cb_matrices);
+							XMStoreFloat4x4(&cb_matrices.invWorld, XMMatrixInverse(nullptr, getWorldMatrix_T()));
+							XMStoreFloat4x4(&cb_matrices.invView, XMMatrixInverse(nullptr, Ctx->camera->getViewMatrix_T()));
+							XMStoreFloat4x4(&cb_matrices.invProjection, XMMatrixInverse(nullptr, Ctx->camera->getProjectionMatrix_T()));
+							cb_matrices.scale = getScaleMatrix();
+							
+							Ctx->getShaderHolder()->updateConstantBufferGS("DDEngine_Matrices", &cb_matrices, 0);
+							Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
+						}
+
+						Ctx->setRasterizerState(Ctx->currentRasterizerState);
+						Ctx->context->GSSetShader(nullptr, nullptr, 0);
 					}
 				}
 			}
 
+			// A cleaning function that releases all Direct3D
+			// allcated buffers for a model.
+			void releaseBuffers()
+			{
+				for (Mesh mesh : meshes) {
+					RELEASE(mesh.vertexBuffer)
+						RELEASE(mesh.indexBuffer)
+				}
+
+				for (ShaderResourceView* tex : textures) {
+					RELEASE(tex)
+				}
+			}
 			
 	};
 }

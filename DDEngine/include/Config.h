@@ -39,8 +39,9 @@ class Config : public ConfigLoader {
 
 		std::vector<string> getRenderConfig();
 
-		string CFG_VERTEX_SHADER_MODEL;
-		string CFG_PIXEL_SHADER_MODEL;
+		string CFG_VERTEX_SHADER_MODEL = "vs_4_0";
+		string CFG_PIXEL_SHADER_MODEL = "ps_4_0";
+		string CFG_GEOMETRY_SHADER_MODEL = "gs_4_0";
 		wstring CFG_WINDOW_TITLE;
 		int CFG_SCREEN_WIDTH;
 		int CFG_SCREEN_HEIGHT;

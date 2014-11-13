@@ -14,7 +14,6 @@ class Grid : public Object3D<DirectX::VertexPositionNormal> {
 	public:
 		Grid();
 		Grid(int columns, int rows);
-		Grid(const Grid &copy) : Object3D(copy) { }
 		~Grid();
 
 	private:

@@ -34,7 +34,7 @@ namespace DDEngine
 	{
 		bool isFileLocked(std::wstring path);
 		FILETIME getLastWriteTime(std::wstring path);
-		std::string splitFilename(const std::string path);
+		std::string getPath(const std::string& fullPath);
 	}
 
 	namespace DDEUtils

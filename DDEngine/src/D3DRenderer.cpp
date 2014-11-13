@@ -44,6 +44,7 @@ HRESULT D3DRenderer::initialize(HWND hwnd) {
 	Ctx.commonStates = new DirectX::CommonStates(Ctx.device);
 
 	camera.setProjectionMatrices(screenDimension);
+	Ctx.camera = &camera;
     return result;
 }
 

@@ -105,10 +105,16 @@
     <FxCompile Include="res\shaders\VS_EnvMapping.hlsl">
       <Filter>Files\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="res\shaders\PS_White.hlsl">
+    <FxCompile Include="res\shaders\VS_IL.hlsl">
       <Filter>Files\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="res\shaders\VS_IL.hlsl">
+    <FxCompile Include="res\shaders\PS_NormalColor.hlsl">
+      <Filter>Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="res\shaders\PS_SelectionColor.hlsl">
+      <Filter>Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="res\shaders\GS_NormalVisualizer.hlsl">
       <Filter>Files\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include "ScenesManager.h"
 #include "HUDRenderer.h"
 #include "GUIRenderer.h"
+#include "AbstractObject.h"
 #include <AntTweakBar/AntTweakBar.h>
 
 using namespace DDEngine;
@@ -13,7 +14,7 @@ using namespace std;
 DDEComponent::DDEComponent(std::string configPath /* = DDE_CONFIG_PATH */) {
 	config.setConfigPath(configPath);
 	config.load();
-	camera.setSavePath(FileUtils::splitFilename(configPath));
+	camera.setSavePath(FileUtils::getPath(configPath));
 	camera.loadCamera();
 }
 

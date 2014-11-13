@@ -12,7 +12,7 @@ class RenderableSkybox : public IRenderable {
 private:
 	std::string path;
 	Skybox skybox;
-	CB::WVP_CB vsCB_0;
+	CB::WVP vsCB_0;
 
 public:
 	RenderableSkybox(DDERenderPackage pkg) : IRenderable(pkg) { }

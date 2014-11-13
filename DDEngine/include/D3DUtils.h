@@ -52,6 +52,16 @@ namespace DDEngine
 			_Out_	ID3D11PixelShader** pixelShader
 		);
 
+		HRESULT createAndCompileGeometryShader(
+			_In_	ID3D11Device* device,
+			_In_	WCHAR* shaderName,
+			_In_	LPCSTR entryPoint,
+			_In_	LPCSTR shaderModel,
+			_Out_	ID3D11GeometryShader** geometryShader,
+			_In_	const D3D11_SO_DECLARATION_ENTRY* layoutDesc,
+			_In_	UINT numElements
+		);
+
 		HRESULT createVertexShaderFromMemory(
 			_In_	ID3D11Device* device,
 			_In_	LPVOID dataBlob,
@@ -70,6 +80,17 @@ namespace DDEngine
 			_Out_	ID3D11PixelShader** pixelShader
 		);
 
+		HRESULT createGeometryShaderFromMemory(
+			_In_	ID3D11Device* device,
+			_In_	LPVOID dataBlob,
+			_In_	DWORD dataSize,
+			_In_	LPCSTR entryPoint,
+			_In_	LPCSTR shaderModel,
+			_Out_	ID3D11GeometryShader** geometryShader,
+			_In_	const D3D11_SO_DECLARATION_ENTRY* layoutDesc,
+			_In_	UINT numElements
+		);
+
 		HRESULT createVertexShaderFromBinary(
 			_In_	ID3D11Device* device,
 			_In_	WCHAR* shaderName, 
@@ -81,6 +102,12 @@ namespace DDEngine
 			_In_	WCHAR* shaderName, 
 			_Out_	ID3D11PixelShader** pixelShader
 		);
+
+		HRESULT createGeometryShaderFromBinary(
+			_In_	ID3D11Device* device,
+			_In_	WCHAR* shaderName,
+			_Out_	ID3D11GeometryShader** geometryShader
+			);
 
 		HRESULT createIndexBuffer(
 			_In_	ID3D11Device* device,

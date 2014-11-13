@@ -94,11 +94,13 @@ void DDEngine::ModelObject::loadGeometry(std::vector<Mesh>& meshes)
 				ScratchImage image;
 				HRESULT hr = -1;
 
+				std::string currentPath = FileUtils::getPath(modelPath) + "/";
+
 				if (ext != std::string::npos) {
-					hr = LoadFromTGAFile(StringUtils::toWstring("res/models/" + path).c_str(), nullptr, image);
+					hr = LoadFromTGAFile(StringUtils::toWstring(currentPath + path).c_str(), nullptr, image);
 				}
 				else {
-					texture = TextureUtils::createTexture("res/models/" + path, *Ctx);
+					texture = TextureUtils::createTexture(currentPath + path, *Ctx);
 				}
 
 				if (SUCCEEDED(hr)) {
