@@ -67,13 +67,58 @@ namespace DDEngine
 				Ctx->context->IASetVertexBuffers(0, 1, &mesh.vertexBuffer, &stride, &offset);
 				Ctx->context->IASetIndexBuffer(mesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-				if (textures.size() > 0) {
-					//TODO config flag if anisotropic is enabled
-					Ctx->setPSSampler(Ctx->commonStates->AnisotropicWrap(), 0);
-					Ctx->setPSResource(textures[mesh.materialIndex], 0);
+				//TODO config flag if anisotropic is enabled
+				Ctx->setPSSampler(Ctx->commonStates->AnisotropicWrap(), 0);
+				Ctx->setVSSampler(Ctx->commonStates->LinearWrap(), 0);
+
+				if (materials.size() > 0) {
+					// set materials, materials starts at index 100-111
+					Ctx->setPSResourceArray(materials[mesh.materialIndex].textureArray, 100);
+
+					if (materialsInVS) {
+						Ctx->setVSResourceArray(materials[mesh.materialIndex].textureArray, 100);
+					}
 				}
 
+				if (materialsCB != nullptr) {
+					defineMaterials(*materialsCB, materialsCBName, mesh.materialIndex, materialsCBSlot, materialsInVS);
+				}
+
+				// draw mesh
 				Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
+
+				/*
+				// unbind
+				if (materialsCB != nullptr) {
+					defaultMaterialsCB.ambient = materialsCB->ambient;
+					defaultMaterialsCB.diffuse = materialsCB->diffuse;
+					defaultMaterialsCB.specular = materialsCB->specular;
+					defaultMaterialsCB.eyePosition = materialsCB->eyePosition;
+					defaultMaterialsCB.lightDirection = materialsCB->lightDirection;
+					defaultMaterialsCB.shininess = materialsCB->shininess;
+					defaultMaterialsCB.lightPosition = materialsCB->lightPosition;
+					defaultMaterialsCB.attenuation = materialsCB->attenuation;
+					defaultMaterialsCB.spotAngle = materialsCB->spotAngle;
+					defaultMaterialsCB.spotOuterAngle = materialsCB->spotOuterAngle;
+					
+					for (size_t i = 0; i < Texture::NUM_TYPES; i++) {
+						defaultMaterialsCB.coords[i] = Texture::DEFAULT_COORDS;
+					}
+
+					Ctx->getShaderHolder()->updateConstantBufferPS(materialsCBName, &defaultMaterialsCB, materialsCBSlot);
+
+					if (materialsInVS) {
+						Ctx->getShaderHolder()->updateConstantBufferVS(materialsCBName, &defaultMaterialsCB, materialsCBSlot);
+					}
+				}
+				*/
+				
+				if (materials.size() > 0) {
+					Ctx->context->PSSetShaderResources(100, Texture::NUM_TYPES, emptyMaterials);
+					if (materialsInVS) {
+						Ctx->context->VSSetShaderResources(100, Texture::NUM_TYPES, emptyMaterials);
+					}
+				}
 			}
 
 		private:
@@ -128,7 +173,7 @@ namespace DDEngine
 					}
 
 					// Draw some visual effect when object is selected
-					if (selected) {
+					if (selected || solidWireframe) {
 						for (Mesh mesh : meshes) {
 							UINT stride = sizeof(T);
 							UINT offset = 0;
@@ -139,7 +184,10 @@ namespace DDEngine
 
 							Ctx->context->RSSetState(Ctx->RSWiredCullBack);
 
-							Ctx->getShaderHolder()->activatePS("DDEngine_PS_White");
+							CB::Color color;
+							color.color = selected ? DirectX::XMFLOAT4(1, 1, 1, 1) : DirectX::XMFLOAT4(0.6f, 0.8f, 0.6f, 1);
+							Ctx->getShaderHolder()->updateConstantBufferPS("DDEngine_Color", &color, 10);
+							Ctx->getShaderHolder()->activatePS("DDEngine_PS_Selection");
 							Ctx->context->DrawIndexed(mesh.numIndices, 0, 0);
 						}
 
@@ -158,9 +206,9 @@ namespace DDEngine
 							Ctx->context->RSSetState(Ctx->RSWiredCullNone);
 
 							Ctx->getShaderHolder()->activateGS("DDEngine_GS_NormalVisualizer");
-							Ctx->getShaderHolder()->activatePS("DDEngine_PS_Green");
+							Ctx->getShaderHolder()->activatePS("DDEngine_PS_NormalVisualizer");
 
-							setCB(cb_matrices);
+							updateMatrices(cb_matrices);
 							XMStoreFloat4x4(&cb_matrices.invWorld, XMMatrixInverse(nullptr, getWorldMatrix_T()));
 							XMStoreFloat4x4(&cb_matrices.invView, XMMatrixInverse(nullptr, Ctx->camera->getViewMatrix_T()));
 							XMStoreFloat4x4(&cb_matrices.invProjection, XMMatrixInverse(nullptr, Ctx->camera->getProjectionMatrix_T()));
@@ -182,11 +230,13 @@ namespace DDEngine
 			{
 				for (Mesh mesh : meshes) {
 					RELEASE(mesh.vertexBuffer)
-						RELEASE(mesh.indexBuffer)
+					RELEASE(mesh.indexBuffer)
 				}
 
-				for (ShaderResourceView* tex : textures) {
-					RELEASE(tex)
+				for (Material m : materials) {
+					for (Texture t : m.textures) {
+						RELEASE(t.texture)
+					}
 				}
 			}
 			

@@ -189,6 +189,7 @@
     <ClInclude Include="include\ShaderCompiler.h" />
     <ClInclude Include="include\ShaderHolder.h" />
     <ClInclude Include="include\Skybox.h" />
+    <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Vertex.h" />
     <ClInclude Include="include\ShaderStructs.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="src\GUIRenderer.cpp" />
     <ClCompile Include="src\HUDRenderer.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
+    <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\ModelObject.cpp" />
     <ClCompile Include="src\ScenesManager.cpp" />
     <ClCompile Include="src\QuadObject.cpp" />

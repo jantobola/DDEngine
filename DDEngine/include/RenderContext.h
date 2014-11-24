@@ -13,6 +13,9 @@ namespace DDEngine
 class AbstractObject;
 class ShaderHolder;
 
+typedef ID3D11ShaderResourceView ShaderResourceView;
+typedef ID3D11SamplerState SamplerState;
+
 enum RasterizerStateType {
 	SOLID_CULL_NONE,
 	SOLID_CULL_BACK,
@@ -72,15 +75,19 @@ class RenderContext {
 		void clearRenderTarget(ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView);
 		void clearRenderTarget(float bgColor[], ID3D11RenderTargetView* renderTarget, ID3D11DepthStencilView* depthStencilView);
 		void setViewport(int x, int y, int width, int height);
-		void setPSResource(ID3D11ShaderResourceView* resource, int index);
-		void setVSResource(ID3D11ShaderResourceView* resource, int index);
-		void setPSSampler(ID3D11SamplerState* sampler, int index);
-		void setVSSampler(ID3D11SamplerState* sampler, int index);
+		
+		void setPSResource(ShaderResourceView* resource, int index);
+		void setVSResource(ShaderResourceView* resource, int index);
+		void setPSResourceArray(std::vector<ShaderResourceView*>& resources, int index);
+		void setVSResourceArray(std::vector<ShaderResourceView*>& resources, int index);
 
-		ShaderHolder* getShaderHolder() { return shaderHolder; }
-		void setShaderHolder(ShaderHolder* shaderHolder) { this->shaderHolder = shaderHolder; }
+		void setPSSampler(SamplerState* sampler, int index);
+		void setVSSampler(SamplerState* sampler, int index);
 
-		std::vector<AbstractObject*>& getRegisteredObjects() { return objectContainer; }
+		inline ShaderHolder* getShaderHolder() { return shaderHolder; }
+		inline void setShaderHolder(ShaderHolder* shaderHolder) { this->shaderHolder = shaderHolder; }
+
+		inline std::vector<AbstractObject*>& getRegisteredObjects() { return objectContainer; }
 		AbstractObject* getRegisteredObject(const std::string& name);
 		const int getRegisteredObjectIndex(const std::string& name);
 

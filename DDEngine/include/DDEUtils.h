@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <string>
 #include <sstream>
+#include <vector>
 
 namespace DDEngine
 {
@@ -14,6 +15,9 @@ namespace DDEngine
 		bool toBool(std::string str);
 		float toFloat(std::string str);
 		int toInt(std::string str);
+
+		std::vector<std::string>& split(const std::string& s, char delim, std::vector<std::string>& elems);
+		std::vector<std::string> split(const std::string& s, char delim);
 
 		template<typename T>
 		std::string toString(const T& value)

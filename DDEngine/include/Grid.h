@@ -12,7 +12,7 @@ struct GridInfo {
 class Grid : public Object3D<DirectX::VertexPositionNormal> {
 
 	public:
-		Grid();
+		Grid() : Object3D() { }
 		Grid(int columns, int rows);
 		~Grid();
 

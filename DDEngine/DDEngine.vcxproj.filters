@@ -12,9 +12,6 @@
     <Filter Include="Header Files\utils">
       <UniqueIdentifier>{d406bfb7-323f-457b-82bb-956d23c1e295}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\console">
-      <UniqueIdentifier>{dc92e13f-5ff3-4c0f-80b9-1943cf222489}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\application">
       <UniqueIdentifier>{0baf81b0-402b-4e75-9b30-23295f9c3276}</UniqueIdentifier>
     </Filter>
@@ -68,6 +65,9 @@
     </Filter>
     <Filter Include="Source Files\resource">
       <UniqueIdentifier>{faeea0fe-6199-4f72-a49d-94489960afb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\console">
+      <UniqueIdentifier>{dc92e13f-5ff3-4c0f-80b9-1943cf222489}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +203,9 @@
     <ClInclude Include="include\ShaderStructs.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
+    <ClInclude Include="include\Material.h">
+      <Filter>Header Files\resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AbstractCommandExecutor.cpp">
@@ -309,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="src\AbstractObject.cpp">
       <Filter>Source Files\object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>Source Files\resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

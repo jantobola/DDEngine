@@ -1,12 +1,15 @@
 #include "AbstractObject.h"
 #include "DDEUtils.h"
 #include "ConstantBuffers.h"
+#include "ShaderHolder.h"
 
 using namespace DirectX;
+using namespace std;
 
 DDEngine::AbstractObject::AbstractObject()
 {
 	resetTransformations();
+	createEmptyMaterials();
 }
 
 DDEngine::AbstractObject::~AbstractObject()
@@ -44,10 +47,69 @@ void DDEngine::AbstractObject::disableShaderCombination(std::string name)
 	}
 }
 
-void DDEngine::AbstractObject::addTexture(const std::string& path)
+void DDEngine::AbstractObject::addMaterial(const std::string& path, Texture::TextureType type, DirectX::XMINT4 coords /* = Texture::DEFAULT_COORDS */, unsigned int index /* = 0 */)
 {
-	ShaderResourceView* texture = TextureUtils::createTexture(path, *Ctx);
-	textures.push_back(texture);
+	ShaderResourceView* textureResource = TextureUtils::createTexture(path, *Ctx);
+	if (!textureResource) return;
+
+	if (materials.size() >= index + 1) {
+		bool matchType = false;
+
+		// switch existing texture
+		for (size_t i = 0; i < materials[index].textures.size(); i++) {
+			
+			Material &m = materials[index];
+			Texture &t = m.textures[i];
+
+			if (t.type == type) {
+				ShaderResourceView* old = t.texture;
+				RELEASE(old);
+
+				t.path = path;
+				t.texture = textureResource;
+
+				m.textureArray[t.type] = t.texture;
+				m.coordsArray[t.type] = coords;
+				matchType = true;
+			}
+		}
+
+		// add new texture into material
+		if (!matchType) {
+			Material &material = materials[index];
+			material.textures.push_back(Texture(path, textureResource, type));
+			material.sortTextures();
+
+			material.textureArray[type] = textureResource;
+			material.coordsArray[type] = coords;
+		}
+
+	} else {
+
+		if (type != Texture::TextureType::UNKNOWN) {
+			Material material;
+			material.index = materials.size();
+			material.textures.push_back(Texture(path, textureResource, type));
+			material.textureArray[type] = textureResource;
+			material.coordsArray[type] = coords;
+			materials.push_back(material);
+		}
+	}
+
+}
+
+void DDEngine::AbstractObject::addMaterial(const std::string& path, std::string type, unsigned int index /*= 0*/)
+{
+	vector<string> typeArr = StringUtils::split(type, '.');
+
+	if (typeArr.size() == 1) {
+		addMaterial(path, Texture::valueOf(type), Texture::DEFAULT_COORDS, index);
+		return;
+	}
+
+	if (typeArr.size() == 2) {
+		addMaterial(path, Texture::valueOf(typeArr[0]), Texture::coordsOf(typeArr[1]), index);
+	}
 }
 
 void DDEngine::AbstractObject::rotateX(float x)
@@ -111,9 +173,89 @@ const DirectX::XMMATRIX DDEngine::AbstractObject::getWorldMatrix_T()
 	return XMMatrixTranspose(getWorldMatrix());
 }
 
-void DDEngine::AbstractObject::setCB(CB::WorldViewProjection& cb)
+void DDEngine::AbstractObject::updateMatrices(CB::WorldViewProjection& cb)
 {
 	XMStoreFloat4x4(&cb.world, getWorldMatrix_T());
+	XMStoreFloat4x4(&cb.invTransWorld, XMMatrixTranspose(XMMatrixInverse(nullptr, getWorldMatrix_T())));
 	XMStoreFloat4x4(&cb.view, Ctx->camera->getViewMatrix_T());
 	XMStoreFloat4x4(&cb.projection, Ctx->camera->getProjectionMatrix_T());
+}
+
+void DDEngine::AbstractObject::defineMaterials(CB::Light& cb, std::string cbName, UINT materialIndex, UINT slot, bool availableInVS /* = false */)
+{
+	if (materials.size() == 0)
+		return;
+
+	cb.ambient = materials[materialIndex].ambient;
+	cb.diffuse = materials[materialIndex].diffuse;
+	cb.specular = materials[materialIndex].specular;
+	cb.shininess = materials[materialIndex].shininess;
+
+	cb.enableDNSA.x = materials[materialIndex].textureArray[0] != nullptr ? 1 : 0;
+	cb.enableDNSA.y = materials[materialIndex].textureArray[1] != nullptr ? 1 : 0;
+	cb.enableDNSA.z = materials[materialIndex].textureArray[2] != nullptr ? 1 : 0;
+	cb.enableDNSA.w = materials[materialIndex].textureArray[3] != nullptr ? 1 : 0;
+	cb.enableEHSO.x = materials[materialIndex].textureArray[4] != nullptr ? 1 : 0;
+	cb.enableEHSO.y = materials[materialIndex].textureArray[5] != nullptr ? 1 : 0;
+	cb.enableEHSO.z = materials[materialIndex].textureArray[6] != nullptr ? 1 : 0;
+	cb.enableEHSO.w = materials[materialIndex].textureArray[7] != nullptr ? 1 : 0;
+	cb.enableDLR.x  = materials[materialIndex].textureArray[8] != nullptr ? 1 : 0;
+	cb.enableDLR.y  = materials[materialIndex].textureArray[9] != nullptr ? 1 : 0;
+	cb.enableDLR.z = materials[materialIndex].textureArray[10] != nullptr ? 1 : 0;
+
+	for (size_t i = 0; i < Texture::NUM_TYPES; i++) {
+		cb.coords[i] = materials[materialIndex].coordsArray[i];
+	}
+
+	Ctx->getShaderHolder()->updateConstantBufferPS(cbName, &cb, slot);
+
+	if (materialsInVS) {
+		Ctx->getShaderHolder()->updateConstantBufferVS(cbName, &cb, slot);
+	}
+}
+
+void DDEngine::AbstractObject::defineMaterials(CB::Light& cb, std::string cbName, UINT slot, bool availableInVS /*= false*/)
+{
+	materialsCB = &cb;
+	materialsCBName = cbName;
+	materialsCBSlot = slot;
+	materialsInVS = availableInVS;
+}
+
+void DDEngine::AbstractObject::createEmptyMaterials()
+{
+	for (size_t i = 0; i < Texture::NUM_TYPES; i++) {
+		emptyMaterials[i] = NULL;
+	}
+}
+
+void DDEngine::AbstractObject::setAmbient(unsigned int index, float r, float g, float b, float a)
+{
+	materials[index].ambient = XMFLOAT4(r / 255, g / 255, b / 255, a / 255);
+}
+
+void DDEngine::AbstractObject::setDiffuse(unsigned int index, float r, float g, float b, float a)
+{
+	materials[index].diffuse = XMFLOAT4(r / 255, g / 255, b / 255, a / 255);
+}
+
+void DDEngine::AbstractObject::setSpecular(unsigned int index, float r, float g, float b, float a)
+{
+	materials[index].specular = XMFLOAT4(r / 255, g / 255, b / 255, a / 255);
+}
+
+void DDEngine::AbstractObject::setShininess(unsigned int index, float s)
+{
+	materials[index].shininess = s;
+}
+
+DirectX::XMFLOAT3 DDEngine::AbstractObject::getWorldPosition()
+{
+	XMVECTOR rot;
+	XMVECTOR scale;
+	XMVECTOR transl;
+	XMFLOAT3 position;
+	XMMatrixDecompose(&scale, &rot, &transl, getWorldMatrix());
+	XMStoreFloat3(&position, transl);
+	return position;
 }

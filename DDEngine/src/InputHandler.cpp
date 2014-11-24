@@ -31,6 +31,16 @@ void DDEngine::InputHandler::onKeyTypedInternal(WPARAM wParam) {
 		cmd.executeCommand("renderer.wireframe = true");
 	}
 
+	//F3 - normals & tangents & bitangents
+	KEY(VK_F3, wParam) {
+		cmd.executeCommand("renderer.normals = false");
+	}
+
+	//F4 - normals & tangents & bitangents
+	KEY(VK_F4, wParam) {
+		cmd.executeCommand("renderer.normals = true");
+	}
+
 	//F5 - listen all shaders to changes
 	KEY(VK_F5, wParam) {
 		cmd.executeCommand("shaders.listenAll");
@@ -51,9 +61,19 @@ void DDEngine::InputHandler::onKeyTypedInternal(WPARAM wParam) {
 		cmd.executeCommand("camera.save");
 	}
 
-	//F9 - save camera
+	//F10 - load camera
 	KEY(VK_F10, wParam) {
 		cmd.executeCommand("camera.load");
+	}
+
+	//PAGE UP - enable transformations and object picking
+	KEY(VK_PRIOR, wParam) {
+		cmd.executeCommand("transform.enable = true");
+	}
+
+	//PAGE DOWN - disable transformations and object picking
+	KEY(VK_NEXT, wParam) {
+		cmd.executeCommand("transform.enable = false");
 	}
 
 }

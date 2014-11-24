@@ -4,10 +4,6 @@ using namespace DDEngine;
 using namespace DirectX;
 using namespace std;
 
-Grid::Grid() {
-	Grid(0, 0);
-}
-
 Grid::Grid(int columns, int rows) : Object3D() {
 	this->columns = columns;
 	this->rows = rows;

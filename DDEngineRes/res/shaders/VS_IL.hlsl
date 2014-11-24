@@ -72,6 +72,19 @@ float4 POS_NOR_TEX(IL_POS_NOR_TEX input) : SV_Position
 	return float4(0, 0, 0, 0);
 }
 
+struct IL_POS_NOR_TAN_TEX
+{
+	float3 pos : SV_Position;
+	float3 nor : NORMAL0;
+	float4 tan : TANGENT0;
+	float2 tex : TEXCOORD0;
+};
+
+float4 POS_NOR_TAN_TEX(IL_POS_NOR_TAN_TEX input) : SV_Position
+{
+	return float4(0, 0, 0, 0);
+}
+
 struct IL_POS_NOR_COL_TEX
 {
 	float3 pos : SV_Position;

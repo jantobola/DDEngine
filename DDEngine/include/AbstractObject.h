@@ -3,6 +3,7 @@
 #include "RenderContext.h"
 #include "D3DUtils.h"
 #include "ConstantBuffers.h"
+#include "Material.h"
 #include <vector>
 #include <windows.h>
 #include <DirectXMath.h>
@@ -47,21 +48,29 @@ namespace DDEngine {
 				std::string ilName;
 			};
 
-
 			RenderContext* Ctx;
 
 			// Public name of a model to handle console command calls for this model.
 			std::string modelName;
+			unsigned int customIndex = 0;
 
 			// Flag indicates mesh is hidden or not.
 			bool visibleFlag = true;
 			bool showNormals = false;
+			bool solidWireframe = false;
 
 			// Model will be rendered as many times as a size of this container.
 			// In most cases container will contain only one shader combination.
 			std::vector<Shaders> shaders;
+			std::vector<Material> materials;
 
-			std::vector<ShaderResourceView*> textures;
+			// Materials Shader
+			CB::Light defaultMaterialsCB;
+			CB::Light* materialsCB = nullptr;
+			std::string materialsCBName;
+			UINT materialsCBSlot = 0;
+			bool materialsInVS = false;
+			ShaderResourceView* emptyMaterials[Texture::NUM_TYPES];
 
 			// MATRICES
 
@@ -72,6 +81,11 @@ namespace DDEngine {
 
 			// Reset all transofrmation matrices to identity matrices.
 			void resetTransformations();
+			void defineMaterials(CB::Light& cb, std::string cbName, UINT materialIndex, UINT slot, bool availableInVS = false);
+
+		private:
+
+			void createEmptyMaterials();
 
 		public:
 
@@ -82,12 +96,17 @@ namespace DDEngine {
 			bool selected = false;
 
 			// It will stop or start rendering of a model.
-			void setVisible(bool isVisible) { this->visibleFlag = isVisible; }
+			inline void setVisible(bool isVisible) { this->visibleFlag = isVisible; }
 			// Returns a flag mesh is visible or hidden.
-			bool isVisible() { return visibleFlag; }
+			inline bool isVisible() { return visibleFlag; }
 
-			void setShowNormals(bool showNormals) { this->showNormals = showNormals; }
-			bool isShowNormals() { return showNormals; }
+			inline void setShowNormals(bool showNormals) { this->showNormals = showNormals; }
+			inline bool isShowNormals() { return showNormals; }
+
+			inline void drawWireframe(bool wireframe) { this->solidWireframe = wireframe; }
+
+			inline void setCustomIndex(unsigned int index) { customIndex = index; }
+			inline unsigned int getCustomIndex() { return customIndex; }
 
 			// Add (append) a shader combination.
 			void addShaderCombination(std::string name, std::string vsName, std::string psName, std::string ilName, bool active = true);
@@ -95,13 +114,20 @@ namespace DDEngine {
 			void enableShaderCombination(std::string name);
 			void disableShaderCombination(std::string name);
 
-			void addTexture(const std::string& path);
+			void addMaterial(const std::string& path, Texture::TextureType type, DirectX::XMINT4 coords = Texture::DEFAULT_COORDS, unsigned int index = 0);
+			void addMaterial(const std::string& path, std::string type, unsigned int index = 0);
 
-			std::vector<Shaders>& getShaders() { return shaders; }
-			const std::string getName() { return modelName; }
+			void setAmbient(unsigned int index, float r, float g, float b, float a);
+			void setDiffuse(unsigned int index, float r, float g, float b, float a);
+			void setSpecular(unsigned int index, float r, float g, float b, float a);
+			void setShininess(unsigned int index, float s);
 
-			void setCB(CB::WorldViewProjection& cb);
+			inline std::vector<Shaders>& getShaders() { return shaders; }
+			inline const std::string getName() { return modelName; }
 
+			void updateMatrices(CB::WorldViewProjection& cb);
+			void defineMaterials(CB::Light& cb, std::string cbName, UINT slot, bool availableInVS = false);
+			
 			// Converts an engine structure into a Direct3D structure. This method should be
 			// called in a pre-render stage.
 			virtual void registerObject(const std::string& modelName, RenderContext& Ctx) = 0;
@@ -129,13 +155,14 @@ namespace DDEngine {
 			// Get transpose world space matrix
 			const DirectX::XMMATRIX getWorldMatrix_T();
 
-			void setRotationMatrix(const DirectX::XMFLOAT4X4 rotationMatrix) { this->rotationMatrix = rotationMatrix; }
-			void setScaleMatrix(const DirectX::XMFLOAT4X4 scaleMatrix) { this->scaleMatrix = scaleMatrix; }
-			void setTranslationMatrix(const DirectX::XMFLOAT4X4 translationMatrix) { this->translationMatrix = translationMatrix; }
+			inline void setRotationMatrix(const DirectX::XMFLOAT4X4 rotationMatrix) { this->rotationMatrix = rotationMatrix; }
+			inline void setScaleMatrix(const DirectX::XMFLOAT4X4 scaleMatrix) { this->scaleMatrix = scaleMatrix; }
+			inline void setTranslationMatrix(const DirectX::XMFLOAT4X4 translationMatrix) { this->translationMatrix = translationMatrix; }
 
-			DirectX::XMFLOAT4X4 getRotationMatrix() { return rotationMatrix; }
-			DirectX::XMFLOAT4X4 getScaleMatrix() { return scaleMatrix; }
-			DirectX::XMFLOAT4X4 getTranslationMatrix() { return translationMatrix; }
+			inline DirectX::XMFLOAT4X4 getRotationMatrix() { return rotationMatrix; }
+			inline DirectX::XMFLOAT4X4 getScaleMatrix() { return scaleMatrix; }
+			inline DirectX::XMFLOAT4X4 getTranslationMatrix() { return translationMatrix; }
+			DirectX::XMFLOAT3 getWorldPosition();
 
 	};
 

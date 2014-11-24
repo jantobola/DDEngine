@@ -269,6 +269,11 @@ void CommandExecutor::executeCommand(std::string command) {
 		END
 	}
 
+	EXECUTE("objects.wireframe") {
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->drawWireframe(ARG_BOOL(1));
+		END
+	}
+
 // ############################################################
 	CMD_ARGS(3) // Commands with three arguments ##############
 // ############################################################
@@ -276,6 +281,11 @@ void CommandExecutor::executeCommand(std::string command) {
 	EXECUTE("renderer.bgcolor") {
 		component.setBackgroundColor(ARG_INT(0), ARG_INT(1), ARG_INT(2), 255);
 		INFO("Background window color changed", 2500);
+		END
+	}
+
+	EXECUTE("objects.material.shininess") {
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setShininess(ARG_INT(1), ARG_FLOAT(2));
 		END
 	}
 
@@ -301,6 +311,34 @@ void CommandExecutor::executeCommand(std::string command) {
 		if (component.getRenderPackage().renderContext.getRegisteredObject(ARG(0)))
 		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->scale(ARG_FLOAT(1), ARG_FLOAT(2), ARG_FLOAT(3));
 		INFO("Object scaled", 2500);
+		END
+	}
+
+	EXECUTE("objects.addMaterial") {
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->addMaterial(ARG(2), ARG(3), ARG_INT(1));
+		END
+	}
+
+// ############################################################
+	CMD_ARGS(5) // Commands with four arguments ###############
+// ############################################################
+
+// ############################################################
+	CMD_ARGS(6) // Commands with four arguments ###############
+// ############################################################
+
+	EXECUTE("objects.material.ambient") {
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setAmbient(ARG_INT(1), ARG_FLOAT(2), ARG_FLOAT(3), ARG_FLOAT(4), ARG_FLOAT(5));
+		END
+	}
+
+	EXECUTE("objects.material.diffuse") {
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setDiffuse(ARG_INT(1), ARG_FLOAT(2), ARG_FLOAT(3), ARG_FLOAT(4), ARG_FLOAT(5));
+		END
+	}
+
+	EXECUTE("objects.material.specular") {
+		component.getRenderPackage().renderContext.getRegisteredObject(ARG(0))->setSpecular(ARG_INT(1), ARG_FLOAT(2), ARG_FLOAT(3), ARG_FLOAT(4), ARG_FLOAT(5));
 		END
 	}
 

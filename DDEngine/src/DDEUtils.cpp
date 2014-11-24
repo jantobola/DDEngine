@@ -45,6 +45,27 @@ std::wstring StringUtils::toWstring(std::string str) {
 	return res;
 }
 
+std::vector<std::string>& DDEngine::StringUtils::split(const std::string &s, char delim, std::vector<std::string> &elems)
+{
+	std::stringstream ss(s);
+	std::string item;
+	
+	while (std::getline(ss, item, delim)) {
+		if (!item.empty()) {
+			elems.push_back(item);
+		}
+	}
+
+	return elems;
+}
+
+std::vector<std::string> DDEngine::StringUtils::split(const std::string &s, char delim)
+{
+	std::vector<std::string> elems;
+	split(s, delim, elems);
+	return elems;
+}
+
 bool FileUtils::isFileLocked( std::wstring path ) {
 	HANDLE fh = CreateFile(path.c_str(), GENERIC_READ
 		| GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);

@@ -33,15 +33,15 @@ void ShaderHolder::load() {
 
 	DataContainer VS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 201);
 	DataContainer PS_Skybox = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 202);
-	DataContainer PS_White = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 203);
-	DataContainer PS_Green = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 204);
+	DataContainer PS_Selection = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 203);
+	DataContainer PS_NormalVisualizer = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 204);
 	DataContainer VS_IL = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 205);
 	DataContainer GS_NormalVisualizer = DLLResourceLoader::loadFromDLL(dll, L"SHADERS", 206);
 
 	addVertexShaderFromMemory("DDEngine_VS_Skybox", VS_Skybox.dataBlob, VS_Skybox.dataSize, "vs_4_0");
 	addPixelShaderFromMemory("DDEngine_PS_Skybox", PS_Skybox.dataBlob, PS_Skybox.dataSize, "ps_4_0");
-	addPixelShaderFromMemory("DDEngine_PS_White", PS_White.dataBlob, PS_White.dataSize, "ps_4_0");
-	addPixelShaderFromMemory("DDEngine_PS_Green", PS_Green.dataBlob, PS_Green.dataSize, "ps_4_0");
+	addPixelShaderFromMemory("DDEngine_PS_Selection", PS_Selection.dataBlob, PS_Selection.dataSize, "ps_4_0");
+	addPixelShaderFromMemory("DDEngine_PS_NormalVisualizer", PS_NormalVisualizer.dataBlob, PS_NormalVisualizer.dataSize, "ps_4_0");
 	addVertexShaderFromMemory("DDEngine_VS_IL", VS_IL.dataBlob, VS_IL.dataSize, "vs_4_0");
 
 	addInputLayout("POS_TEX", "DDEngine_VS_IL", VertexPositionTexture::InputElements, VertexPositionTexture::InputElementCount, "POS_TEX");
@@ -57,12 +57,23 @@ void ShaderHolder::load() {
 
 	addConstantBuffer("DDEngine_WVP", sizeof(CB::WVP));
 	addConstantBuffer("DDEngine_Matrices", sizeof(CB::GSMatrices));
+	addConstantBuffer("DDEngine_Color", sizeof(CB::Color));
+
+	// unused
+	D3D11_INPUT_ELEMENT_DESC pos_nor_tan_tex[] = {
+		{ "SV_Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
 
 	D3D11_SO_DECLARATION_ENTRY gsLayout[] =
 	{
-		{ 0, "SV_POSITION", 0, 0, 4, 0 }
+		{ 0, "SV_POSITION", 0, 0, 4, 0 },
+		{ 0, "COLOR", 0, 0, 4, 0 }
 	};
 
+	addInputLayout("POS_NOR_TAN_TEX", "DDEngine_VS_IL", pos_nor_tan_tex, ARRAYSIZE(pos_nor_tan_tex), "POS_NOR_TAN_TEX");
 	addGeometryShaderFromMemory("DDEngine_GS_NormalVisualizer", GS_NormalVisualizer.dataBlob, GS_NormalVisualizer.dataSize, "", gsLayout, ARRAYSIZE(gsLayout));
 
 	FreeLibrary(dll);

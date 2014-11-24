@@ -220,3 +220,34 @@ namespace DDEngine
 	}
 
 }
+
+#include <DirectXMath.h>
+
+namespace DirectX
+{
+	struct VertexPositionNormalTangentTexture
+	{
+		VertexPositionNormalTangentTexture()
+		{ }
+
+		VertexPositionNormalTangentTexture(XMFLOAT3 const& position, XMFLOAT3 const& normal, XMFLOAT4 const& tangent, XMFLOAT2 const& textureCoordinate)
+			: position(position),
+			normal(normal),
+			tangent(tangent),
+			textureCoordinate(textureCoordinate)
+		{ }
+
+		VertexPositionNormalTangentTexture(FXMVECTOR position, FXMVECTOR normal, FXMVECTOR tangent, CXMVECTOR textureCoordinate)
+		{
+			XMStoreFloat3(&this->position, position);
+			XMStoreFloat3(&this->normal, normal);
+			XMStoreFloat4(&this->tangent, tangent);
+			XMStoreFloat2(&this->textureCoordinate, textureCoordinate);
+		}
+
+		XMFLOAT3 position;
+		XMFLOAT3 normal;
+		XMFLOAT4 tangent;
+		XMFLOAT2 textureCoordinate;
+	};
+}

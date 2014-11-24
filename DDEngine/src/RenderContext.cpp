@@ -150,12 +150,20 @@ void RenderContext::setRenderWireframe( bool renderedWireframe ) {
 	this->wireframe = renderedWireframe;
 }
 
-void RenderContext::setPSResource( ID3D11ShaderResourceView* resource, int index ) {
+void RenderContext::setPSResource( ShaderResourceView* resource, int index ) {
 	context->PSSetShaderResources(index, 1, &resource);
 }
 
-void RenderContext::setVSResource( ID3D11ShaderResourceView* resource, int index ) {
+void RenderContext::setVSResource( ShaderResourceView* resource, int index ) {
 	context->VSSetShaderResources(index, 1, &resource);
+}
+
+void DDEngine::RenderContext::setPSResourceArray(std::vector<ShaderResourceView*>& resources, int index) {
+	context->PSSetShaderResources(index, resources.size(), &resources[0]);
+}
+
+void DDEngine::RenderContext::setVSResourceArray(std::vector<ShaderResourceView*>& resources, int index) {
+	context->VSSetShaderResources(index, resources.size(), &resources[0]);
 }
 
 void RenderContext::setPSSampler( ID3D11SamplerState* sampler, int index ) {

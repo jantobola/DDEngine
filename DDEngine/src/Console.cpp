@@ -86,7 +86,7 @@ bool Console::invokeKeyDown(const CEGUI::EventArgs &e) {
 bool Console::invokeGlobalKeyUp( const CEGUI::EventArgs &e ) {
 	const CEGUI::KeyEventArgs* args = static_cast<const CEGUI::KeyEventArgs*>(&e);
 
-	if (args->scancode == CEGUI::Key::Grave || args->scancode == CEGUI::Key::One) {
+	if (args->scancode == CEGUI::Key::Grave) {
 		if(!hidden) {
 			CEGUI::String s = cmd->getText();
 			s = s.substr(0, s.length() - 1);

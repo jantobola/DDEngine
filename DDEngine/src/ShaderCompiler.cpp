@@ -16,6 +16,8 @@ ShaderCompilationResult ShaderCompiler::compile( WCHAR* fileName, LPCSTR entryPo
 		// the shaders to be optimized and to run exactly the way they will run in 
 		// the release configuration of this program.
 		dwShaderFlags |= D3DCOMPILE_DEBUG;
+		dwShaderFlags |= D3DCOMPILE_PREFER_FLOW_CONTROL;
+		dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 	#else
 		dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
 	#endif
@@ -45,6 +47,8 @@ DDEngine::ShaderCompiler::ShaderCompilationResult DDEngine::ShaderCompiler::comp
 
 #if defined( DEBUG ) || defined( _DEBUG )
 	dwShaderFlags |= D3DCOMPILE_DEBUG;
+	dwShaderFlags |= D3DCOMPILE_PREFER_FLOW_CONTROL;
+	dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
 	dwShaderFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
 #endif
