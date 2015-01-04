@@ -239,6 +239,20 @@ DDEngine::Camera::XMMATRIX DDEngine::Camera::getProjectionMatrix_T() {
 	return XMMatrixTranspose(getProjectionMatrix());
 }
 
+DDEngine::Camera::XMMATRIX DDEngine::Camera::getViewMatrixFromDirection(XMFLOAT3 position, XMFLOAT3 direction)
+{
+	XMVECTOR pos = XMLoadFloat3(&position);
+	XMVECTOR dir = XMLoadFloat3(&direction);
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	return XMMatrixLookToRH(pos, dir, up);
+}
+
+DDEngine::Camera::XMMATRIX DDEngine::Camera::getViewMatrixFromDirection_T(XMFLOAT3 position, XMFLOAT3 direction)
+{
+	return XMMatrixTranspose(getViewMatrixFromDirection(position, direction));
+}
+
 XMMATRIX Camera::getPerspectiveMatrix() {
 	return XMLoadFloat4x4(&perspectiveProjection);
 }

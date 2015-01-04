@@ -17,6 +17,7 @@ class RenderToTexture {
 		ID3D11Texture2D* texture2D = nullptr;
 		ID3D11RenderTargetView* renderTargetView = nullptr;
 		ShaderResourceView* shaderResourceView = nullptr;
+		ShaderResourceView* depthShaderResourceView = nullptr;
 		ID3D11DepthStencilView*	depthStencilView = nullptr;
 		ID3D11Texture2D* depthStencilBuffer = nullptr;
 
@@ -38,6 +39,7 @@ class RenderToTexture {
 		HRESULT createDepth();
 
 		ShaderResourceView* getShaderResourceView();
+		ShaderResourceView* getDepthShaderResourceView();
 		ID3D11RenderTargetView* getRenderTargetView();
 		ID3D11DepthStencilView* getDepthStencilView();
 

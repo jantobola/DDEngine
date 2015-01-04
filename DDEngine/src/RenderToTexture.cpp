@@ -62,7 +62,19 @@ HRESULT RenderToTexture::create(int width, int height, DXGI_FORMAT format) {
 }
 
 HRESULT DDEngine::RenderToTexture::createDepth() {
-	return DXUtils::createDepthStencilBuffer(Ctx->device, Ctx->context, DDEngine::Dimension(width, height), &depthStencilView, &depthStencilBuffer, 1);
+	HRESULT result = S_OK;
+	result = DXUtils::createDepthStencilBuffer(Ctx->device, Ctx->context, DDEngine::Dimension(width, height), &depthStencilView, &depthStencilBuffer, 1);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+
+	shaderResourceViewDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+	shaderResourceViewDesc.Texture2D.MipLevels = 1;
+
+	result = Ctx->device->CreateShaderResourceView(depthStencilBuffer, &shaderResourceViewDesc, &depthShaderResourceView);
+
+	return result;
 }
 
 ShaderResourceView* RenderToTexture::getShaderResourceView() {
@@ -97,10 +109,16 @@ ID3D11DepthStencilView* DDEngine::RenderToTexture::getDepthStencilView() {
 	return depthStencilView;
 }
 
+ShaderResourceView* DDEngine::RenderToTexture::getDepthShaderResourceView()
+{
+	return depthShaderResourceView;
+}
+
 void RenderToTexture::cleanUp() {
 	RELEASE(texture2D)
 	RELEASE(shaderResourceView)
 	RELEASE(renderTargetView)
 	RELEASE(depthStencilBuffer)
 	RELEASE(depthStencilView)
+	RELEASE(depthShaderResourceView)
 }
