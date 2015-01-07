@@ -21,7 +21,11 @@
 #include "InputHandler.h"			   //
 #include "DDEComponent.h"			   //
 #include "CommandExecutor.h"		   //
-								       //
+#include "Grid.h"					   //
+#include "ModelObject.h"			   //
+#include "CommonObject.h"			   //
+#include "RenderToTexture.h"		   //
+#include "HUDRenderer.h"			   //
 									   //
 /////////////////////////////////////////
 /////////////////////////////////////////

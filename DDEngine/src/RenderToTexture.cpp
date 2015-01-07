@@ -114,6 +114,18 @@ ShaderResourceView* DDEngine::RenderToTexture::getDepthShaderResourceView()
 	return depthShaderResourceView;
 }
 
+void DDEngine::RenderToTexture::setAsRenderTarget()
+{
+	Ctx->setRenderTarget(renderTargetView, depthStencilView);
+	Ctx->setViewport(0, 0, width, height);
+}
+
+void DDEngine::RenderToTexture::clearRenderTarget()
+{
+	float bgcolor[] = { 0, 0, 0, 1 };
+	Ctx->clearRenderTarget(bgcolor, renderTargetView, depthStencilView);
+}
+
 void RenderToTexture::cleanUp() {
 	RELEASE(texture2D)
 	RELEASE(shaderResourceView)
