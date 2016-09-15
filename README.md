@@ -35,7 +35,7 @@ WaterRendering
 
 Samples
 -------
-[![Water rendering](https://img.youtube.com/vi/SAgEGvJKh8w/0.jpg)](https://www.youtube.com/watch?v=SAgEGvJKh8w)
+[![Water rendering](./WaterRendering/doc/vid1.jpg)](https://www.youtube.com/watch?v=SAgEGvJKh8w)
 
 
 ---------------------
