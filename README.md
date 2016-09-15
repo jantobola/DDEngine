@@ -5,6 +5,11 @@ DDEngine is a lightweight graphics engine written in C++ and Direct3D 11. It use
 
 Main focus of the engine is to support easy development and testing of graphic algorithms and shaders.
 
+
+[![Water rendering](./WaterRendering/doc/vid1.jpg)](https://www.youtube.com/watch?v=SAgEGvJKh8w)
+[![Water rendering](./WaterRendering/doc/vid2.jpg)](https://www.youtube.com/watch?v=oH3rF9sN-6w)
+
+
 FEATURES
 --------
 - Shader management
@@ -30,13 +35,6 @@ WaterRendering
 - Sample project
 
 
-
------------------
-
-Samples
--------
-[![Water rendering](./WaterRendering/doc/vid1.jpg)](https://www.youtube.com/watch?v=SAgEGvJKh8w)
-[![Water rendering](./WaterRendering/doc/vid2.jpg)](https://www.youtube.com/watch?v=oH3rF9sN-6w)
 
 
 ---------------------
